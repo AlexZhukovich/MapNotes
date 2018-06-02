@@ -8,7 +8,6 @@ import android.support.v4.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
 
 class NoLocationPermissionFragment : Fragment() {
 
@@ -17,7 +16,7 @@ class NoLocationPermissionFragment : Fragment() {
                               savedInstanceState: Bundle?): View? {
         val rootView = inflater.inflate(R.layout.fragment_no_location_permission, container, false)
 
-        rootView.findViewById<Button>(R.id.openAppPrefs).setOnClickListener({
+        rootView.findViewById<View>(R.id.openAppPrefs).setOnClickListener({
             val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
                     Uri.parse("package:${activity?.packageName}"))
             intent.addCategory(Intent.CATEGORY_DEFAULT)

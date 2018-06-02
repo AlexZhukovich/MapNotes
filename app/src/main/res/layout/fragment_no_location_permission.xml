@@ -40,8 +40,6 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="24dp"
         android:text="@string/open_app_prefs"
-        android:textColor="@color/colorAccent"
-        android:background="@android:color/transparent"
         app:layout_constraintEnd_toStartOf="@+id/vertical_guideline_end"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/permissionExplanation" />

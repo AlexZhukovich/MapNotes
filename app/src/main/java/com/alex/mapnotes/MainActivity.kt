@@ -23,6 +23,8 @@ import kotlinx.android.synthetic.main.button_sheet.*
 const val LOCATION_REQUEST_CODE = 100
 
 class MainActivity : AppCompatActivity(), OnMapReadyCallback {
+    private var mapFragment: SupportMapFragment? = null
+
     private val bottomSheetBehavior by lazy {
         BottomSheetBehavior.from(bottomSheet)
     }
@@ -56,10 +58,6 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-    }
-
-    override fun onResume() {
-        super.onResume()
 
         bottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
 
@@ -86,6 +84,27 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
         }
     }
 
+    override fun onStart() {
+        super.onStart()
+        mapFragment?.onStart()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        mapFragment?.onResume()
+    }
+
+    override fun onPause() {
+        super.onPause()
+        mapFragment?.onPause()
+        navigation.setOnNavigationItemSelectedListener(null)
+    }
+
+    override fun onStop() {
+        super.onStop()
+        mapFragment?.onStop()
+    }
+
     private fun showPermissionExplanationSnackBar() {
         Snackbar
                 .make(layout, R.string.permission_explanation, Snackbar.LENGTH_LONG)
@@ -98,19 +117,20 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
     }
 
     private fun showContentWhichRequirePermissions() {
-        val mapFragment = SupportMapFragment.newInstance()
+        mapFragment = SupportMapFragment.newInstance()
         supportFragmentManager.beginTransaction()
-                .replace(R.id.map, mapFragment)
+                .replace(R.id.mapContainer, mapFragment)
                 .commit()
         navigation.visibility = View.VISIBLE
-        mapFragment.getMapAsync(this)
+        mapFragment?.getMapAsync(this)
     }
 
     private fun hideContentWhichRequirePermissions() {
         supportFragmentManager.beginTransaction()
-                .replace(R.id.map, NoLocationPermissionFragment())
+                .replace(R.id.mapContainer, NoLocationPermissionFragment())
                 .commit()
         navigation.visibility = View.GONE
+        mapFragment?.getMapAsync(null)
     }
 
     override fun onRequestPermissionsResult(requestCode: Int,
