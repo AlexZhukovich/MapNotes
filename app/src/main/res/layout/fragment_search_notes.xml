@@ -45,10 +45,12 @@
         app:layout_constraintTop_toTopOf="@+id/horizontal_guideline_begin" />
 
     <android.support.v7.widget.RecyclerView
+        android:id="@+id/recyclerView"
         android:layout_width="0dp"
         android:layout_height="0dp"
+        android:layout_marginBottom="@dimen/design_bottom_navigation_height"
         android:layout_marginTop="8dp"
-        app:layout_constraintBottom_toTopOf="@+id/horizontal_guideline_end"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/vertical_guideline_end"
         app:layout_constraintStart_toStartOf="@+id/vertical_guideline_begin"
         app:layout_constraintTop_toBottomOf="@+id/editText" />
