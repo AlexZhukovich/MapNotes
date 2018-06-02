@@ -58,7 +58,7 @@
         app:layout_constraintTop_toTopOf="@+id/horizontal_guideline_begin" />
 
     <TextView
-        android:id="@+id/textView"
+        android:id="@+id/currentLocation"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
