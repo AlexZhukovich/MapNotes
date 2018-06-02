@@ -5,11 +5,16 @@ import android.support.design.widget.BottomNavigationView
 import android.support.design.widget.BottomSheetBehavior
 import android.support.v4.app.Fragment
 import android.support.v7.app.AppCompatActivity
+import com.google.android.gms.maps.CameraUpdateFactory
+import com.google.android.gms.maps.GoogleMap
+import com.google.android.gms.maps.OnMapReadyCallback
+import com.google.android.gms.maps.SupportMapFragment
+import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.MarkerOptions
 import kotlinx.android.synthetic.main.activity_main.navigation
 import kotlinx.android.synthetic.main.button_sheet.bottomSheet
 
-class MainActivity : AppCompatActivity() {
-
+class MainActivity : AppCompatActivity(), OnMapReadyCallback {
     private val bottomSheetBehavior by lazy {
         BottomSheetBehavior.from(bottomSheet)
     }
@@ -46,5 +51,16 @@ class MainActivity : AppCompatActivity() {
 
         bottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener)
+
+        val mapFragment = supportFragmentManager
+                .findFragmentById(R.id.map) as SupportMapFragment
+        mapFragment.getMapAsync(this)
+    }
+
+    override fun onMapReady(map: GoogleMap?) {
+        val sydney = LatLng(-33.8688, 151.2093)
+        map?.addMarker(MarkerOptions().position(sydney).title("Sydney"))
+        map?.moveCamera(CameraUpdateFactory.newLatLng(sydney))
+        map?.setMinZoomPreference(15.0f)
     }
 }
