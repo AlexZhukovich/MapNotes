@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <android.support.constraint.Guideline
+        android:id="@+id/vertical_guideline_end"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_end="16dp" />
+
+    <android.support.constraint.Guideline
+        android:id="@+id/vertical_guideline_begin"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_begin="16dp" />
+
+    <android.support.constraint.Guideline
+        android:id="@+id/horizontal_guideline_begin"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_begin="8dp" />
+
+    <android.support.constraint.Guideline
+        android:id="@+id/horizontal_guideline_end"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_end="8dp" />
+
+    <Button
+        android:id="@+id/openAppPrefs"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="24dp"
+        android:text="@string/open_app_prefs"
+        android:textColor="@color/colorAccent"
+        android:background="@android:color/transparent"
+        app:layout_constraintEnd_toStartOf="@+id/vertical_guideline_end"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/permissionExplanation" />
+
+    <TextView
+        android:id="@+id/permissionExplanation"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:layout_marginTop="8dp"
+        android:text="@string/permission_explanation"
+        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/vertical_guideline_end"
+        app:layout_constraintStart_toStartOf="@+id/vertical_guideline_begin"
+        app:layout_constraintTop_toTopOf="@+id/horizontal_guideline_begin" />
+
+    <ImageView
+        android:id="@+id/mapImage"
+        android:layout_width="72dp"
+        android:layout_height="72dp"
+        android:layout_marginBottom="24dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        app:layout_constraintBottom_toTopOf="@+id/permissionExplanation"
+        app:layout_constraintEnd_toStartOf="@+id/vertical_guideline_end"
+        app:layout_constraintStart_toStartOf="parent"
+        app:srcCompat="@drawable/ic_map_black_24dp" />
+</android.support.constraint.ConstraintLayout>

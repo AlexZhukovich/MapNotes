@@ -12,4 +12,11 @@
 
     <!-- Search notes -->
     <string name="search_note_user_hint">Search text or user name</string>
+
+    <!-- Permissions -->
+    <string name="permission_explanation">We need location permission because we would like to save notes based on your location</string>
+    <string name="permission_grant_text">Grant</string>
+
+    <!-- No permission fragment -->
+    <string name="open_app_prefs">Open preferences</string>
 </resources>
