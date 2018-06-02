@@ -5,4 +5,11 @@
     <string name="nav_add_note_title">Add note</string>
     <string name="nav_map_title">Map</string>
     <string name="nav_search_notes_title">Search notes</string>
+
+    <!-- Add a note -->
+    <string name="add_note_button_text">Add</string>
+    <string name="add_note_hint">Note</string>
+
+    <!-- Search notes -->
+    <string name="search_note_user_hint">Search text or user name</string>
 </resources>
