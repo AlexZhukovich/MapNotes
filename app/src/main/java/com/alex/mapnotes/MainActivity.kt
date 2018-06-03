@@ -11,6 +11,7 @@ import android.support.v4.app.Fragment
 import android.support.v4.content.ContextCompat
 import android.support.v7.app.AppCompatActivity
 import android.view.View
+import com.alex.mapnotes.add.AddNoteFragment
 import com.alex.mapnotes.search.SearchNotesFragment
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
@@ -33,7 +34,7 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
     private val mOnNavigationItemSelectedListener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
         when (item.itemId) {
             R.id.navigation_add_note -> {
-                replaceBottomFragment(SaveNoteFragment())
+                replaceBottomFragment(AddNoteFragment())
                 bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
                 return@OnNavigationItemSelectedListener true
             }
