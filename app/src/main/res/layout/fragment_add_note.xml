@@ -35,7 +35,7 @@
         app:layout_constraintGuide_end="8dp" />
 
     <EditText
-        android:id="@+id/editText2"
+        android:id="@+id/note"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
@@ -43,12 +43,12 @@
         android:ems="10"
         android:inputType="textMultiLine"
         android:hint="@string/add_note_hint"
-        app:layout_constraintEnd_toStartOf="@+id/button"
+        app:layout_constraintEnd_toStartOf="@+id/add"
         app:layout_constraintStart_toStartOf="@+id/vertical_guideline_begin"
         app:layout_constraintTop_toBottomOf="@+id/horizontal_guideline_begin" />
 
     <Button
-        android:id="@+id/button"
+        android:id="@+id/add"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/add_note_button_text"
@@ -66,6 +66,6 @@
         app:layout_constraintBottom_toTopOf="@+id/horizontal_guideline_end"
         app:layout_constraintEnd_toStartOf="@+id/vertical_guideline_end"
         app:layout_constraintStart_toStartOf="@+id/vertical_guideline_begin"
-        app:layout_constraintTop_toBottomOf="@+id/editText2" />
+        app:layout_constraintTop_toBottomOf="@+id/note" />
 
 </android.support.constraint.ConstraintLayout>

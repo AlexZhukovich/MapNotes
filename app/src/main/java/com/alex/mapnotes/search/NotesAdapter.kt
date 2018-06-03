@@ -7,10 +7,15 @@ import com.alex.mapnotes.R
 import com.alex.mapnotes.model.Note
 
 class NotesAdapter(private val itemClick: (Note) -> Unit) : RecyclerView.Adapter<NoteViewHolder>() {
-    private var notes: List<Note> = listOf()
+    private var notes: MutableList<Note> = mutableListOf()
 
-    fun setNotes(notes: List<Note>) {
+    fun setNotes(notes: MutableList<Note>) {
         this.notes = notes
+        notifyDataSetChanged()
+    }
+
+    fun addNote(note: Note) {
+        this.notes.add(note)
         notifyDataSetChanged()
     }
 
