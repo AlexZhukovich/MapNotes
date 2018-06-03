@@ -19,4 +19,11 @@
 
     <!-- No permission fragment -->
     <string name="open_app_prefs">Open preferences</string>
+
+    <!-- Login screen -->
+    <string name="login_title">Login</string>
+    <string name="email_hint">Email address</string>
+    <string name="password_hint">Password</string>
+    <string name="sign_in_text">Sign In</string>
+    <string name="sign_up_text">Sign Up</string>
 </resources>
