@@ -13,7 +13,9 @@ class AddressLocationProvider(private val context: Context) : LocationProvider {
     private var listener :((Location) -> Unit)? = null
     private val fusedLocationProviderClient by lazy { LocationServices.getFusedLocationProviderClient(context) }
 
-    private val locationRequest = LocationRequest.create()
+    private val locationRequest = LocationRequest.create().apply {
+        interval = 3_000
+    }
     private val locationCallback = object : LocationCallback() {
         override fun onLocationResult(locationResult: LocationResult?) {
             locationResult ?: return

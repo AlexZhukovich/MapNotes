@@ -12,20 +12,24 @@ import android.support.v4.content.ContextCompat
 import android.support.v7.app.AppCompatActivity
 import android.view.View
 import com.alex.mapnotes.add.AddNoteFragment
+import com.alex.mapnotes.data.provider.AddressLocationProvider
+import com.alex.mapnotes.ext.checkLocationPermission
 import com.alex.mapnotes.search.SearchNotesFragment
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
-import com.google.android.gms.maps.model.MarkerOptions
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.button_sheet.*
+
 
 const val LOCATION_REQUEST_CODE = 100
 
 class MainActivity : AppCompatActivity(), OnMapReadyCallback {
     private var mapFragment: SupportMapFragment? = null
+
+    private var map: GoogleMap? = null
 
     private val bottomSheetBehavior by lazy {
         BottomSheetBehavior.from(bottomSheet)
@@ -50,6 +54,8 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
         }
         false
     }
+
+    private val locationProvider by lazy { AddressLocationProvider(this) }
 
     private fun replaceBottomFragment(fragment: Fragment) {
         supportFragmentManager.beginTransaction()
@@ -89,11 +95,16 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
     override fun onStart() {
         super.onStart()
         mapFragment?.onStart()
+        locationProvider.startLocationUpdates()
     }
 
     override fun onResume() {
         super.onResume()
         mapFragment?.onResume()
+        locationProvider.addLocationListener {
+            val zoom = map?.cameraPosition?.zoom!!
+            map?.moveCamera(CameraUpdateFactory.newLatLngZoom(LatLng(it.latitude, it.longitude), zoom))
+        }
     }
 
     override fun onPause() {
@@ -105,6 +116,7 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
     override fun onStop() {
         super.onStop()
         mapFragment?.onStop()
+        locationProvider.stopLocationUpdates()
     }
 
     private fun showPermissionExplanationSnackBar() {
@@ -150,9 +162,9 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
     }
 
     override fun onMapReady(map: GoogleMap?) {
-        val sydney = LatLng(-33.8688, 151.2093)
-        map?.addMarker(MarkerOptions().position(sydney).title("Sydney"))
-        map?.moveCamera(CameraUpdateFactory.newLatLng(sydney))
-        map?.setMinZoomPreference(15.0f)
+        this.map = map
+        if (checkLocationPermission(this)) {
+            this.map?.isMyLocationEnabled = true
+        }
     }
 }
