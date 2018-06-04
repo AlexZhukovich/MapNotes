@@ -165,6 +165,7 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
         this.map = map
         if (checkLocationPermission(this)) {
             this.map?.isMyLocationEnabled = true
+            this.map?.animateCamera(CameraUpdateFactory.zoomTo(14.0f))
         }
     }
 }
