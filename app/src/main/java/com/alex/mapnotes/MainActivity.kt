@@ -101,7 +101,7 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
     override fun onResume() {
         super.onResume()
         mapFragment?.onResume()
-        locationProvider.addLocationListener {
+        locationProvider.addUpdatableLocationListener {
             val zoom = map?.cameraPosition?.zoom!!
             map?.moveCamera(CameraUpdateFactory.newLatLngZoom(LatLng(it.latitude, it.longitude), zoom))
         }

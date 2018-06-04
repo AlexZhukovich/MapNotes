@@ -10,7 +10,8 @@ import com.google.android.gms.location.LocationResult
 import com.google.android.gms.location.LocationServices
 
 class AddressLocationProvider(private val context: Context) : LocationProvider {
-    private var listener :((Location) -> Unit)? = null
+    private var updatableListener :((Location) -> Unit)? = null
+    private var singleListener: ((Location) -> Unit)? = null
     private val fusedLocationProviderClient by lazy { LocationServices.getFusedLocationProviderClient(context) }
 
     private val locationRequest = LocationRequest.create().apply {
@@ -19,7 +20,11 @@ class AddressLocationProvider(private val context: Context) : LocationProvider {
     private val locationCallback = object : LocationCallback() {
         override fun onLocationResult(locationResult: LocationResult?) {
             locationResult ?: return
-            listener?.invoke(locationResult.lastLocation)
+            updatableListener?.invoke(locationResult.lastLocation)
+            if (singleListener != null) {
+                singleListener?.invoke(locationResult.lastLocation)
+                singleListener = null
+            }
         }
     }
 
@@ -32,8 +37,12 @@ class AddressLocationProvider(private val context: Context) : LocationProvider {
         }
     }
 
-    override fun addLocationListener(listener: (Location) -> Unit) {
-        this.listener = listener
+    override fun addUpdatableLocationListener(listener: (Location) -> Unit) {
+        this.updatableListener = listener
+    }
+
+    override fun addSingleLocationListener(listener: (Location) -> Unit) {
+        this.singleListener = listener
     }
 
     @SuppressLint("MissingPermission")
@@ -45,7 +54,11 @@ class AddressLocationProvider(private val context: Context) : LocationProvider {
     private fun useLastLocation() {
         fusedLocationProviderClient.lastLocation.addOnCompleteListener {
             if (it.isSuccessful && it.result != null) {
-                listener?.invoke(it.result)
+                updatableListener?.invoke(it.result)
+                if (singleListener != null) {
+                    singleListener?.invoke(it.result)
+                    singleListener = null
+                }
             }
         }
     }

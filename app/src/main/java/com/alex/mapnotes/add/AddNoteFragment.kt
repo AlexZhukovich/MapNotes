@@ -3,6 +3,8 @@ package com.alex.mapnotes.add
 import android.location.Geocoder
 import android.os.Bundle
 import android.support.v4.app.Fragment
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -32,9 +34,23 @@ class AddNoteFragment: Fragment(), AddNoteView {
                               container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         val rootView = inflater.inflate(R.layout.fragment_add_note, container, false)
+
+        rootView.note.addTextChangedListener(object : TextWatcher {
+            override fun afterTextChanged(s: Editable?) {
+            }
+
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+            }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                rootView.add.isEnabled = !s.isNullOrEmpty()
+            }
+        })
         rootView.add.setOnClickListener {
             val text = rootView.note.text.toString()
-            presenter.addNote(text)
+            if (text.isNotEmpty()) {
+                presenter.addNote(text)
+            }
         }
         return rootView
     }
@@ -47,6 +63,10 @@ class AddNoteFragment: Fragment(), AddNoteView {
     override fun onResume() {
         super.onResume()
         presenter.getCurrentLocation()
+    }
+
+    override fun clearNoteText() {
+        note.text.clear()
     }
 
     override fun displayCurrentLocation(address: String) {

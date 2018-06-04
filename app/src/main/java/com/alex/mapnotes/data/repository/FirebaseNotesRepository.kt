@@ -4,7 +4,6 @@ import com.alex.mapnotes.model.Note
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 
-
 class FirebaseNotesRepository : NotesRepository {
     private val notesPath = "notes"
 
@@ -12,8 +11,8 @@ class FirebaseNotesRepository : NotesRepository {
 
     override fun addNote(note: Note) {
         val notesRef = database.getReference(notesPath)
-        val key: String = notesRef.push().key!!
-        notesRef.child(key).setValue(note)
+        val newNoteRef = notesRef.push()
+        newNoteRef.setValue(note)
     }
 
     override fun getNotes(listener: ValueEventListener) {

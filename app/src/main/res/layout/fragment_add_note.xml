@@ -52,7 +52,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/add_note_button_text"
-        android:textColor="@color/colorAccent"
+        android:enabled="false"
         android:background="@android:color/transparent"
         app:layout_constraintEnd_toStartOf="@+id/vertical_guideline_end"
         app:layout_constraintTop_toTopOf="@+id/horizontal_guideline_begin" />

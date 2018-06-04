@@ -6,7 +6,9 @@ interface LocationProvider {
 
     fun startLocationUpdates()
 
-    fun addLocationListener(listener: (Location) -> Unit)
+    fun addUpdatableLocationListener(listener: (Location) -> Unit)
+
+    fun addSingleLocationListener(listener: (Location) -> Unit)
 
     fun stopLocationUpdates()
 }

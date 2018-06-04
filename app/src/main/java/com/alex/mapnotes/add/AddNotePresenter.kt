@@ -19,16 +19,17 @@ class AddNotePresenter(private val locationProvider: LocationProvider,
     }
 
     override fun getCurrentLocation() {
-        locationProvider.addLocationListener { location ->
+        locationProvider.addUpdatableLocationListener { location ->
             view?.displayCurrentLocation(locationFormatter.format(location))
         }
     }
 
     override fun addNote(text: String) {
-        locationProvider.addLocationListener {
+        locationProvider.addSingleLocationListener {
             val uid = authRepository.getUser()?.uid!!
             val note = Note(it.latitude, it.longitude, text, uid)
             notesRepository.addNote(note)
+            view?.clearNoteText()
         }
     }
 
