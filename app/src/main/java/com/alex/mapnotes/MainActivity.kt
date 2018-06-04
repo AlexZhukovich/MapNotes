@@ -23,7 +23,6 @@ import com.google.android.gms.maps.model.LatLng
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.button_sheet.*
 
-
 const val LOCATION_REQUEST_CODE = 100
 
 class MainActivity : AppCompatActivity(), OnMapReadyCallback {
@@ -36,6 +35,11 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
     }
 
     private val mOnNavigationItemSelectedListener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
+        if (navigation.selectedItemId == item.itemId
+                && bottomSheetBehavior.state != BottomSheetBehavior.STATE_HIDDEN) {
+            return@OnNavigationItemSelectedListener false
+        }
+
         when (item.itemId) {
             R.id.navigation_add_note -> {
                 replaceBottomFragment(AddNoteFragment())
