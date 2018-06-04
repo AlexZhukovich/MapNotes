@@ -1,4 +1,4 @@
-package com.alex.mapnotes.search
+package com.alex.mapnotes.search.adapter
 
 import android.support.v7.widget.RecyclerView
 import android.view.View
