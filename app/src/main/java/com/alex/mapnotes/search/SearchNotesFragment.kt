@@ -9,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import com.alex.mapnotes.R
+import com.alex.mapnotes.data.formatter.CoordinateFormatter
 import com.alex.mapnotes.data.repository.FirebaseNotesRepository
 import com.alex.mapnotes.model.Note
 import com.google.firebase.database.DataSnapshot
@@ -20,13 +21,14 @@ class SearchNotesFragment: Fragment() {
 
     private lateinit var adapter: NotesAdapter
     private val notesRepository by lazy { FirebaseNotesRepository() }
+    private val coordinateFormatter by lazy { CoordinateFormatter() }
 
     override fun onCreateView(inflater: LayoutInflater,
                               container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
 
         val rootView = inflater.inflate(R.layout.fragment_search_notes, container, false)
-        adapter = NotesAdapter {
+        adapter = NotesAdapter(coordinateFormatter) {
             Toast.makeText(context, it.toString(), Toast.LENGTH_SHORT).show()
         }
         notesRepository.getNotes(object : ValueEventListener{
