@@ -1,14 +1,17 @@
 package com.alex.mapnotes.search
 
+import android.content.Intent
 import android.os.Bundle
 import android.support.v4.app.Fragment
+import android.support.v4.content.LocalBroadcastManager
 import android.support.v7.widget.DefaultItemAnimator
 import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
+import com.alex.mapnotes.DISPLAY_LOCATION
+import com.alex.mapnotes.EXTRA_NOTE
 import com.alex.mapnotes.R
 import com.alex.mapnotes.data.formatter.CoordinateFormatter
 import com.alex.mapnotes.data.repository.FirebaseAuthRepository
@@ -30,7 +33,12 @@ class SearchNotesFragment: Fragment(), SearchNotesView {
 
         val rootView = inflater.inflate(R.layout.fragment_search_notes, container, false)
         adapter = NotesAdapter(coordinateFormatter) {
-            Toast.makeText(context, it.toString(), Toast.LENGTH_SHORT).show()
+            val broadcastManager = LocalBroadcastManager.getInstance(this.context!!)
+            val intent = Intent(DISPLAY_LOCATION)
+            intent.apply {
+                putExtra(EXTRA_NOTE, it)
+            }
+            broadcastManager.sendBroadcast(intent)
         }
         val layoutManager = LinearLayoutManager(activity)
         rootView.recyclerView.layoutManager = layoutManager

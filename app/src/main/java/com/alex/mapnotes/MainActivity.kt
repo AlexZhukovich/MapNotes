@@ -1,6 +1,10 @@
 package com.alex.mapnotes
 
 import android.Manifest
+import android.content.BroadcastReceiver
+import android.content.Context
+import android.content.Intent
+import android.content.IntentFilter
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.support.design.widget.BottomNavigationView
@@ -9,29 +13,52 @@ import android.support.design.widget.Snackbar
 import android.support.v4.app.ActivityCompat
 import android.support.v4.app.Fragment
 import android.support.v4.content.ContextCompat
+import android.support.v4.content.LocalBroadcastManager
 import android.support.v7.app.AppCompatActivity
 import android.view.View
 import com.alex.mapnotes.add.AddNoteFragment
 import com.alex.mapnotes.data.provider.AddressLocationProvider
 import com.alex.mapnotes.ext.checkLocationPermission
+import com.alex.mapnotes.model.Note
 import com.alex.mapnotes.search.SearchNotesFragment
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.MarkerOptions
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.button_sheet.*
 
 const val LOCATION_REQUEST_CODE = 100
+const val DISPLAY_LOCATION = "display_location"
+const val EXTRA_NOTE = "note"
 
 class MainActivity : AppCompatActivity(), OnMapReadyCallback {
+    private var isInteractionMode = false
+
     private var mapFragment: SupportMapFragment? = null
 
     private var map: GoogleMap? = null
 
     private val bottomSheetBehavior by lazy {
         BottomSheetBehavior.from(bottomSheet)
+    }
+
+    private val displayOnMapBroadcastListener = object : BroadcastReceiver() {
+        override fun onReceive(context: Context?, intent: Intent?) {
+            isInteractionMode = true
+            val note = intent?.getParcelableExtra<Note>(EXTRA_NOTE)
+            if (note != null) {
+                val notePos = LatLng(note.latitude, note.longitude)
+
+                bottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
+                map?.addMarker(MarkerOptions()
+                        .position(notePos)
+                        .title(note.text))?.showInfoWindow()
+                map?.animateCamera(CameraUpdateFactory.newLatLngZoom(notePos, 16.0f))
+            }
+        }
     }
 
     private val mOnNavigationItemSelectedListener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
@@ -42,15 +69,18 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
 
         when (item.itemId) {
             R.id.navigation_add_note -> {
+                isInteractionMode = true
                 replaceBottomFragment(AddNoteFragment())
                 bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
                 return@OnNavigationItemSelectedListener true
             }
             R.id.navigation_map -> {
+                isInteractionMode = false
                 bottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
                 return@OnNavigationItemSelectedListener true
             }
             R.id.navigation_search_notes -> {
+                isInteractionMode = true
                 replaceBottomFragment(SearchNotesFragment())
                 bottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
                 return@OnNavigationItemSelectedListener true
@@ -102,19 +132,33 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
         locationProvider.startLocationUpdates()
     }
 
+    override fun onBackPressed() {
+        if (isInteractionMode) {
+            isInteractionMode = false
+        } else {
+            super.onBackPressed()
+        }
+    }
+
     override fun onResume() {
         super.onResume()
         mapFragment?.onResume()
         locationProvider.addUpdatableLocationListener {
-            val zoom = map?.cameraPosition?.zoom!!
-            map?.moveCamera(CameraUpdateFactory.newLatLngZoom(LatLng(it.latitude, it.longitude), zoom))
+            if (!isInteractionMode) {
+                val zoom = map?.cameraPosition?.zoom!!
+                map?.animateCamera(CameraUpdateFactory.newLatLngZoom(LatLng(it.latitude, it.longitude), zoom))
+            }
         }
+        LocalBroadcastManager
+                .getInstance(this)
+                .registerReceiver(displayOnMapBroadcastListener, IntentFilter(DISPLAY_LOCATION))
     }
 
     override fun onPause() {
         super.onPause()
         mapFragment?.onPause()
         navigation.setOnNavigationItemSelectedListener(null)
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(displayOnMapBroadcastListener)
     }
 
     override fun onStop() {
@@ -169,7 +213,16 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
         this.map = map
         if (checkLocationPermission(this)) {
             this.map?.isMyLocationEnabled = true
-            this.map?.animateCamera(CameraUpdateFactory.zoomTo(14.0f))
+
+            this.map?.setOnMyLocationButtonClickListener {
+                isInteractionMode = false
+                return@setOnMyLocationButtonClickListener true
+            }
+            this.map?.setOnCameraMoveStartedListener { reason ->
+                if (reason == GoogleMap.OnCameraMoveStartedListener.REASON_GESTURE) {
+                    isInteractionMode = true
+                }
+            }
         }
     }
 }
