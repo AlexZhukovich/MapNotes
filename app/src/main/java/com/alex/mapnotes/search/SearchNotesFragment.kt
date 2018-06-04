@@ -11,19 +11,18 @@ import android.view.ViewGroup
 import android.widget.Toast
 import com.alex.mapnotes.R
 import com.alex.mapnotes.data.formatter.CoordinateFormatter
+import com.alex.mapnotes.data.repository.FirebaseAuthRepository
 import com.alex.mapnotes.data.repository.FirebaseNotesRepository
 import com.alex.mapnotes.model.Note
 import com.alex.mapnotes.search.adapter.NotesAdapter
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.ValueEventListener
 import kotlinx.android.synthetic.main.fragment_search_notes.view.*
 
-class SearchNotesFragment: Fragment() {
-
+class SearchNotesFragment: Fragment(), SearchNotesView {
     private lateinit var adapter: NotesAdapter
-    private val notesRepository by lazy { FirebaseNotesRepository() }
     private val coordinateFormatter by lazy { CoordinateFormatter() }
+    private val authRepository by lazy { FirebaseAuthRepository() }
+    private val notesRepository by lazy { FirebaseNotesRepository() }
+    private val presenter by lazy { SearchNotesPresenter(authRepository, notesRepository) }
 
     override fun onCreateView(inflater: LayoutInflater,
                               container: ViewGroup?,
@@ -33,20 +32,6 @@ class SearchNotesFragment: Fragment() {
         adapter = NotesAdapter(coordinateFormatter) {
             Toast.makeText(context, it.toString(), Toast.LENGTH_SHORT).show()
         }
-        notesRepository.getNotes(object : ValueEventListener{
-            override fun onCancelled(databaseError: DatabaseError) {
-
-            }
-
-            override fun onDataChange(dataSnapshot: DataSnapshot) {
-                if (dataSnapshot.exists()) {
-                    dataSnapshot.children.forEach {
-                        val item: Note = it.getValue(Note::class.java)!!
-                        adapter.addNote(item)
-                    }
-                }
-            }
-        })
         val layoutManager = LinearLayoutManager(activity)
         rootView.recyclerView.layoutManager = layoutManager
         rootView.recyclerView.itemAnimator = DefaultItemAnimator()
@@ -54,5 +39,20 @@ class SearchNotesFragment: Fragment() {
                 DividerItemDecoration(rootView.recyclerView.context, layoutManager.orientation))
         rootView.recyclerView.adapter = adapter
         return rootView
+    }
+
+    override fun onStart() {
+        super.onStart()
+        presenter.onAttach(this)
+        presenter.getNotes()
+    }
+
+    override fun displayNote(note: Note) {
+        adapter.addNote(note)
+    }
+
+    override fun onStop() {
+        presenter.toString()
+        super.onStop()
     }
 }
