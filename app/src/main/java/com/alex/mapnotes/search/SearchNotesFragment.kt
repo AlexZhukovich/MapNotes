@@ -3,6 +3,7 @@ package com.alex.mapnotes.search
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.widget.DefaultItemAnimator
+import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
@@ -12,6 +13,7 @@ import com.alex.mapnotes.R
 import com.alex.mapnotes.data.formatter.CoordinateFormatter
 import com.alex.mapnotes.data.repository.FirebaseNotesRepository
 import com.alex.mapnotes.model.Note
+import com.alex.mapnotes.search.adapter.NotesAdapter
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ValueEventListener
@@ -45,8 +47,11 @@ class SearchNotesFragment: Fragment() {
                 }
             }
         })
-        rootView.recyclerView.layoutManager = LinearLayoutManager(activity)
+        val layoutManager = LinearLayoutManager(activity)
+        rootView.recyclerView.layoutManager = layoutManager
         rootView.recyclerView.itemAnimator = DefaultItemAnimator()
+        rootView.recyclerView.addItemDecoration(
+                DividerItemDecoration(rootView.recyclerView.context, layoutManager.orientation))
         rootView.recyclerView.adapter = adapter
         return rootView
     }
