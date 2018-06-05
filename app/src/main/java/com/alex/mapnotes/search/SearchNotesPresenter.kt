@@ -10,6 +10,8 @@ import com.google.firebase.database.ValueEventListener
 class SearchNotesPresenter(private val userRepository: UserRepository,
                            private val notesRepository: NotesRepository) : SearchNotesMvpPresenter {
     private var view: SearchNotesView? = null
+    private val notesSearchCategory = 0
+    private val usersSearchCategory = 1
 
     override fun onAttach(view: SearchNotesView?) {
         this.view = view
@@ -42,6 +44,68 @@ class SearchNotesPresenter(private val userRepository: UserRepository,
                 }
             }
         })
+    }
+
+    override fun searchNotes(text: String, categoryPosition: Int) {
+        view?.clearSearchResults()
+        when (categoryPosition) {
+            notesSearchCategory -> {
+                notesRepository.getNotesByNoteText(text, object : ValueEventListener {
+                    override fun onCancelled(p0: DatabaseError) {
+                    }
+
+                    override fun onDataChange(dataSnapshot: DataSnapshot) {
+                        if (dataSnapshot.exists()) {
+                            dataSnapshot.children.forEach({
+                                val note: Note = it.getValue(Note::class.java)!!
+                                userRepository.getHumanReadableName(note.user!!, object : ValueEventListener {
+                                    override fun onCancelled(p0: DatabaseError) {
+                                        note.user = "Unknown"
+                                        view?.displayNote(note)
+                                    }
+
+                                    override fun onDataChange(dataSnapshot: DataSnapshot) {
+                                        if (dataSnapshot.exists()) {
+                                            note.user = dataSnapshot.children.first().value.toString()
+                                            view?.displayNote(note)
+                                        }
+                                    }
+                                })
+                            })
+                        }
+                    }
+
+                })
+            }
+            usersSearchCategory -> {
+                userRepository.getUserIdFromHumanReadableName(text, object : ValueEventListener {
+                    override fun onCancelled(p0: DatabaseError) {
+
+                    }
+
+                    override fun onDataChange(userdDataSnapshot: DataSnapshot) {
+                        if (userdDataSnapshot.exists()) {
+                            val userId = userdDataSnapshot.children.first().key.toString()
+                            notesRepository.getNotesByUser(userId, object : ValueEventListener {
+                                override fun onCancelled(p0: DatabaseError) {
+                                    view?.clearSearchResults()
+                                }
+
+                                override fun onDataChange(notesDataSnapshot: DataSnapshot) {
+                                    if (notesDataSnapshot.exists()) {
+                                        notesDataSnapshot.children.forEach({
+                                            val note: Note = it.getValue(Note::class.java)!!
+                                            note.user = text
+                                            view?.displayNote(note)
+                                        })
+                                    }
+                                }
+                            })
+                        }
+                    }
+                })
+            }
+        }
     }
 
     override fun onDetach() {

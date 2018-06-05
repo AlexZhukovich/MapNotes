@@ -8,4 +8,8 @@ interface NotesRepository {
     fun addNote(note: Note)
 
     fun getNotes(listener: ValueEventListener)
+
+    fun getNotesByNoteText(text: String, listener: ValueEventListener)
+
+    fun getNotesByUser(userId: String, listener: ValueEventListener)
 }

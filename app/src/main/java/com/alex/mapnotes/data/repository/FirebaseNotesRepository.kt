@@ -18,4 +18,18 @@ class FirebaseNotesRepository : NotesRepository {
     override fun getNotes(listener: ValueEventListener) {
         database.getReference(notesPath).addListenerForSingleValueEvent(listener)
     }
+
+    override fun getNotesByNoteText(text: String, listener: ValueEventListener) {
+        database.getReference(notesPath)
+                .orderByChild("text")
+                .startAt(text)
+                .addListenerForSingleValueEvent(listener)
+    }
+
+    override fun getNotesByUser(userId: String, listener: ValueEventListener) {
+        database.getReference(notesPath)
+                .orderByChild("user")
+                .equalTo(userId)
+                .addListenerForSingleValueEvent(listener)
+    }
 }

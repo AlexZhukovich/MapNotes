@@ -11,7 +11,12 @@
     <string name="add_note_hint">Note</string>
 
     <!-- Search notes -->
-    <string name="search_note_user_hint">Search text or user name</string>
+    <string name="search_hint">Search</string>
+    <string name="search_button_text">Search</string>
+    <string-array name="search_options">
+        <item>Notes</item>
+        <item>Users</item>
+    </string-array>
 
     <!-- Permissions -->
     <string name="permission_explanation">We need location permission because we would like to save notes based on your location</string>

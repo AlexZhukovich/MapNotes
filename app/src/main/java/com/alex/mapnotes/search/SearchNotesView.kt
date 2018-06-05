@@ -6,4 +6,6 @@ import com.alex.mapnotes.model.Note
 interface SearchNotesView : MvpView {
 
     fun displayNote(note: Note)
+
+    fun clearSearchResults()
 }

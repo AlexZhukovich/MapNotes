@@ -16,6 +16,11 @@ class NotesAdapter(private val formatter: LatLonFormatter,
         notifyDataSetChanged()
     }
 
+    fun clear() {
+        this.notes.clear()
+        notifyDataSetChanged()
+    }
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): NoteViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.item_note, parent, false)
         return NoteViewHolder(view, itemClick, formatter)
@@ -26,5 +31,4 @@ class NotesAdapter(private val formatter: LatLonFormatter,
     override fun onBindViewHolder(holder: NoteViewHolder, position: Int) {
         holder.bindNote(notes[position])
     }
-
 }
