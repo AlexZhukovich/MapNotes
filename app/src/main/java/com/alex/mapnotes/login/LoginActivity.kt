@@ -42,6 +42,7 @@ class LoginActivity : AppCompatActivity(), LoginView {
     }
 
     override fun navigateToMapScreen() {
+        finish()
         navigator.navigateTo(MainActivity::class.java)
     }
 
