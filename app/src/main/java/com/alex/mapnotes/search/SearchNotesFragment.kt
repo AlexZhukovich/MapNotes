@@ -14,7 +14,7 @@ import com.alex.mapnotes.DISPLAY_LOCATION
 import com.alex.mapnotes.EXTRA_NOTE
 import com.alex.mapnotes.R
 import com.alex.mapnotes.data.formatter.CoordinateFormatter
-import com.alex.mapnotes.data.repository.FirebaseAuthRepository
+import com.alex.mapnotes.data.repository.FirebaseUserRepository
 import com.alex.mapnotes.data.repository.FirebaseNotesRepository
 import com.alex.mapnotes.model.Note
 import com.alex.mapnotes.search.adapter.NotesAdapter
@@ -23,7 +23,7 @@ import kotlinx.android.synthetic.main.fragment_search_notes.view.*
 class SearchNotesFragment: Fragment(), SearchNotesView {
     private lateinit var adapter: NotesAdapter
     private val coordinateFormatter by lazy { CoordinateFormatter() }
-    private val authRepository by lazy { FirebaseAuthRepository() }
+    private val authRepository by lazy { FirebaseUserRepository() }
     private val notesRepository by lazy { FirebaseNotesRepository() }
     private val presenter by lazy { SearchNotesPresenter(authRepository, notesRepository) }
 

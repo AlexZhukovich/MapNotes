@@ -1,8 +1,8 @@
 package com.alex.mapnotes.login
 
-import com.alex.mapnotes.data.repository.AuthRepository
+import com.alex.mapnotes.data.repository.UserRepository
 
-class LoginPresenter(private val authRepository: AuthRepository) : LoginMvpPresenter {
+class LoginPresenter(private val userRepository: UserRepository) : LoginMvpPresenter {
     private var view: LoginView? = null
 
     override fun onAttach(view: LoginView?) {
@@ -10,7 +10,7 @@ class LoginPresenter(private val authRepository: AuthRepository) : LoginMvpPrese
     }
 
     override fun signIn(email: String, password: String) {
-        authRepository.signIn(email, password) {
+        userRepository.signIn(email, password) {
             if (it.isSuccessful) {
                 view?.navigateToMapScreen()
             } else {
@@ -19,9 +19,10 @@ class LoginPresenter(private val authRepository: AuthRepository) : LoginMvpPrese
         }
     }
 
-    override fun signUp(email: String, password: String) {
-        authRepository.signUp(email, password) {
+    override fun signUp(name: String, email: String, password: String) {
+        userRepository.signUp(email, password) {
             if (it.isSuccessful) {
+                userRepository.changeUserName(it.result.user, name)
                 view?.navigateToMapScreen()
             } else {
                 view?.displayError("Something went wrong")

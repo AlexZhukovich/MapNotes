@@ -11,7 +11,7 @@ import android.view.ViewGroup
 import com.alex.mapnotes.R
 import com.alex.mapnotes.data.formatter.FullAddressFormatter
 import com.alex.mapnotes.data.provider.AddressLocationProvider
-import com.alex.mapnotes.data.repository.FirebaseAuthRepository
+import com.alex.mapnotes.data.repository.FirebaseUserRepository
 import com.alex.mapnotes.data.repository.FirebaseNotesRepository
 import kotlinx.android.synthetic.main.fragment_add_note.*
 import kotlinx.android.synthetic.main.fragment_add_note.view.*
@@ -22,7 +22,7 @@ class AddNoteFragment: Fragment(), AddNoteView {
     private val locationProvider by lazy { AddressLocationProvider(this.context!!) }
     private val locationFormatter by lazy { FullAddressFormatter(geocoder) }
     private val notesRepository by lazy { FirebaseNotesRepository() }
-    private val authRepository by lazy { FirebaseAuthRepository() }
+    private val authRepository by lazy { FirebaseUserRepository() }
     private val presenter by lazy {
         AddNotePresenter(locationProvider,
                          locationFormatter,

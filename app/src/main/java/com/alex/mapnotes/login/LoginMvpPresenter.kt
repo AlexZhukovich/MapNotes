@@ -6,5 +6,5 @@ interface LoginMvpPresenter : MvpPresenter<LoginView> {
 
     fun signIn(email: String, password: String)
 
-    fun signUp(email: String, password: String)
+    fun signUp(name: String, email: String, password: String)
 }

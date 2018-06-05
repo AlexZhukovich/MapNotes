@@ -1,13 +1,13 @@
 package com.alex.mapnotes.search
 
-import com.alex.mapnotes.data.repository.AuthRepository
+import com.alex.mapnotes.data.repository.UserRepository
 import com.alex.mapnotes.data.repository.NotesRepository
 import com.alex.mapnotes.model.Note
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ValueEventListener
 
-class SearchNotesPresenter(private val authRepository: AuthRepository,
+class SearchNotesPresenter(private val userRepository: UserRepository,
                            private val notesRepository: NotesRepository) : SearchNotesMvpPresenter {
     private var view: SearchNotesView? = null
 
@@ -16,7 +16,6 @@ class SearchNotesPresenter(private val authRepository: AuthRepository,
     }
 
     override fun getNotes() {
-        val userId = authRepository.getUser()?.uid
         notesRepository.getNotes(object : ValueEventListener {
             override fun onCancelled(databaseError: DatabaseError) {
 
@@ -25,11 +24,20 @@ class SearchNotesPresenter(private val authRepository: AuthRepository,
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 if (dataSnapshot.exists()) {
                     dataSnapshot.children.forEach {
-                        val item: Note = it.getValue(Note::class.java)!!
-                        if (item.user == userId) {
-                            item.user = "Me"
-                        }
-                        view?.displayNote(item)
+                        val note: Note = it.getValue(Note::class.java)!!
+                        userRepository.getHumanReadableName(note.user!!, object : ValueEventListener {
+                            override fun onCancelled(p0: DatabaseError) {
+                                note.user = "Unknown"
+                                view?.displayNote(note)
+                            }
+
+                            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                                if (dataSnapshot.exists()) {
+                                    note.user = dataSnapshot.children.first().value.toString()
+                                    view?.displayNote(note)
+                                }
+                            }
+                        })
                     }
                 }
             }

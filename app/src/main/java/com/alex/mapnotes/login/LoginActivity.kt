@@ -5,13 +5,13 @@ import android.support.v7.app.AppCompatActivity
 import android.widget.Toast
 import com.alex.mapnotes.MainActivity
 import com.alex.mapnotes.R
-import com.alex.mapnotes.data.repository.FirebaseAuthRepository
+import com.alex.mapnotes.data.repository.FirebaseUserRepository
 import com.alex.mapnotes.ext.navigateTo
 import kotlinx.android.synthetic.main.activity_login.*
 
 class LoginActivity : AppCompatActivity(), LoginView {
 
-    private val authRepository by lazy { FirebaseAuthRepository() }
+    private val authRepository by lazy { FirebaseUserRepository() }
     private val presenter by lazy { LoginPresenter(authRepository) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -24,9 +24,10 @@ class LoginActivity : AppCompatActivity(), LoginView {
         }
 
         signUp.setOnClickListener {
+            val nameValue = name.text.toString()
             val emailValue = email.text.toString().trim()
             val passwordValue = password.text.toString()
-            presenter.signUp(emailValue, passwordValue)
+            presenter.signUp(nameValue, emailValue, passwordValue)
         }
     }
 
