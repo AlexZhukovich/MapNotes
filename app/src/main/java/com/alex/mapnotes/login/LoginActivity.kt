@@ -6,14 +6,13 @@ import android.widget.Toast
 import com.alex.mapnotes.MainActivity
 import com.alex.mapnotes.R
 import com.alex.mapnotes.data.repository.FirebaseAuthRepository
-import com.alex.mapnotes.navigation.Navigator
+import com.alex.mapnotes.ext.navigateTo
 import kotlinx.android.synthetic.main.activity_login.*
 
 class LoginActivity : AppCompatActivity(), LoginView {
 
     private val authRepository by lazy { FirebaseAuthRepository() }
     private val presenter by lazy { LoginPresenter(authRepository) }
-    private val navigator by lazy { Navigator(this) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -43,7 +42,7 @@ class LoginActivity : AppCompatActivity(), LoginView {
 
     override fun navigateToMapScreen() {
         finish()
-        navigator.navigateTo(MainActivity::class.java)
+        navigateTo(MainActivity::class.java)
     }
 
     override fun displayError(text: String) {
