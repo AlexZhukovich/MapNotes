@@ -41,6 +41,8 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
 
     private var mapFragment: SupportMapFragment? = null
 
+    private val locationProvider by lazy { AddressLocationProvider(this) }
+
     private var map: GoogleMap? = null
     private val bottomSheetBehavior by lazy {
         BottomSheetBehavior.from(bottomSheet)
@@ -90,8 +92,6 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
         false
     }
 
-    private val locationProvider by lazy { AddressLocationProvider(this) }
-
     private fun replaceBottomFragment(fragment: Fragment) {
         supportFragmentManager.beginTransaction()
                 .replace(R.id.bottomSheetContainer, fragment)
@@ -130,7 +130,6 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
     override fun onStart() {
         super.onStart()
         mapFragment?.onStart()
-        locationProvider.startLocationUpdates()
     }
 
     override fun onBackPressed() {
@@ -144,18 +143,6 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
     override fun onResume() {
         super.onResume()
         mapFragment?.onResume()
-        locationProvider.addUpdatableLocationListener {
-            if (!isInteractionMode) {
-//                val zoom = if (isInit) {
-//                    isInit = false
-//                    14.0f
-//                } else {
-//                    map?.cameraPosition?.zoom!!
-//                }
-                val zoom = map?.cameraPosition?.zoom!!
-                map?.moveCamera(CameraUpdateFactory.newLatLngZoom(LatLng(it.latitude, it.longitude), zoom))
-            }
-        }
         LocalBroadcastManager
                 .getInstance(this)
                 .registerReceiver(displayOnMapBroadcastListener, IntentFilter(DISPLAY_LOCATION))
@@ -228,6 +215,13 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
             this.map?.setOnCameraMoveStartedListener { reason ->
                 if (reason == GoogleMap.OnCameraMoveStartedListener.REASON_GESTURE) {
                     isInteractionMode = true
+                }
+            }
+            locationProvider.startLocationUpdates()
+            locationProvider.addUpdatableLocationListener {
+                if (!isInteractionMode) {
+                    val zoom = map?.cameraPosition?.zoom!!
+                    map.moveCamera(CameraUpdateFactory.newLatLngZoom(LatLng(it.latitude, it.longitude), zoom))
                 }
             }
         }
