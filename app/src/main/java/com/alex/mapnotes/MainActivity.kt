@@ -35,12 +35,13 @@ const val DISPLAY_LOCATION = "display_location"
 const val EXTRA_NOTE = "note"
 
 class MainActivity : AppCompatActivity(), OnMapReadyCallback {
+    private val defaultZoom = 15.0f
+
     private var isInteractionMode = false
 
     private var mapFragment: SupportMapFragment? = null
 
     private var map: GoogleMap? = null
-
     private val bottomSheetBehavior by lazy {
         BottomSheetBehavior.from(bottomSheet)
     }
@@ -145,8 +146,14 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
         mapFragment?.onResume()
         locationProvider.addUpdatableLocationListener {
             if (!isInteractionMode) {
+//                val zoom = if (isInit) {
+//                    isInit = false
+//                    14.0f
+//                } else {
+//                    map?.cameraPosition?.zoom!!
+//                }
                 val zoom = map?.cameraPosition?.zoom!!
-                map?.animateCamera(CameraUpdateFactory.newLatLngZoom(LatLng(it.latitude, it.longitude), zoom))
+                map?.moveCamera(CameraUpdateFactory.newLatLngZoom(LatLng(it.latitude, it.longitude), zoom))
             }
         }
         LocalBroadcastManager
@@ -212,8 +219,8 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
     override fun onMapReady(map: GoogleMap?) {
         this.map = map
         if (checkLocationPermission(this)) {
+            updateInitLocation(map)
             this.map?.isMyLocationEnabled = true
-
             this.map?.setOnMyLocationButtonClickListener {
                 isInteractionMode = false
                 return@setOnMyLocationButtonClickListener true
@@ -224,5 +231,11 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
                 }
             }
         }
+    }
+
+    private fun updateInitLocation(map: GoogleMap?) {
+        val initialLoc = map?.cameraPosition?.target
+        val location = CameraUpdateFactory.newLatLngZoom(initialLoc, defaultZoom)
+        map?.moveCamera(location)
     }
 }
