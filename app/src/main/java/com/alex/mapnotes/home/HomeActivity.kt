@@ -62,22 +62,21 @@ class MainActivity : AppCompatActivity(), HomeView {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
-        bottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
-
-        navigation.selectedItemId = R.id.navigation_map
-        navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener)
     }
 
     override fun onStart() {
         super.onStart()
         presenter.onAttach(this)
         mapFragment?.onStart()
+        bottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
     }
 
     override fun onResume() {
         super.onResume()
         mapFragment?.onResume()
+
+        navigation.selectedItemId = R.id.navigation_map
+        navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener)
 
         if (!checkLocationPermission(this)) {
             // Permission is not granted; show an explanation
