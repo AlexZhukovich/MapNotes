@@ -1,4 +1,4 @@
-package com.alex.mapnotes
+package com.alex.mapnotes.home
 
 import android.Manifest
 import android.content.BroadcastReceiver
@@ -12,26 +12,30 @@ import android.support.design.widget.BottomSheetBehavior
 import android.support.design.widget.Snackbar
 import android.support.v4.app.ActivityCompat
 import android.support.v4.app.Fragment
-import android.support.v4.content.ContextCompat
 import android.support.v4.content.LocalBroadcastManager
 import android.support.v7.app.AppCompatActivity
 import android.view.View
+import com.alex.mapnotes.NoLocationPermissionFragment
+import com.alex.mapnotes.R
 import com.alex.mapnotes.add.AddNoteFragment
+import com.alex.mapnotes.ext.LOCATION_REQUEST_CODE
+import com.alex.mapnotes.ext.checkLocationPermission
+import com.alex.mapnotes.ext.requestLocationPermissions
 import com.alex.mapnotes.map.GoogleMapFragment
 import com.alex.mapnotes.model.Note
 import com.alex.mapnotes.search.SearchNotesFragment
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.button_sheet.*
 
-const val LOCATION_REQUEST_CODE = 100
+
 const val DISPLAY_LOCATION = "display_location"
 const val EXTRA_NOTE = "note"
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), HomeView {
     private var mapFragment: GoogleMapFragment? = null
-    private val bottomSheetBehavior by lazy {
-        BottomSheetBehavior.from(bottomSheet)
-    }
+    private val bottomSheetBehavior by lazy { BottomSheetBehavior.from(bottomSheet) }
+
+    private val presenter by lazy { HomePresenter() }
 
     private val hideExpandedMenuListener = object : BroadcastReceiver() {
         override fun onReceive(context: Context?, intent: Intent?) {
@@ -46,27 +50,7 @@ class MainActivity : AppCompatActivity() {
                 && bottomSheetBehavior.state != BottomSheetBehavior.STATE_HIDDEN) {
             return@OnNavigationItemSelectedListener false
         }
-
-        when (item.itemId) {
-            R.id.navigation_add_note -> {
-                mapFragment?.isInteractionMode = true
-                replaceBottomFragment(AddNoteFragment())
-                bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
-                return@OnNavigationItemSelectedListener true
-            }
-            R.id.navigation_map -> {
-                mapFragment?.isInteractionMode = false
-                bottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
-                return@OnNavigationItemSelectedListener true
-            }
-            R.id.navigation_search_notes -> {
-                mapFragment?.isInteractionMode = true
-                replaceBottomFragment(SearchNotesFragment())
-                bottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
-                return@OnNavigationItemSelectedListener true
-            }
-        }
-        false
+        return@OnNavigationItemSelectedListener presenter.handleNavigationItemClick(item.itemId)
     }
 
     private fun replaceBottomFragment(fragment: Fragment) {
@@ -83,30 +67,71 @@ class MainActivity : AppCompatActivity() {
 
         navigation.selectedItemId = R.id.navigation_map
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener)
-
-        if (ContextCompat.checkSelfPermission(this,
-                        Manifest.permission.ACCESS_FINE_LOCATION)
-                != PackageManager.PERMISSION_GRANTED) {
-
-            // Permission is not granted; show an explanation
-            if (ActivityCompat.shouldShowRequestPermissionRationale(this,
-                            Manifest.permission.ACCESS_FINE_LOCATION)) {
-                showPermissionExplanationSnackBar()
-                hideContentWhichRequirePermissions()
-            } else {
-                // No explanation needed, we can request the permission.
-                ActivityCompat.requestPermissions(this,
-                        arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
-                        LOCATION_REQUEST_CODE)
-            }
-        } else {
-            showContentWhichRequirePermissions()
-        }
     }
 
     override fun onStart() {
         super.onStart()
+        presenter.onAttach(this)
         mapFragment?.onStart()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        mapFragment?.onResume()
+
+        if (!checkLocationPermission(this)) {
+            // Permission is not granted; show an explanation
+            if (ActivityCompat.shouldShowRequestPermissionRationale(this,
+                            Manifest.permission.ACCESS_FINE_LOCATION)) {
+                presenter.showLocationPermissionRationale()
+            } else {
+                // No explanation needed, we can request the permission.
+                requestLocationPermissions(this)
+            }
+        } else {
+            showContentWhichRequirePermissions()
+        }
+
+        LocalBroadcastManager
+                .getInstance(this)
+                .registerReceiver(hideExpandedMenuListener, IntentFilter(DISPLAY_LOCATION))
+    }
+
+    override fun displayAddNote() {
+        replaceBottomFragment(AddNoteFragment())
+    }
+
+    override fun displaySearchNotes() {
+        replaceBottomFragment(SearchNotesFragment())
+    }
+
+    override fun updateMapInteractionMode(isInteractionMode: Boolean) {
+        mapFragment?.isInteractionMode = isInteractionMode
+    }
+
+    override fun updateNavigationState(newState: Int) {
+        bottomSheetBehavior.state = newState
+    }
+
+    override fun showPermissionExplanationSnackBar() {
+        Snackbar.make(layout, R.string.permission_explanation, Snackbar.LENGTH_LONG)
+                .setAction(R.string.permission_grant_text) { requestLocationPermissions(this) }
+                .show()
+    }
+
+    override fun showContentWhichRequirePermissions() {
+        mapFragment = GoogleMapFragment()
+        supportFragmentManager.beginTransaction()
+                .replace(R.id.mapContainer, mapFragment)
+                .commit()
+        navigation.visibility = View.VISIBLE
+    }
+
+    override fun hideContentWhichRequirePermissions() {
+        supportFragmentManager.beginTransaction()
+                .replace(R.id.mapContainer, NoLocationPermissionFragment())
+                .commit()
+        navigation.visibility = View.GONE
     }
 
     override fun onBackPressed() {
@@ -118,14 +143,6 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    override fun onResume() {
-        super.onResume()
-        mapFragment?.onResume()
-        LocalBroadcastManager
-                .getInstance(this)
-                .registerReceiver(hideExpandedMenuListener, IntentFilter(DISPLAY_LOCATION))
-    }
-
     override fun onPause() {
         super.onPause()
         mapFragment?.onPause()
@@ -134,34 +151,9 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onStop() {
-        super.onStop()
+        presenter.onDetach()
         mapFragment?.onStop()
-    }
-
-    private fun showPermissionExplanationSnackBar() {
-        Snackbar
-                .make(layout, R.string.permission_explanation, Snackbar.LENGTH_LONG)
-                .setAction(R.string.permission_grant_text) {
-                    ActivityCompat.requestPermissions(this@MainActivity,
-                            arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
-                            LOCATION_REQUEST_CODE)
-                }
-                .show()
-    }
-
-    private fun showContentWhichRequirePermissions() {
-        mapFragment = GoogleMapFragment()
-        supportFragmentManager.beginTransaction()
-                .replace(R.id.mapContainer, mapFragment)
-                .commit()
-        navigation.visibility = View.VISIBLE
-    }
-
-    private fun hideContentWhichRequirePermissions() {
-        supportFragmentManager.beginTransaction()
-                .replace(R.id.mapContainer, NoLocationPermissionFragment())
-                .commit()
-        navigation.visibility = View.GONE
+        super.onStop()
     }
 
     override fun onRequestPermissionsResult(requestCode: Int,

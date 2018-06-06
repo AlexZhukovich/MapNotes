@@ -3,7 +3,7 @@ package com.alex.mapnotes.login
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.widget.Toast
-import com.alex.mapnotes.MainActivity
+import com.alex.mapnotes.home.MainActivity
 import com.alex.mapnotes.R
 import com.alex.mapnotes.data.repository.FirebaseUserRepository
 import com.alex.mapnotes.ext.navigateTo

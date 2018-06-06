@@ -10,8 +10,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
-import com.alex.mapnotes.DISPLAY_LOCATION
-import com.alex.mapnotes.EXTRA_NOTE
+import com.alex.mapnotes.home.DISPLAY_LOCATION
+import com.alex.mapnotes.home.EXTRA_NOTE
 import com.alex.mapnotes.R
 import com.alex.mapnotes.data.formatter.CoordinateFormatter
 import com.alex.mapnotes.data.repository.FirebaseNotesRepository

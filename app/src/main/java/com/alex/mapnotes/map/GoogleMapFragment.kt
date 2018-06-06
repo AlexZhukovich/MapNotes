@@ -6,8 +6,8 @@ import android.content.Intent
 import android.content.IntentFilter
 import android.location.Location
 import android.support.v4.content.LocalBroadcastManager
-import com.alex.mapnotes.DISPLAY_LOCATION
-import com.alex.mapnotes.EXTRA_NOTE
+import com.alex.mapnotes.home.DISPLAY_LOCATION
+import com.alex.mapnotes.home.EXTRA_NOTE
 import com.alex.mapnotes.data.provider.AddressLocationProvider
 import com.alex.mapnotes.ext.checkLocationPermission
 import com.alex.mapnotes.model.Note
