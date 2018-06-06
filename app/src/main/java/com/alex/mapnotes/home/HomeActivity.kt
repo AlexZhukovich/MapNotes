@@ -35,7 +35,7 @@ class MainActivity : AppCompatActivity(), HomeView {
     private var mapFragment: GoogleMapFragment? = null
     private val bottomSheetBehavior by lazy { BottomSheetBehavior.from(bottomSheet) }
 
-    private val presenter by lazy { HomePresenter() }
+    private val presenter : HomeMvpPresenter by lazy { HomePresenter() }
 
     private val hideExpandedMenuListener = object : BroadcastReceiver() {
         override fun onReceive(context: Context?, intent: Intent?) {

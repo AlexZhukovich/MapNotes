@@ -14,25 +14,33 @@ import com.alex.mapnotes.home.DISPLAY_LOCATION
 import com.alex.mapnotes.home.EXTRA_NOTE
 import com.alex.mapnotes.R
 import com.alex.mapnotes.data.formatter.CoordinateFormatter
+import com.alex.mapnotes.data.formatter.LatLonFormatter
 import com.alex.mapnotes.data.repository.FirebaseNotesRepository
 import com.alex.mapnotes.data.repository.FirebaseUserRepository
+import com.alex.mapnotes.data.repository.NotesRepository
+import com.alex.mapnotes.data.repository.UserRepository
 import com.alex.mapnotes.model.Note
 import com.alex.mapnotes.search.adapter.NotesAdapter
 import kotlinx.android.synthetic.main.fragment_search_notes.view.*
 
 class SearchNotesFragment: Fragment(), SearchNotesView {
     private lateinit var adapter: NotesAdapter
-    private val coordinateFormatter by lazy { CoordinateFormatter() }
-    private val authRepository by lazy { FirebaseUserRepository() }
-    private val notesRepository by lazy { FirebaseNotesRepository() }
-    private val presenter by lazy { SearchNotesPresenter(authRepository, notesRepository) }
+    private val coordinateFormatter : LatLonFormatter by lazy { CoordinateFormatter() }
+    private val userRepository : UserRepository by lazy { FirebaseUserRepository() }
+    private val notesRepository : NotesRepository by lazy { FirebaseNotesRepository() }
+    private val presenter : SearchNotesMvpPresenter by lazy {
+        SearchNotesPresenter(userRepository, notesRepository)
+    }
 
     override fun onCreateView(inflater: LayoutInflater,
                               container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
 
         val rootView = inflater.inflate(R.layout.fragment_search_notes, container, false)
-        rootView.searchOptions.adapter = ArrayAdapter.createFromResource(activity, R.array.search_options, android.R.layout.simple_dropdown_item_1line)
+        rootView.searchOptions.adapter = ArrayAdapter.createFromResource(
+                activity,
+                R.array.search_options,
+                android.R.layout.simple_dropdown_item_1line)
         adapter = NotesAdapter(coordinateFormatter) {
             val broadcastManager = LocalBroadcastManager.getInstance(this.context!!)
             val intent = Intent(DISPLAY_LOCATION)

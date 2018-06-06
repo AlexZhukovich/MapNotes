@@ -9,6 +9,7 @@ import android.support.v4.content.LocalBroadcastManager
 import com.alex.mapnotes.home.DISPLAY_LOCATION
 import com.alex.mapnotes.home.EXTRA_NOTE
 import com.alex.mapnotes.data.provider.AddressLocationProvider
+import com.alex.mapnotes.data.provider.LocationProvider
 import com.alex.mapnotes.ext.checkLocationPermission
 import com.alex.mapnotes.model.Note
 import com.google.android.gms.maps.CameraUpdateFactory
@@ -21,8 +22,8 @@ import com.google.android.gms.maps.model.MarkerOptions
 class GoogleMapFragment : SupportMapFragment(), MapView, OnMapReadyCallback {
     private var map: GoogleMap? = null
 
-    val presenter by lazy { GoogleMapPresenter() }
-    private val locationProvider by lazy { AddressLocationProvider(this.context!!) }
+    val presenter : MapMvpPresenter by lazy { GoogleMapPresenter() }
+    private val locationProvider : LocationProvider by lazy { AddressLocationProvider(this.context!!) }
 
     var isInteractionMode: Boolean = false
         set(value) {

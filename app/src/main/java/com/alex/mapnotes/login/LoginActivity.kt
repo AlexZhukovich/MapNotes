@@ -6,13 +6,14 @@ import android.widget.Toast
 import com.alex.mapnotes.home.MainActivity
 import com.alex.mapnotes.R
 import com.alex.mapnotes.data.repository.FirebaseUserRepository
+import com.alex.mapnotes.data.repository.UserRepository
 import com.alex.mapnotes.ext.navigateTo
 import kotlinx.android.synthetic.main.activity_login.*
 
 class LoginActivity : AppCompatActivity(), LoginView {
 
-    private val authRepository by lazy { FirebaseUserRepository() }
-    private val presenter by lazy { LoginPresenter(authRepository) }
+    private val userRepository : UserRepository by lazy { FirebaseUserRepository() }
+    private val presenter : LoginMvpPresenter by lazy { LoginPresenter(userRepository) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
