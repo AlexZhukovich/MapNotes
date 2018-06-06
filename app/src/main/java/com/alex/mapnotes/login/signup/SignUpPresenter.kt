@@ -1,9 +1,9 @@
 package com.alex.mapnotes.login.signup
 
 import android.content.Context
-import android.util.Patterns
 import com.alex.mapnotes.R
 import com.alex.mapnotes.data.repository.UserRepository
+import com.alex.mapnotes.ext.isValidEmail
 
 class SignUpPresenter(private var context: Context?,
                       private val userRepository: UserRepository) : SignUpMvpPresenter {
@@ -14,7 +14,7 @@ class SignUpPresenter(private var context: Context?,
     }
 
     override fun signUp(name: String, email: String, password: String) {
-        if (email.isEmpty() || !isValidEmail(email)) {
+        if (email.isEmpty() || !email.isValidEmail()) {
             view?.displayError(context?.getString(R.string.error_email_should_be_valid)!!)
             return
         } else if (password.isEmpty()) {
@@ -30,14 +30,9 @@ class SignUpPresenter(private var context: Context?,
                 userRepository.changeUserName(it.result.user, name)
                 view?.navigateToMapScreen()
             } else {
-                view?.displayError("Something went wrong")
+                view?.displayError(it.exception?.message!!)
             }
         }
-    }
-
-    private fun isValidEmail(email: String): Boolean {
-        val matcher = Patterns.EMAIL_ADDRESS.matcher(email)
-        return matcher.matches()
     }
 
     override fun onDetach() {
