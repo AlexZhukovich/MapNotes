@@ -5,12 +5,15 @@ import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.location.Location
+import android.provider.Settings
 import android.support.v4.content.LocalBroadcastManager
-import com.alex.mapnotes.home.DISPLAY_LOCATION
-import com.alex.mapnotes.home.EXTRA_NOTE
+import android.support.v7.app.AlertDialog
+import com.alex.mapnotes.R
 import com.alex.mapnotes.data.provider.AddressLocationProvider
 import com.alex.mapnotes.data.provider.LocationProvider
 import com.alex.mapnotes.ext.checkLocationPermission
+import com.alex.mapnotes.home.DISPLAY_LOCATION
+import com.alex.mapnotes.home.EXTRA_NOTE
 import com.alex.mapnotes.model.Note
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
@@ -19,8 +22,10 @@ import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 
+
 class GoogleMapFragment : SupportMapFragment(), MapView, OnMapReadyCallback {
     private var map: GoogleMap? = null
+    var markers = mutableListOf<MarkerOptions>()
 
     val presenter : MapMvpPresenter by lazy { GoogleMapPresenter() }
     private val locationProvider : LocationProvider by lazy { AddressLocationProvider(this.context!!) }
@@ -54,12 +59,14 @@ class GoogleMapFragment : SupportMapFragment(), MapView, OnMapReadyCallback {
         ))
     }
 
-    override fun displayMoteOnMap(note: Note) {
+    override fun displayNoteOnMap(note: Note) {
         val notePos = LatLng(note.latitude, note.longitude)
-        map?.addMarker(MarkerOptions()
+        val markerOptions = MarkerOptions()
                 .position(notePos)
-                .title(note.text))?.showInfoWindow()
+                .title(note.text)
+        map?.addMarker(markerOptions)?.showInfoWindow()
         map?.animateCamera(CameraUpdateFactory.newLatLng(notePos))
+        markers.add(markerOptions)
     }
 
     override fun onResume() {
@@ -72,6 +79,18 @@ class GoogleMapFragment : SupportMapFragment(), MapView, OnMapReadyCallback {
     override fun onMapReady(googleMap: GoogleMap?) {
         map = googleMap
         updateInitLocation(map)
+        if (!locationProvider.isLocationAvailable()) {
+            val dialog = AlertDialog.Builder(this.context!!).apply {
+                this.setMessage(R.string.use_location_message)
+                this.setPositiveButton(R.string.ok_button, { _, _ ->
+                    startActivity(Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS))
+                })
+                this.setNegativeButton(R.string.cancel_button, { _, _ ->
+                    activity?.finish()
+                })
+            }
+            dialog.show()
+        }
         if (checkLocationPermission(this.context!!)) {
             map?.isMyLocationEnabled = true
             map?.setOnMyLocationButtonClickListener {
@@ -95,6 +114,7 @@ class GoogleMapFragment : SupportMapFragment(), MapView, OnMapReadyCallback {
 
     fun clearAllMarkers() {
         map?.clear()
+        markers.clear()
     }
 
     override fun onPause() {

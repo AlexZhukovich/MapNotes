@@ -8,5 +8,5 @@ interface MapView : MvpView {
 
     fun animateCamera(currentLocation: Location?)
 
-    fun displayMoteOnMap(note: Note)
+    fun displayNoteOnMap(note: Note)
 }

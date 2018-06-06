@@ -11,4 +11,6 @@ interface LocationProvider {
     fun addSingleLocationListener(listener: (Location) -> Unit)
 
     fun stopLocationUpdates()
+
+    fun isLocationAvailable() : Boolean
 }

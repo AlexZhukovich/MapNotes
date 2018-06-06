@@ -46,4 +46,8 @@
 
     <!-- Error and warnings -->
     <string name="unknown_user">Unknown</string>
+    <string name="use_location_message">To continue, turn on device location.</string>
+
+    <string name="ok_button">OK</string>
+    <string name="cancel_button">Cancel</string>
 </resources>

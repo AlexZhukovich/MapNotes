@@ -19,7 +19,7 @@ class GoogleMapPresenter : MapMvpPresenter {
 
     override fun handleMapNote(note: Note?) {
         note?.let {
-            view?.displayMoteOnMap(it)
+            view?.displayNoteOnMap(it)
         }
     }
 

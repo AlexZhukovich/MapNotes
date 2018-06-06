@@ -174,7 +174,7 @@ class HomeActivity : AppCompatActivity(), HomeView {
     }
 
     override fun onBackPressed() {
-        if (mapFragment?.isInteractionMode!!) {
+        if (mapFragment?.isInteractionMode!! || mapFragment?.markers?.isNotEmpty()!!) {
             mapFragment?.isInteractionMode = false
             mapFragment?.clearAllMarkers()
         } else {

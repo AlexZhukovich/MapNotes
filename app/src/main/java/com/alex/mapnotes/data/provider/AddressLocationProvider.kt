@@ -3,6 +3,8 @@ package com.alex.mapnotes.data.provider
 import android.annotation.SuppressLint
 import android.content.Context
 import android.location.Location
+import android.location.LocationManager
+import android.os.RemoteException
 import com.alex.mapnotes.ext.checkLocationPermission
 import com.google.android.gms.location.LocationCallback
 import com.google.android.gms.location.LocationRequest
@@ -65,5 +67,16 @@ class AddressLocationProvider(private val context: Context) : LocationProvider {
 
     override fun stopLocationUpdates() {
         fusedLocationProviderClient.removeLocationUpdates(locationCallback)
+    }
+
+    override fun isLocationAvailable(): Boolean {
+        val locationManager : LocationManager = context.getSystemService(Context.LOCATION_SERVICE) as LocationManager
+        var isGpsEnabled = false
+        try {
+            isGpsEnabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)
+        } catch (ex: RemoteException) {
+            //not needed because GPS disabled
+        }
+        return isGpsEnabled
     }
 }
