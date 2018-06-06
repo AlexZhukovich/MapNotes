@@ -25,13 +25,18 @@
     <!-- No permission fragment -->
     <string name="open_app_prefs">Open preferences</string>
 
-    <!-- Login screen -->
+    <!-- Login screens -->
     <string name="login_title">Login</string>
+    <string name="login_message">Save your memories with MapNotes.</string>
+    <string name="sign_in_title">Sing In</string>
+    <string name="sign_up_title">Sing Up</string>
     <string name="name_hint">Name</string>
     <string name="email_hint">Email address</string>
     <string name="password_hint">Password</string>
-    <string name="sign_in_text">Sign In</string>
-    <string name="sign_up_text">Sign Up</string>
+    <string name="sign_in_button_text">Sing In</string>
+    <string name="sign_up_button_text">Sing Up</string>
+    <string name="login_button_text">Login</string>
+    <string name="create_account_text">Create an account</string>
 
     <!-- Home screen -->
     <string name="nav_sign_out_title">Sign Out</string>

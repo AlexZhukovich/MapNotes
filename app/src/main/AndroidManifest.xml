@@ -28,7 +28,12 @@
         <activity
             android:name=".login.LoginActivity"
             android:label="@string/login_title" />
-
+        <activity
+            android:name=".login.signup.SignUpActivity"
+            android:label="@string/sign_up_title" />
+        <activity
+            android:name=".login.signin.SignInActivity"
+            android:label="@string/sign_in_title" />
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_api_key"/>

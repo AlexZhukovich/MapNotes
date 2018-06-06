@@ -4,7 +4,7 @@ import com.alex.mapnotes.base.MvpPresenter
 
 interface LoginMvpPresenter : MvpPresenter<LoginView> {
 
-    fun signIn(email: String, password: String)
+    fun openSignIn()
 
-    fun signUp(name: String, email: String, password: String)
+    fun openSignUp()
 }
