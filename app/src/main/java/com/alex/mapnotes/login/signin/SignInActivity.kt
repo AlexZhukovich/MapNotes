@@ -12,7 +12,7 @@ import kotlinx.android.synthetic.main.activity_sign_in.*
 
 class SignInActivity : AppCompatActivity(), SignInView {
     private val userRepository: UserRepository by lazy { FirebaseUserRepository() }
-    private val presenter: SignInMvpPresenter by lazy { SignInPresenter(userRepository) }
+    private val presenter: SignInMvpPresenter by lazy { SignInPresenter(this, userRepository) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

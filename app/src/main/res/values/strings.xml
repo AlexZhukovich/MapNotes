@@ -37,6 +37,9 @@
     <string name="sign_up_button_text">Sing Up</string>
     <string name="login_button_text">Login</string>
     <string name="create_account_text">Create an account</string>
+    <string name="error_email_should_be_valid">An email address should be valid</string>
+    <string name="error_password_should_not_be_empty">A password should not be empty</string>
+    <string name="error_name_should_not_be_empty">A name should not be empty</string>
 
     <!-- Home screen -->
     <string name="nav_sign_out_title">Sign Out</string>
