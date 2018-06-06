@@ -18,6 +18,7 @@ class SearchNotesPresenter(private val userRepository: UserRepository,
     }
 
     override fun getNotes() {
+        view?.clearSearchResults()
         notesRepository.getNotes(object : ValueEventListener {
             override fun onCancelled(databaseError: DatabaseError) {
 
