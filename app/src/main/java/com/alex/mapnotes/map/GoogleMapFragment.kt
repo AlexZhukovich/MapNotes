@@ -18,47 +18,47 @@ import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 
-class GoogleMapFragment : SupportMapFragment(), OnMapReadyCallback {
-    private val defaultZoom = 15.0f
-    private var location: Location? = null
+class GoogleMapFragment : SupportMapFragment(), MapView, OnMapReadyCallback {
+    private var map: GoogleMap? = null
+
+    val presenter by lazy { GoogleMapPresenter() }
+    private val locationProvider by lazy { AddressLocationProvider(this.context!!) }
 
     var isInteractionMode: Boolean = false
         set(value) {
             field = value
-            if (!value) {
-                map?.animateCamera(CameraUpdateFactory.newLatLng(
-                        location?.let { LatLng(it.latitude, it.longitude) }
-                ))
-            }
+            presenter.handleInteractionMode(value)
         }
 
-    private var map: GoogleMap? = null
     private val displayOnMapBroadcastListener = object : BroadcastReceiver() {
         override fun onReceive(context: Context?, intent: Intent?) {
             val note = intent?.getParcelableExtra<Note>(EXTRA_NOTE)
-            if (note != null) {
-                val notePos = LatLng(note.latitude, note.longitude)
-                map?.addMarker(MarkerOptions()
-                        .position(notePos)
-                        .title(note.text))?.showInfoWindow()
-                map?.animateCamera(CameraUpdateFactory.newLatLngZoom(notePos, 16.0f))
-            }
+            presenter.handleMapNote(note)
         }
     }
 
-    private val locationProvider by lazy { AddressLocationProvider(this.context!!) }
-
     override fun onStart() {
         super.onStart()
+        presenter.onAttach(this)
         locationProvider.startLocationUpdates()
         locationProvider.addUpdatableLocationListener {
-            location = it
-            if (!isInteractionMode) {
-                val zoom = map?.cameraPosition?.zoom!!
-                map?.moveCamera(CameraUpdateFactory.newLatLngZoom(LatLng(it.latitude, it.longitude), zoom))
-            }
+            presenter.handleLocationUpdate(isInteractionMode, it)
         }
         getMapAsync(this)
+    }
+
+    override fun animateCamera(currentLocation: Location?) {
+        map?.animateCamera(CameraUpdateFactory.newLatLng(
+                currentLocation?.let { LatLng(it.latitude, it.longitude) }
+        ))
+    }
+
+    override fun displayMoteOnMap(note: Note) {
+        val notePos = LatLng(note.latitude, note.longitude)
+        map?.addMarker(MarkerOptions()
+                .position(notePos)
+                .title(note.text))?.showInfoWindow()
+        map?.animateCamera(CameraUpdateFactory.newLatLng(notePos))
     }
 
     override fun onResume() {
@@ -86,6 +86,7 @@ class GoogleMapFragment : SupportMapFragment(), OnMapReadyCallback {
     }
 
     private fun updateInitLocation(map: GoogleMap?) {
+        val defaultZoom = 18.0f
         val initialLoc = map?.cameraPosition?.target
         val location = CameraUpdateFactory.newLatLngZoom(initialLoc, defaultZoom)
         map?.moveCamera(location)
@@ -101,8 +102,8 @@ class GoogleMapFragment : SupportMapFragment(), OnMapReadyCallback {
     }
 
     override fun onStop() {
-        super.onStop()
         locationProvider.stopLocationUpdates()
+        presenter.onDetach()
+        super.onStop()
     }
-
 }
