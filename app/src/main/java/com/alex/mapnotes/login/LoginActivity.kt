@@ -3,7 +3,7 @@ package com.alex.mapnotes.login
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.widget.Toast
-import com.alex.mapnotes.home.MainActivity
+import com.alex.mapnotes.home.HomeActivity
 import com.alex.mapnotes.R
 import com.alex.mapnotes.data.repository.FirebaseUserRepository
 import com.alex.mapnotes.data.repository.UserRepository
@@ -44,7 +44,7 @@ class LoginActivity : AppCompatActivity(), LoginView {
 
     override fun navigateToMapScreen() {
         finish()
-        navigateTo(MainActivity::class.java)
+        navigateTo(HomeActivity::class.java)
     }
 
     override fun displayError(text: String) {

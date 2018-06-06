@@ -31,7 +31,7 @@ import kotlinx.android.synthetic.main.button_sheet.*
 const val DISPLAY_LOCATION = "display_location"
 const val EXTRA_NOTE = "note"
 
-class MainActivity : AppCompatActivity(), HomeView {
+class HomeActivity : AppCompatActivity(), HomeView {
     private var mapFragment: GoogleMapFragment? = null
     private val bottomSheetBehavior by lazy { BottomSheetBehavior.from(bottomSheet) }
 
@@ -44,6 +44,22 @@ class MainActivity : AppCompatActivity(), HomeView {
             }
         }
     }
+
+    private val bottomSheetCallback: BottomSheetBehavior.BottomSheetCallback
+        get() {
+            return object : BottomSheetBehavior.BottomSheetCallback() {
+                override fun onSlide(bottomSheet: View, slideOffset: Float) {
+                    // not needed
+                }
+
+                override fun onStateChanged(bottomSheet: View, newState: Int) {
+                    if (newState == BottomSheetBehavior.STATE_HIDDEN
+                            && navigation.selectedItemId != R.id.navigation_map) {
+                        navigation.selectedItemId = R.id.navigation_map
+                    }
+                }
+            }
+        }
 
     private val mOnNavigationItemSelectedListener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
         if (navigation.selectedItemId == item.itemId
@@ -77,6 +93,7 @@ class MainActivity : AppCompatActivity(), HomeView {
 
         navigation.selectedItemId = R.id.navigation_map
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener)
+        bottomSheetBehavior.setBottomSheetCallback(bottomSheetCallback)
 
         if (!checkLocationPermission(this)) {
             // Permission is not granted; show an explanation
