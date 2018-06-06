@@ -29,7 +29,7 @@ class SearchNotesFragment: Fragment(), SearchNotesView {
     private val userRepository : UserRepository by lazy { FirebaseUserRepository() }
     private val notesRepository : NotesRepository by lazy { FirebaseNotesRepository() }
     private val presenter : SearchNotesMvpPresenter by lazy {
-        SearchNotesPresenter(userRepository, notesRepository)
+        SearchNotesPresenter(this.context!!, userRepository, notesRepository)
     }
 
     override fun onCreateView(inflater: LayoutInflater,

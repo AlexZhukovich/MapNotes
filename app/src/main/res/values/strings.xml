@@ -43,4 +43,7 @@
 
     <!-- Home screen -->
     <string name="nav_sign_out_title">Sign Out</string>
+
+    <!-- Error and warnings -->
+    <string name="unknown_user">Unknown</string>
 </resources>

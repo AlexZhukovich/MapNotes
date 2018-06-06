@@ -1,5 +1,7 @@
 package com.alex.mapnotes.search
 
+import android.content.Context
+import com.alex.mapnotes.R
 import com.alex.mapnotes.data.repository.UserRepository
 import com.alex.mapnotes.data.repository.NotesRepository
 import com.alex.mapnotes.model.Note
@@ -7,7 +9,8 @@ import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ValueEventListener
 
-class SearchNotesPresenter(private val userRepository: UserRepository,
+class SearchNotesPresenter(private var context: Context?,
+                           private val userRepository: UserRepository,
                            private val notesRepository: NotesRepository) : SearchNotesMvpPresenter {
     private var view: SearchNotesView? = null
     private val notesSearchCategory = 0
@@ -30,7 +33,7 @@ class SearchNotesPresenter(private val userRepository: UserRepository,
                         val note: Note = it.getValue(Note::class.java)!!
                         userRepository.getHumanReadableName(note.user!!, object : ValueEventListener {
                             override fun onCancelled(p0: DatabaseError) {
-                                note.user = "Unknown"
+                                note.user = context?.getString(R.string.unknown_user)
                                 view?.displayNote(note)
                             }
 
@@ -49,6 +52,11 @@ class SearchNotesPresenter(private val userRepository: UserRepository,
 
     override fun searchNotes(text: String, categoryPosition: Int) {
         view?.clearSearchResults()
+        if (text.isEmpty()) {
+            getNotes()
+            return
+        }
+
         when (categoryPosition) {
             notesSearchCategory -> {
                 notesRepository.getNotesByNoteText(text, object : ValueEventListener {
@@ -61,7 +69,7 @@ class SearchNotesPresenter(private val userRepository: UserRepository,
                                 val note: Note = it.getValue(Note::class.java)!!
                                 userRepository.getHumanReadableName(note.user!!, object : ValueEventListener {
                                     override fun onCancelled(p0: DatabaseError) {
-                                        note.user = "Unknown"
+                                        note.user = context?.getString(R.string.unknown_user)
                                         view?.displayNote(note)
                                     }
 
@@ -110,6 +118,7 @@ class SearchNotesPresenter(private val userRepository: UserRepository,
     }
 
     override fun onDetach() {
+        this.view = null
         this.view = null
     }
 }

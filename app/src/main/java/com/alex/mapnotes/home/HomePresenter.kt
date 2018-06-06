@@ -20,7 +20,6 @@ class HomePresenter(private val userRepository: UserRepository) : HomeMvpPresent
                 return true
             }
             R.id.navigation_map -> {
-                view?.updateMapInteractionMode(false)
                 view?.updateNavigationState(BottomSheetBehavior.STATE_HIDDEN)
                 return true
             }
