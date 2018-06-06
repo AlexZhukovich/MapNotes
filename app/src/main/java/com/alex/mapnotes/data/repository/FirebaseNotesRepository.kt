@@ -6,6 +6,8 @@ import com.google.firebase.database.ValueEventListener
 
 class FirebaseNotesRepository : NotesRepository {
     private val notesPath = "notes"
+    private val textKey = "text"
+    private val userKey = "user"
 
     private val database by lazy { FirebaseDatabase.getInstance() }
 
@@ -21,14 +23,14 @@ class FirebaseNotesRepository : NotesRepository {
 
     override fun getNotesByNoteText(text: String, listener: ValueEventListener) {
         database.getReference(notesPath)
-                .orderByChild("text")
+                .orderByChild(textKey)
                 .startAt(text)
                 .addListenerForSingleValueEvent(listener)
     }
 
     override fun getNotesByUser(userId: String, listener: ValueEventListener) {
         database.getReference(notesPath)
-                .orderByChild("user")
+                .orderByChild(userKey)
                 .equalTo(userId)
                 .addListenerForSingleValueEvent(listener)
     }

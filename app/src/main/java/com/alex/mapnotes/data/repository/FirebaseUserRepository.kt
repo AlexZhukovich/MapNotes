@@ -9,6 +9,7 @@ import com.google.firebase.database.ValueEventListener
 
 class FirebaseUserRepository : UserRepository {
     private val usersPath = "users"
+    private val nameKey = "name"
     private val auth = FirebaseAuth.getInstance()
     private val database = FirebaseDatabase.getInstance()
 
@@ -30,7 +31,7 @@ class FirebaseUserRepository : UserRepository {
 
     override fun changeUserName(user: FirebaseUser, name: String) {
         val usersRef = database.getReference(usersPath)
-        usersRef.child(user.uid).setValue(hashMapOf("name" to name))
+        usersRef.child(user.uid).setValue(hashMapOf(nameKey to name))
     }
 
     override fun getHumanReadableName(userId: String, listener: ValueEventListener) {
@@ -39,7 +40,7 @@ class FirebaseUserRepository : UserRepository {
 
     override fun getUserIdFromHumanReadableName(userName: String, listener: ValueEventListener) {
         database.getReference(usersPath)
-                .orderByChild("name")
+                .orderByChild(nameKey)
                 .equalTo(userName)
                 .addListenerForSingleValueEvent(listener)
     }

@@ -7,7 +7,6 @@ import com.alex.mapnotes.R
 import com.alex.mapnotes.data.repository.FirebaseUserRepository
 import com.alex.mapnotes.data.repository.UserRepository
 import com.alex.mapnotes.ext.clearAndNavigateTo
-import com.alex.mapnotes.ext.navigateTo
 import com.alex.mapnotes.home.HomeActivity
 import kotlinx.android.synthetic.main.activity_sign_up.*
 

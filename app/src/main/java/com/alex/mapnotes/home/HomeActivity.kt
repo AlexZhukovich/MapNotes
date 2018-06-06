@@ -17,7 +17,7 @@ import android.support.v7.app.AppCompatActivity
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
-import com.alex.mapnotes.NoLocationPermissionFragment
+import com.alex.mapnotes.nopermissions.NoLocationPermissionFragment
 import com.alex.mapnotes.R
 import com.alex.mapnotes.add.AddNoteFragment
 import com.alex.mapnotes.data.repository.FirebaseUserRepository
@@ -32,7 +32,6 @@ import com.alex.mapnotes.model.Note
 import com.alex.mapnotes.search.SearchNotesFragment
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.button_sheet.*
-
 
 const val DISPLAY_LOCATION = "display_location"
 const val EXTRA_NOTE = "note"
