@@ -1,16 +1,15 @@
 package com.alex.mapnotes.add
 
-import com.alex.mapnotes.base.MvpPresenter
 import com.alex.mapnotes.data.formatter.LocationFormatter
 import com.alex.mapnotes.data.provider.LocationProvider
-import com.alex.mapnotes.data.repository.UserRepository
 import com.alex.mapnotes.data.repository.NotesRepository
+import com.alex.mapnotes.data.repository.UserRepository
 import com.alex.mapnotes.model.Note
 
 class AddNotePresenter(private val locationProvider: LocationProvider,
                        private val locationFormatter: LocationFormatter,
                        private val userRepository: UserRepository,
-                       private val notesRepository: NotesRepository) : MvpPresenter<AddNoteView>, AddNoteMvpPresenter {
+                       private val notesRepository: NotesRepository) : AddNoteMvpPresenter {
     private var view: AddNoteView? = null
 
     override fun onAttach(view: AddNoteView?) {

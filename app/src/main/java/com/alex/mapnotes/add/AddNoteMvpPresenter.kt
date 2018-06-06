@@ -1,6 +1,8 @@
 package com.alex.mapnotes.add
 
-interface AddNoteMvpPresenter {
+import com.alex.mapnotes.base.MvpPresenter
+
+interface AddNoteMvpPresenter : MvpPresenter<AddNoteView> {
 
     fun getCurrentLocation()
 
