@@ -7,4 +7,8 @@ interface HomeMvpPresenter : MvpPresenter<HomeView> {
     fun handleNavigationItemClick(itemId: Int) : Boolean
 
     fun showLocationPermissionRationale()
+
+    fun checkUser()
+
+    fun signOut()
 }

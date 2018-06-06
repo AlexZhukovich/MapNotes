@@ -17,4 +17,6 @@ interface HomeView : MvpView {
     fun showContentWhichRequirePermissions()
 
     fun showPermissionExplanationSnackBar()
+
+    fun navigateToLoginScreen()
 }

@@ -2,8 +2,9 @@ package com.alex.mapnotes.home
 
 import android.support.design.widget.BottomSheetBehavior
 import com.alex.mapnotes.R
+import com.alex.mapnotes.data.repository.UserRepository
 
-class HomePresenter : HomeMvpPresenter {
+class HomePresenter(private val userRepository: UserRepository) : HomeMvpPresenter {
     private var view: HomeView? = null
 
     override fun onAttach(view: HomeView?) {
@@ -38,6 +39,17 @@ class HomePresenter : HomeMvpPresenter {
             it.showPermissionExplanationSnackBar()
             it.hideContentWhichRequirePermissions()
         }
+    }
+
+    override fun checkUser() {
+        if (userRepository.getUser() == null) {
+            view?.navigateToLoginScreen()
+        }
+    }
+
+    override fun signOut() {
+        userRepository.signOut()
+        view?.navigateToLoginScreen()
     }
 
     override fun onDetach() {

@@ -14,13 +14,19 @@ import android.support.v4.app.ActivityCompat
 import android.support.v4.app.Fragment
 import android.support.v4.content.LocalBroadcastManager
 import android.support.v7.app.AppCompatActivity
+import android.view.Menu
+import android.view.MenuItem
 import android.view.View
 import com.alex.mapnotes.NoLocationPermissionFragment
 import com.alex.mapnotes.R
 import com.alex.mapnotes.add.AddNoteFragment
+import com.alex.mapnotes.data.repository.FirebaseUserRepository
+import com.alex.mapnotes.data.repository.UserRepository
 import com.alex.mapnotes.ext.LOCATION_REQUEST_CODE
 import com.alex.mapnotes.ext.checkLocationPermission
+import com.alex.mapnotes.ext.navigateTo
 import com.alex.mapnotes.ext.requestLocationPermissions
+import com.alex.mapnotes.login.LoginActivity
 import com.alex.mapnotes.map.GoogleMapFragment
 import com.alex.mapnotes.model.Note
 import com.alex.mapnotes.search.SearchNotesFragment
@@ -34,8 +40,8 @@ const val EXTRA_NOTE = "note"
 class HomeActivity : AppCompatActivity(), HomeView {
     private var mapFragment: GoogleMapFragment? = null
     private val bottomSheetBehavior by lazy { BottomSheetBehavior.from(bottomSheet) }
-
-    private val presenter : HomeMvpPresenter by lazy { HomePresenter() }
+    private val userRepository : UserRepository by lazy { FirebaseUserRepository() }
+    private val presenter : HomeMvpPresenter by lazy { HomePresenter(userRepository) }
 
     private val hideExpandedMenuListener = object : BroadcastReceiver() {
         override fun onReceive(context: Context?, intent: Intent?) {
@@ -85,6 +91,7 @@ class HomeActivity : AppCompatActivity(), HomeView {
         presenter.onAttach(this)
         mapFragment?.onStart()
         bottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
+        presenter.checkUser()
     }
 
     override fun onResume() {
@@ -111,6 +118,18 @@ class HomeActivity : AppCompatActivity(), HomeView {
         LocalBroadcastManager
                 .getInstance(this)
                 .registerReceiver(hideExpandedMenuListener, IntentFilter(DISPLAY_LOCATION))
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.home_menu, menu)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+        when (item?.itemId) {
+            R.id.navigation_sign_out -> presenter.signOut()
+        }
+        return super.onOptionsItemSelected(item)
     }
 
     override fun displayAddNote() {
@@ -148,6 +167,11 @@ class HomeActivity : AppCompatActivity(), HomeView {
                 .replace(R.id.mapContainer, NoLocationPermissionFragment())
                 .commit()
         navigation.visibility = View.GONE
+    }
+
+    override fun navigateToLoginScreen() {
+        finish()
+        navigateTo(LoginActivity::class.java)
     }
 
     override fun onBackPressed() {

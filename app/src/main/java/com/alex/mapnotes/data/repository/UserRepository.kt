@@ -13,6 +13,8 @@ interface UserRepository {
 
     fun getUser() : FirebaseUser?
 
+    fun signOut()
+
     fun changeUserName(user: FirebaseUser, name: String)
 
     fun getHumanReadableName(userId: String, listener: ValueEventListener)

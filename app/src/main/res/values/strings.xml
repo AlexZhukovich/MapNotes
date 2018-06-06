@@ -32,4 +32,7 @@
     <string name="password_hint">Password</string>
     <string name="sign_in_text">Sign In</string>
     <string name="sign_up_text">Sign Up</string>
+
+    <!-- Home screen -->
+    <string name="nav_sign_out_title">Sign Out</string>
 </resources>

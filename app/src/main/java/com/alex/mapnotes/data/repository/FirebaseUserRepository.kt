@@ -20,6 +20,10 @@ class FirebaseUserRepository : UserRepository {
         auth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(result)
     }
 
+    override fun signOut() {
+        auth.signOut()
+    }
+
     override fun getUser() : FirebaseUser? {
         return auth.currentUser
     }
