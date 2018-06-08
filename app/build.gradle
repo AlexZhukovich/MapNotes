@@ -32,26 +32,32 @@ android {
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
+
+    // Kotlin
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+
+    // Android Support Libraries
     implementation "com.android.support:appcompat-v7:$support_libs_version"
     implementation "com.android.support:design:$support_libs_version"
     implementation "com.android.support.constraint:constraint-layout:$constraint_layout_version"
 
-
+    // Google play services
     implementation "com.google.android.gms:play-services-maps:$play_services_version"
     implementation "com.google.android.gms:play-services-location:$play_services_version"
 
-
+    // Firebase
     implementation "com.google.firebase:firebase-auth:$firebase_auth_version"
     implementation "com.google.firebase:firebase-database:$firebase_database_version"
     implementation "com.google.firebase:firebase-core:$firebase_core_version"
 
-
+    // JUnit
     testImplementation "junit:junit:$junit_version"
 
-
+    // Android test runner and rules
     androidTestImplementation "com.android.support.test:runner:$test_runner_version"
     androidTestImplementation "com.android.support.test:rules:$test_rules_version"
+
+    // Espresso
     androidTestImplementation "com.android.support.test.espresso:espresso-core:$espresso_version"
 }
 apply plugin: 'com.google.gms.google-services'
