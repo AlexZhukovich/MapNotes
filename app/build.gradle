@@ -32,20 +32,32 @@ android {
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation"org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-    implementation 'com.android.support:appcompat-v7:27.1.1'
-    implementation 'com.android.support:design:27.1.1'
-    implementation 'com.android.support.constraint:constraint-layout:1.1.0'
-    implementation 'com.google.android.gms:play-services-maps:15.0.1'
-    implementation 'com.google.android.gms:play-services-location:15.0.1'
-    implementation 'com.google.firebase:firebase-auth:16.0.1'
-    implementation 'com.google.firebase:firebase-database:16.0.1'
-    implementation 'com.google.firebase:firebase-core:16.0.0'
 
-    testImplementation 'junit:junit:4.12'
+    // Kotlin
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 
-    androidTestImplementation 'com.android.support.test:runner:1.0.2'
-    androidTestImplementation 'com.android.support.test:rules:1.0.2'
-    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
+    // Android Support Libraries
+    implementation "com.android.support:appcompat-v7:$support_libs_version"
+    implementation "com.android.support:design:$support_libs_version"
+    implementation "com.android.support.constraint:constraint-layout:$constraint_layout_version"
+
+    // Google play services
+    implementation "com.google.android.gms:play-services-maps:$play_services_version"
+    implementation "com.google.android.gms:play-services-location:$play_services_version"
+
+    // Firebase
+    implementation "com.google.firebase:firebase-auth:$firebase_auth_version"
+    implementation "com.google.firebase:firebase-database:$firebase_database_version"
+    implementation "com.google.firebase:firebase-core:$firebase_core_version"
+
+    // JUnit
+    testImplementation "junit:junit:$junit_version"
+
+    // Android test runner and rules
+    androidTestImplementation "com.android.support.test:runner:$test_runner_version"
+    androidTestImplementation "com.android.support.test:rules:$test_rules_version"
+
+    // Espresso
+    androidTestImplementation "com.android.support.test.espresso:espresso-core:$espresso_version"
 }
 apply plugin: 'com.google.gms.google-services'
