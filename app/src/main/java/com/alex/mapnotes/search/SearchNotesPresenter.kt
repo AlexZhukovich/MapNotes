@@ -11,7 +11,6 @@ import com.alex.mapnotes.model.Note
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ValueEventListener
-import kotlinx.coroutines.experimental.android.UI
 
 class SearchNotesPresenter(private var context: Context?,
                            private val userRepository: UserRepository,
@@ -25,7 +24,7 @@ class SearchNotesPresenter(private var context: Context?,
         this.view = view
     }
 
-    override fun getNotes() = launch(UI) {
+    override fun getNotes() = launch(appExecutors.uiContext) {
         view?.clearSearchResults()
         val notes =  notesRepository.getNotes { note ->
             kotlinx.coroutines.experimental.launch {
@@ -33,7 +32,7 @@ class SearchNotesPresenter(private var context: Context?,
                 if (userName is Result.Success) {
                     note.user = userName.data
                 } else {
-                    note.user = "Unknown"
+                    note.user = context?.getString(R.string.unknown_user)
                 }
             }
         }
