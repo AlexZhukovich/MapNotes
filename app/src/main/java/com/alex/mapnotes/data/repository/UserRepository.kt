@@ -1,5 +1,6 @@
 package com.alex.mapnotes.data.repository
 
+import com.alex.mapnotes.data.Result
 import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FirebaseUser
@@ -18,6 +19,8 @@ interface UserRepository {
     fun changeUserName(user: FirebaseUser, name: String)
 
     fun getHumanReadableName(userId: String, listener: ValueEventListener)
+
+    suspend fun getHumanReadableName(userId: String) : Result<String>
 
     fun getUserIdFromHumanReadableName(userName: String, listener: ValueEventListener)
 }

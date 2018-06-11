@@ -1,13 +1,19 @@
 package com.alex.mapnotes.data.repository
 
+import com.alex.mapnotes.AppExecutors
+import com.alex.mapnotes.data.Result
 import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
+import kotlinx.coroutines.experimental.withContext
+import kotlin.coroutines.experimental.suspendCoroutine
 
-class FirebaseUserRepository : UserRepository {
+class FirebaseUserRepository(private val appExecutors: AppExecutors) : UserRepository {
     private val usersPath = "users"
     private val nameKey = "name"
     private val auth = FirebaseAuth.getInstance()
@@ -36,6 +42,22 @@ class FirebaseUserRepository : UserRepository {
 
     override fun getHumanReadableName(userId: String, listener: ValueEventListener) {
         database.getReference(usersPath).child(userId).addListenerForSingleValueEvent(listener)
+    }
+
+    override suspend fun getHumanReadableName(userId: String) : Result<String> = withContext(appExecutors.networkContext) {
+        suspendCoroutine<Result<String>> {
+            database.getReference(usersPath).child(userId).addValueEventListener(object : ValueEventListener {
+                override fun onCancelled(databaseError: DatabaseError) {
+                    it.resume(Result.Error(databaseError.toException()))
+                }
+
+                override fun onDataChange(dataSnapshot: DataSnapshot) {
+                    if (dataSnapshot.exists()) {
+                        it.resume(Result.Success(dataSnapshot.children.first().value.toString()))
+                    }
+                }
+            })
+        }
     }
 
     override fun getUserIdFromHumanReadableName(userName: String, listener: ValueEventListener) {
