@@ -11,6 +11,7 @@ import com.alex.mapnotes.model.Note
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ValueEventListener
+import kotlinx.coroutines.experimental.Job
 
 class SearchNotesPresenter(private var context: Context?,
                            private val userRepository: UserRepository,
@@ -24,18 +25,20 @@ class SearchNotesPresenter(private var context: Context?,
         this.view = view
     }
 
-    override fun getNotes() = launch(appExecutors.uiContext) {
-        view?.clearSearchResults()
-        val notes =  notesRepository.getNotes { note ->
-            kotlinx.coroutines.experimental.launch {
-                val userName = userRepository.getHumanReadableName(note.user!!)
-                if (userName is Result.Success) {
-                    note.user = userName.data
-                } else {
-                    note.user = context?.getString(R.string.unknown_user)
-                }
+    private fun replaceNoteAuthorIdToNameJob(note: Note) : Job {
+        return kotlinx.coroutines.experimental.launch {
+            val userName = userRepository.getHumanReadableName(note.user!!)
+            if (userName is Result.Success) {
+                note.user = userName.data
+            } else {
+                note.user = context?.getString(R.string.unknown_user)
             }
         }
+    }
+
+    override fun getNotes() = launch(appExecutors.uiContext) {
+        view?.clearSearchResults()
+        val notes =  notesRepository.getNotes { replaceNoteAuthorIdToNameJob(it) }
         when (notes) {
             is Result.Error -> {
                 // TODO: display an error
@@ -117,7 +120,6 @@ class SearchNotesPresenter(private var context: Context?,
     }
 
     override fun onDetach() {
-        this.view = null
         this.view = null
     }
 }
