@@ -22,5 +22,5 @@ interface UserRepository {
 
     suspend fun getHumanReadableName(userId: String) : Result<String>
 
-    fun getUserIdFromHumanReadableName(userName: String, listener: ValueEventListener)
+    suspend fun getUserIdFromHumanReadableName(userName: String) : Result<String>
 }

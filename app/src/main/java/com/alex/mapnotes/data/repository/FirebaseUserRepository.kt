@@ -60,10 +60,22 @@ class FirebaseUserRepository(private val appExecutors: AppExecutors) : UserRepos
         }
     }
 
-    override fun getUserIdFromHumanReadableName(userName: String, listener: ValueEventListener) {
-        database.getReference(usersPath)
-                .orderByChild(nameKey)
-                .equalTo(userName)
-                .addListenerForSingleValueEvent(listener)
+    override suspend fun getUserIdFromHumanReadableName(userName: String) : Result<String> = withContext(appExecutors.networkContext) {
+        suspendCoroutine<Result<String>> {
+            database.getReference(usersPath)
+                    .orderByChild(nameKey)
+                    .equalTo(userName)
+                    .addListenerForSingleValueEvent(object : ValueEventListener {
+                        override fun onCancelled(databaseError: DatabaseError) {
+                            it.resume(Result.Error(databaseError.toException()))
+                        }
+
+                        override fun onDataChange(dataSnapshot: DataSnapshot) {
+                            if (dataSnapshot.exists()) {
+                                it.resume(Result.Success(dataSnapshot.children.first().key.toString()))
+                            }
+                        }
+                    })
+        }
     }
 }

@@ -8,9 +8,6 @@ import com.alex.mapnotes.data.repository.NotesRepository
 import com.alex.mapnotes.data.repository.UserRepository
 import com.alex.mapnotes.ext.launch
 import com.alex.mapnotes.model.Note
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.ValueEventListener
 import kotlinx.coroutines.experimental.Job
 
 class SearchNotesPresenter(private var context: Context?,
@@ -61,60 +58,41 @@ class SearchNotesPresenter(private var context: Context?,
 
         when (categoryPosition) {
             notesSearchCategory -> {
-                notesRepository.getNotesByNoteText(text, object : ValueEventListener {
-                    override fun onCancelled(p0: DatabaseError) {
-                    }
+                launch(appExecutors.uiContext) {
+                    val notes = notesRepository.getNotesByNoteText(text) { replaceNoteAuthorIdToNameJob(it) }
+                    when (notes) {
+                        is Result.Error -> {
+                            // TODO: display an error
+                        }
+                        is Result.Success -> {
+                            notes.data.forEach {
+                                view?.displayNote(it)
+                            }
 
-                    override fun onDataChange(dataSnapshot: DataSnapshot) {
-                        if (dataSnapshot.exists()) {
-                            dataSnapshot.children.forEach({
-                                val note: Note = it.getValue(Note::class.java)!!
-                                userRepository.getHumanReadableName(note.user!!, object : ValueEventListener {
-                                    override fun onCancelled(p0: DatabaseError) {
-                                        note.user = context?.getString(R.string.unknown_user)
-                                        view?.displayNote(note)
-                                    }
-
-                                    override fun onDataChange(dataSnapshot: DataSnapshot) {
-                                        if (dataSnapshot.exists()) {
-                                            note.user = dataSnapshot.children.first().value.toString()
-                                            view?.displayNote(note)
-                                        }
-                                    }
-                                })
-                            })
                         }
                     }
-
-                })
+                }
             }
             usersSearchCategory -> {
-                userRepository.getUserIdFromHumanReadableName(text, object : ValueEventListener {
-                    override fun onCancelled(p0: DatabaseError) {
-
-                    }
-
-                    override fun onDataChange(userdDataSnapshot: DataSnapshot) {
-                        if (userdDataSnapshot.exists()) {
-                            val userId = userdDataSnapshot.children.first().key.toString()
-                            notesRepository.getNotesByUser(userId, object : ValueEventListener {
-                                override fun onCancelled(p0: DatabaseError) {
-                                    view?.clearSearchResults()
-                                }
-
-                                override fun onDataChange(notesDataSnapshot: DataSnapshot) {
-                                    if (notesDataSnapshot.exists()) {
-                                        notesDataSnapshot.children.forEach({
-                                            val note: Note = it.getValue(Note::class.java)!!
-                                            note.user = text
-                                            view?.displayNote(note)
-                                        })
+                launch(appExecutors.networkContext) {
+                    kotlinx.coroutines.experimental.launch {
+                        val userId = userRepository.getUserIdFromHumanReadableName(text)
+                        if (userId is Result.Success) {
+                            val notes = notesRepository.getNotesByUser(userId.data, text)
+                            if (notes is Result.Success) {
+                                notes.data.forEach {
+                                    launch(appExecutors.uiContext) {
+                                        view?.displayNote(it)
                                     }
                                 }
-                            })
+                            } else {
+                                // TODO: display an error
+                            }
+                        } else {
+                            // TODO: display an error
                         }
-                    }
-                })
+                    }.join()
+                }
             }
         }
     }
