@@ -4,6 +4,7 @@ import com.alex.mapnotes.data.formatter.LocationFormatter
 import com.alex.mapnotes.data.provider.LocationProvider
 import com.alex.mapnotes.data.repository.NotesRepository
 import com.alex.mapnotes.data.repository.UserRepository
+import com.alex.mapnotes.ext.launch
 import com.alex.mapnotes.model.Note
 
 class AddNotePresenter(private val locationProvider: LocationProvider,
@@ -27,7 +28,9 @@ class AddNotePresenter(private val locationProvider: LocationProvider,
         locationProvider.addSingleLocationListener {
             val uid = userRepository.getUser()?.uid!!
             val note = Note(it.latitude, it.longitude, text, uid)
-            notesRepository.addNote(note)
+            launch {
+                notesRepository.addNote(note)
+            }
             view?.clearNoteText()
         }
     }

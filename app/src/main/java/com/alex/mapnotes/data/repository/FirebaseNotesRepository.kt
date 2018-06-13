@@ -2,6 +2,7 @@ package com.alex.mapnotes.data.repository
 
 import com.alex.mapnotes.AppExecutors
 import com.alex.mapnotes.data.Result
+import com.alex.mapnotes.ext.launch
 import com.alex.mapnotes.model.Note
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -19,10 +20,12 @@ class FirebaseNotesRepository(private val appExecutors: AppExecutors) : NotesRep
 
     private val database by lazy { FirebaseDatabase.getInstance() }
 
-    override fun addNote(note: Note) {
-        val notesRef = database.getReference(notesPath)
-        val newNoteRef = notesRef.push()
-        newNoteRef.setValue(note)
+    override suspend fun addNote(note: Note) {
+        launch(appExecutors.networkContext) {
+            val notesRef = database.getReference(notesPath)
+            val newNoteRef = notesRef.push()
+            newNoteRef.setValue(note)
+        }
     }
 
     override suspend fun getNotes(replaceAuthorName: (Note) -> Job): Result<List<Note>> = withContext(appExecutors.networkContext) {

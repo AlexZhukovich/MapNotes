@@ -6,7 +6,7 @@ import kotlinx.coroutines.experimental.Job
 
 interface NotesRepository {
 
-    fun addNote(note: Note)
+    suspend fun addNote(note: Note)
 
     suspend fun getNotes(replaceAuthorName: (Note) -> Job) : Result<List<Note>>
 
