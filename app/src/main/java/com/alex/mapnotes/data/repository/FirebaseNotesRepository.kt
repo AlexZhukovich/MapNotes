@@ -9,7 +9,6 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import kotlinx.coroutines.experimental.Job
-import kotlinx.coroutines.experimental.async
 import kotlinx.coroutines.experimental.withContext
 import kotlin.coroutines.experimental.suspendCoroutine
 
@@ -37,15 +36,15 @@ class FirebaseNotesRepository(private val appExecutors: AppExecutors) : NotesRep
 
                 override fun onDataChange(dataSnapshot: DataSnapshot) {
 
-                    async(appExecutors.networkContext) {
+                    launch(appExecutors.networkContext) {
 
                         if (dataSnapshot.exists()) {
                             val noteResults = mutableListOf<Note>()
-                            dataSnapshot.children.forEach({
+                            dataSnapshot.children.forEach {
                                 val note = it.getValue(Note::class.java)!!
                                 replaceAuthorName(note).join()
                                 noteResults.add(note)
-                            })
+                            }
                             it.resume(Result.Success(noteResults))
                         }
                     }
@@ -65,14 +64,14 @@ class FirebaseNotesRepository(private val appExecutors: AppExecutors) : NotesRep
                         }
 
                         override fun onDataChange(dataSnapshot: DataSnapshot) {
-                            async(appExecutors.networkContext) {
+                            launch(appExecutors.networkContext) {
                                 if (dataSnapshot.exists()) {
                                     val noteResults = mutableListOf<Note>()
-                                    dataSnapshot.children.forEach({
+                                    dataSnapshot.children.forEach {
                                         val note = it.getValue(Note::class.java)!!
                                         replaceAuthorName(note).join()
                                         noteResults.add(note)
-                                    })
+                                    }
                                     it.resume(Result.Success(noteResults))
                                 }
                             }
@@ -94,11 +93,11 @@ class FirebaseNotesRepository(private val appExecutors: AppExecutors) : NotesRep
                         override fun onDataChange(dataSnapshot: DataSnapshot) {
                             if (dataSnapshot.exists()) {
                                 val noteResults = mutableListOf<Note>()
-                                dataSnapshot.children.forEach({
+                                dataSnapshot.children.forEach {
                                     val note = it.getValue(Note::class.java)!!
                                     note.user = humanReadableName
                                     noteResults.add(note)
-                                })
+                                }
                                 it.resume(Result.Success(noteResults))
                             }
                         }
