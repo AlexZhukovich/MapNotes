@@ -1,12 +1,15 @@
 package com.alex.mapnotes.login.signin
 
 import android.content.Context
-import com.alex.mapnotes.data.repository.UserRepository
+import com.alex.mapnotes.AppExecutors
 import com.alex.mapnotes.R
+import com.alex.mapnotes.data.Result
+import com.alex.mapnotes.data.repository.UserRepository
 import com.alex.mapnotes.ext.isValidEmail
-
+import kotlinx.coroutines.experimental.launch
 
 class SignInPresenter(private var context: Context?,
+                      private val appExecutors: AppExecutors,
                       private val userRepository: UserRepository) : SignInMvpPresenter {
     private var view: SignInView? = null
 
@@ -23,14 +26,18 @@ class SignInPresenter(private var context: Context?,
             return
         }
 
-        userRepository.signIn(email, password) {
-            if (it.isSuccessful) {
-                view?.navigateToMapScreen()
-            } else {
-                view?.displayError(it.exception?.message!!)
+        launch(appExecutors.networkContext) {
+
+            val result = userRepository.signIn(email, password)
+            when (result) {
+                is Result.Success -> {
+                    view?.navigateToMapScreen()
+                }
+                is Result.Error -> {
+                    view?.displayError(result.exception.message!!)
+                }
             }
         }
-
     }
 
     override fun onDetach() {

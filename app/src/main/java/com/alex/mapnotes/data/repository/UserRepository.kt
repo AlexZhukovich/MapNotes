@@ -8,7 +8,7 @@ import com.google.firebase.database.ValueEventListener
 
 interface UserRepository {
 
-    fun signIn(email: String, password: String, result: (Task<AuthResult>) -> Unit)
+    suspend fun signIn(email: String, password: String) : Result<Boolean>
 
     fun signUp(email: String, password: String, result: (Task<AuthResult>) -> Unit)
 

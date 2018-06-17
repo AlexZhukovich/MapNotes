@@ -19,8 +19,12 @@ class FirebaseUserRepository(private val appExecutors: AppExecutors) : UserRepos
     private val auth = FirebaseAuth.getInstance()
     private val database = FirebaseDatabase.getInstance()
 
-    override fun signIn(email: String, password: String, result: (Task<AuthResult>) -> Unit) {
-        auth.signInWithEmailAndPassword(email, password).addOnCompleteListener(result)
+    override suspend fun signIn(email: String, password: String): Result<Boolean> = withContext(appExecutors.networkContext) {
+        suspendCoroutine<Result<Boolean>> {
+            auth.signInWithEmailAndPassword(email, password).addOnCompleteListener { authResultTask ->
+                it.resume(Result.Success(authResultTask.result.user != null))
+            }
+        }
     }
 
     override fun signUp(email: String, password: String, result: (Task<AuthResult>) -> Unit) {
