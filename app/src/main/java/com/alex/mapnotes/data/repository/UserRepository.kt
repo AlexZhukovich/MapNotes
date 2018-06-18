@@ -12,7 +12,7 @@ interface UserRepository {
 
     fun getUser() : FirebaseUser?
 
-    fun signOut()
+    suspend fun signOut()
 
     fun changeUserName(user: FirebaseUser, name: String)
 

@@ -8,6 +8,7 @@ import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
+import kotlinx.coroutines.experimental.launch
 import kotlinx.coroutines.experimental.withContext
 import kotlin.coroutines.experimental.suspendCoroutine
 
@@ -33,8 +34,10 @@ class FirebaseUserRepository(private val appExecutors: AppExecutors) : UserRepos
         }
     }
 
-    override fun signOut() {
-        auth.signOut()
+    override suspend fun signOut() = withContext(appExecutors.networkContext) {
+        launch {
+            auth.signOut()
+        }.join()
     }
 
     override fun getUser() : FirebaseUser? {

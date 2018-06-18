@@ -1,10 +1,13 @@
 package com.alex.mapnotes.home
 
 import android.support.design.widget.BottomSheetBehavior
+import com.alex.mapnotes.AppExecutors
 import com.alex.mapnotes.R
 import com.alex.mapnotes.data.repository.UserRepository
+import kotlinx.coroutines.experimental.launch
 
-class HomePresenter(private val userRepository: UserRepository) : HomeMvpPresenter {
+class HomePresenter(private val appExecutors: AppExecutors,
+                    private val userRepository: UserRepository) : HomeMvpPresenter {
     private var view: HomeView? = null
 
     override fun onAttach(view: HomeView?) {
@@ -47,8 +50,12 @@ class HomePresenter(private val userRepository: UserRepository) : HomeMvpPresent
     }
 
     override fun signOut() {
-        userRepository.signOut()
-        view?.navigateToLoginScreen()
+        launch(appExecutors.uiContext) {
+            launch(appExecutors.ioContext) {
+                userRepository.signOut()
+            }.join()
+            view?.navigateToLoginScreen()
+        }
     }
 
     override fun onDetach() {
