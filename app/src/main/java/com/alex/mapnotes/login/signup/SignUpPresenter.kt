@@ -1,11 +1,15 @@
 package com.alex.mapnotes.login.signup
 
 import android.content.Context
+import com.alex.mapnotes.AppExecutors
 import com.alex.mapnotes.R
+import com.alex.mapnotes.data.Result
 import com.alex.mapnotes.data.repository.UserRepository
 import com.alex.mapnotes.ext.isValidEmail
+import kotlinx.coroutines.experimental.launch
 
 class SignUpPresenter(private var context: Context?,
+                      private val appExecutors: AppExecutors,
                       private val userRepository: UserRepository) : SignUpMvpPresenter {
     private var view: SignUpView? = null
 
@@ -25,12 +29,15 @@ class SignUpPresenter(private var context: Context?,
             return
         }
 
-        userRepository.signUp(email, password) {
-            if (it.isSuccessful) {
-                userRepository.changeUserName(it.result.user, name)
-                view?.navigateToMapScreen()
-            } else {
-                view?.displayError(it.exception?.message!!)
+        launch(appExecutors.uiContext) {
+            val result = userRepository.signUp(email, password)
+            when (result) {
+                is Result.Success -> {
+                    view?.navigateToMapScreen()
+                }
+                is Result.Error -> {
+                    view?.displayError(result.exception.message!!)
+                }
             }
         }
     }

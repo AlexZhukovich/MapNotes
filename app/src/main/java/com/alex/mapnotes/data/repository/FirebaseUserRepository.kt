@@ -2,8 +2,6 @@ package com.alex.mapnotes.data.repository
 
 import com.alex.mapnotes.AppExecutors
 import com.alex.mapnotes.data.Result
-import com.google.android.gms.tasks.Task
-import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.database.DataSnapshot
@@ -27,8 +25,12 @@ class FirebaseUserRepository(private val appExecutors: AppExecutors) : UserRepos
         }
     }
 
-    override fun signUp(email: String, password: String, result: (Task<AuthResult>) -> Unit) {
-        auth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(result)
+    override suspend fun signUp(email: String, password: String) : Result<Boolean> = withContext(appExecutors.networkContext) {
+        suspendCoroutine<Result<Boolean>> {
+            auth.createUserWithEmailAndPassword(email, password).addOnCompleteListener {authResultTask ->
+                it.resume(Result.Success(authResultTask.result != null))
+            }
+        }
     }
 
     override fun signOut() {

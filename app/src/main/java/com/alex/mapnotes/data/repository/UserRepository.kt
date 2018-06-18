@@ -1,8 +1,6 @@
 package com.alex.mapnotes.data.repository
 
 import com.alex.mapnotes.data.Result
-import com.google.android.gms.tasks.Task
-import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.database.ValueEventListener
 
@@ -10,7 +8,7 @@ interface UserRepository {
 
     suspend fun signIn(email: String, password: String) : Result<Boolean>
 
-    fun signUp(email: String, password: String, result: (Task<AuthResult>) -> Unit)
+    suspend fun signUp(email: String, password: String) : Result<Boolean>
 
     fun getUser() : FirebaseUser?
 
