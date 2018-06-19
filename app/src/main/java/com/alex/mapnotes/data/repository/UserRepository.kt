@@ -3,6 +3,7 @@ package com.alex.mapnotes.data.repository
 import com.alex.mapnotes.data.Result
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.database.ValueEventListener
+import kotlinx.coroutines.experimental.Deferred
 
 interface UserRepository {
 
@@ -10,9 +11,9 @@ interface UserRepository {
 
     suspend fun signUp(email: String, password: String) : Result<Boolean>
 
-    fun getUser() : FirebaseUser?
-
     suspend fun signOut()
+
+    suspend fun getCurrentUser() : Deferred<Result<FirebaseUser>>
 
     fun changeUserName(user: FirebaseUser, name: String)
 

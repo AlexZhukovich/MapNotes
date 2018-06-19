@@ -2,12 +2,15 @@ package com.alex.mapnotes.data.repository
 
 import com.alex.mapnotes.AppExecutors
 import com.alex.mapnotes.data.Result
+import com.alex.mapnotes.data.exception.UserNotAuthenticatedException
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
+import kotlinx.coroutines.experimental.Deferred
+import kotlinx.coroutines.experimental.async
 import kotlinx.coroutines.experimental.launch
 import kotlinx.coroutines.experimental.withContext
 import kotlin.coroutines.experimental.suspendCoroutine
@@ -40,8 +43,13 @@ class FirebaseUserRepository(private val appExecutors: AppExecutors) : UserRepos
         }.join()
     }
 
-    override fun getUser() : FirebaseUser? {
-        return auth.currentUser
+    override suspend fun getCurrentUser() : Deferred<Result<FirebaseUser>> = async(appExecutors.networkContext) {
+        val user = auth.currentUser
+        if (user != null) {
+            return@async Result.Success(user)
+        } else {
+            return@async Result.Error(UserNotAuthenticatedException())
+        }
     }
 
     override fun changeUserName(user: FirebaseUser, name: String) {

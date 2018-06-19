@@ -1,13 +1,16 @@
 package com.alex.mapnotes.add
 
+import com.alex.mapnotes.AppExecutors
+import com.alex.mapnotes.data.Result
 import com.alex.mapnotes.data.formatter.LocationFormatter
 import com.alex.mapnotes.data.provider.LocationProvider
 import com.alex.mapnotes.data.repository.NotesRepository
 import com.alex.mapnotes.data.repository.UserRepository
-import com.alex.mapnotes.ext.launch
 import com.alex.mapnotes.model.Note
+import kotlinx.coroutines.experimental.launch
 
-class AddNotePresenter(private val locationProvider: LocationProvider,
+class AddNotePresenter(private val appExecutors: AppExecutors,
+                       private val locationProvider: LocationProvider,
                        private val locationFormatter: LocationFormatter,
                        private val userRepository: UserRepository,
                        private val notesRepository: NotesRepository) : AddNoteMvpPresenter {
@@ -25,13 +28,16 @@ class AddNotePresenter(private val locationProvider: LocationProvider,
     }
 
     override fun addNote(text: String) {
+        view?.clearNoteText()
         locationProvider.addSingleLocationListener {
-            val uid = userRepository.getUser()?.uid!!
-            val note = Note(it.latitude, it.longitude, text, uid)
-            launch {
-                notesRepository.addNote(note)
+            launch(appExecutors.uiContext) {
+                val currentUser = userRepository.getCurrentUser().await()
+                if (currentUser is Result.Success) {
+                    val uid = currentUser.data.uid
+                    val note = Note(it.latitude, it.longitude, text, uid)
+                    notesRepository.addNote(note)
+                }
             }
-            view?.clearNoteText()
         }
     }
 

@@ -3,6 +3,7 @@ package com.alex.mapnotes.home
 import android.support.design.widget.BottomSheetBehavior
 import com.alex.mapnotes.AppExecutors
 import com.alex.mapnotes.R
+import com.alex.mapnotes.data.Result
 import com.alex.mapnotes.data.repository.UserRepository
 import kotlinx.coroutines.experimental.launch
 
@@ -44,8 +45,15 @@ class HomePresenter(private val appExecutors: AppExecutors,
     }
 
     override fun checkUser() {
-        if (userRepository.getUser() == null) {
-            view?.navigateToLoginScreen()
+        launch(appExecutors.uiContext) {
+            val currentUser = userRepository.getCurrentUser().await()
+            when (currentUser) {
+                is Result.Success -> {
+                }
+                is Result.Error -> {
+                    view?.navigateToLoginScreen()
+                }
+            }
         }
     }
 

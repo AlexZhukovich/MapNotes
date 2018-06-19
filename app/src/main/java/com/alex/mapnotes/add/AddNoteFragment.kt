@@ -30,7 +30,8 @@ class AddNoteFragment: Fragment(), AddNoteView {
     private val notesRepository : NotesRepository by lazy { FirebaseNotesRepository(appExecutors) }
     private val userRepository : UserRepository by lazy { FirebaseUserRepository(appExecutors) }
     private val presenter : AddNoteMvpPresenter by lazy {
-        AddNotePresenter(locationProvider,
+        AddNotePresenter(appExecutors,
+                         locationProvider,
                          locationFormatter,
                          userRepository,
                          notesRepository)
