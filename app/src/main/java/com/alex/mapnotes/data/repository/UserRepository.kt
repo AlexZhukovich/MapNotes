@@ -17,8 +17,6 @@ interface UserRepository {
 
     fun changeUserName(user: FirebaseUser, name: String)
 
-    fun getHumanReadableName(userId: String, listener: ValueEventListener)
-
     suspend fun getHumanReadableName(userId: String) : Result<String>
 
     suspend fun getUserIdFromHumanReadableName(userName: String) : Result<String>

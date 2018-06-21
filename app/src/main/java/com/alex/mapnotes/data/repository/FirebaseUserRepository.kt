@@ -57,10 +57,6 @@ class FirebaseUserRepository(private val appExecutors: AppExecutors) : UserRepos
         usersRef.child(user.uid).setValue(hashMapOf(nameKey to name))
     }
 
-    override fun getHumanReadableName(userId: String, listener: ValueEventListener) {
-        database.getReference(usersPath).child(userId).addListenerForSingleValueEvent(listener)
-    }
-
     override suspend fun getHumanReadableName(userId: String) : Result<String> = withContext(appExecutors.networkContext) {
         suspendCoroutine<Result<String>> {
             database.getReference(usersPath).child(userId).addValueEventListener(object : ValueEventListener {
