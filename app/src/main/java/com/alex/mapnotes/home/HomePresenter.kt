@@ -46,7 +46,7 @@ class HomePresenter(private val appExecutors: AppExecutors,
 
     override fun checkUser() {
         launch(appExecutors.uiContext) {
-            val currentUser = userRepository.getCurrentUser().await()
+            val currentUser = userRepository.getCurrentUser()
             when (currentUser) {
                 is Result.Success -> {
                 }

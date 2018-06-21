@@ -31,7 +31,7 @@ class AddNotePresenter(private val appExecutors: AppExecutors,
         view?.clearNoteText()
         locationProvider.addSingleLocationListener {
             launch(appExecutors.uiContext) {
-                val currentUser = userRepository.getCurrentUser().await()
+                val currentUser = userRepository.getCurrentUser()
                 if (currentUser is Result.Success) {
                     val uid = currentUser.data.uid
                     val note = Note(it.latitude, it.longitude, text, uid)
