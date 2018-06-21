@@ -9,8 +9,6 @@ import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
-import kotlinx.coroutines.experimental.async
-import kotlinx.coroutines.experimental.launch
 import kotlinx.coroutines.experimental.withContext
 import kotlin.coroutines.experimental.suspendCoroutine
 
@@ -37,19 +35,17 @@ class FirebaseUserRepository(private val appExecutors: AppExecutors) : UserRepos
     }
 
     override suspend fun signOut() = withContext(appExecutors.networkContext) {
-        launch {
-            auth.signOut()
-        }.join()
+        auth.signOut()
     }
 
-    override suspend fun getCurrentUser() : Result<FirebaseUser> = async(appExecutors.networkContext) {
+    override suspend fun getCurrentUser() : Result<FirebaseUser> = withContext(appExecutors.networkContext) {
         val user = auth.currentUser
         if (user != null) {
-            return@async Result.Success(user)
+            return@withContext Result.Success(user)
         } else {
-            return@async Result.Error(UserNotAuthenticatedException())
+            return@withContext Result.Error(UserNotAuthenticatedException())
         }
-    }.await()
+    }
 
     override fun changeUserName(user: FirebaseUser, name: String) {
         val usersRef = database.getReference(usersPath)
