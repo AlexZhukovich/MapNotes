@@ -29,6 +29,7 @@ class AddNotePresenter(private val appExecutors: AppExecutors,
 
     override fun addNote(text: String) {
         view?.clearNoteText()
+        view?.hideKeyboard()
         locationProvider.addSingleLocationListener {
             launch(appExecutors.uiContext) {
                 val currentUser = userRepository.getCurrentUser()

@@ -1,5 +1,6 @@
 package com.alex.mapnotes.add
 
+import android.content.Context
 import android.location.Geocoder
 import android.os.Bundle
 import android.support.v4.app.Fragment
@@ -8,14 +9,15 @@ import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.InputMethodManager
 import com.alex.mapnotes.AppExecutors
 import com.alex.mapnotes.R
 import com.alex.mapnotes.data.formatter.FullAddressFormatter
 import com.alex.mapnotes.data.formatter.LocationFormatter
 import com.alex.mapnotes.data.provider.AddressLocationProvider
 import com.alex.mapnotes.data.provider.LocationProvider
-import com.alex.mapnotes.data.repository.FirebaseUserRepository
 import com.alex.mapnotes.data.repository.FirebaseNotesRepository
+import com.alex.mapnotes.data.repository.FirebaseUserRepository
 import com.alex.mapnotes.data.repository.NotesRepository
 import com.alex.mapnotes.data.repository.UserRepository
 import kotlinx.android.synthetic.main.fragment_add_note.*
@@ -78,6 +80,11 @@ class AddNoteFragment: Fragment(), AddNoteView {
 
     override fun displayCurrentLocation(address: String) {
         currentLocation.text = address
+    }
+
+    override fun hideKeyboard() {
+        val imm = context?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        imm.hideSoftInputFromWindow(note.windowToken, 0)
     }
 
     override fun onStop() {
