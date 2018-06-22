@@ -1,5 +1,6 @@
 package com.alex.mapnotes.add
 
+import android.location.Location
 import com.alex.mapnotes.AppExecutors
 import com.alex.mapnotes.data.Result
 import com.alex.mapnotes.data.formatter.LocationFormatter
@@ -15,29 +16,35 @@ class AddNotePresenter(private val appExecutors: AppExecutors,
                        private val userRepository: UserRepository,
                        private val notesRepository: NotesRepository) : AddNoteMvpPresenter {
     private var view: AddNoteView? = null
+    private var lastLocation: Location? = null
+    private var uid : String? = null
 
     override fun onAttach(view: AddNoteView?) {
         this.view = view
         locationProvider.startLocationUpdates()
+
+        launch(appExecutors.ioContext) {
+            val userResult = userRepository.getCurrentUser()
+            if (userResult is Result.Success) {
+                uid = userResult.data.uid
+            }
+        }
     }
 
     override fun getCurrentLocation() {
         locationProvider.addUpdatableLocationListener { location ->
             view?.displayCurrentLocation(locationFormatter.format(location))
+            lastLocation = location
         }
     }
 
     override fun addNote(text: String) {
         view?.clearNoteText()
         view?.hideKeyboard()
-        locationProvider.addSingleLocationListener {
-            launch(appExecutors.uiContext) {
-                val currentUser = userRepository.getCurrentUser()
-                if (currentUser is Result.Success) {
-                    val uid = currentUser.data.uid
-                    val note = Note(it.latitude, it.longitude, text, uid)
-                    notesRepository.addNote(note)
-                }
+        launch(appExecutors.ioContext) {
+            uid?.let {
+                val note = Note(lastLocation?.latitude!!, lastLocation?.longitude!!, text, it)
+                notesRepository.addNote(note)
             }
         }
     }
