@@ -20,7 +20,7 @@ class FirebaseNotesRepository(private val appExecutors: AppExecutors) : NotesRep
     private val database by lazy { FirebaseDatabase.getInstance() }
 
     override suspend fun addNote(note: Note) {
-        launch(appExecutors.networkContext) {
+        withContext(appExecutors.networkContext) {
             val notesRef = database.getReference(notesPath)
             val newNoteRef = notesRef.push()
             newNoteRef.setValue(note)
