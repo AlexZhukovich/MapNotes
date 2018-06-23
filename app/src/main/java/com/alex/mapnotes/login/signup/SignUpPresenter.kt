@@ -7,6 +7,7 @@ import com.alex.mapnotes.data.Result
 import com.alex.mapnotes.data.repository.UserRepository
 import com.alex.mapnotes.ext.isValidEmail
 import kotlinx.coroutines.experimental.launch
+import kotlinx.coroutines.experimental.withContext
 
 class SignUpPresenter(private var context: Context?,
                       private val appExecutors: AppExecutors,
@@ -33,6 +34,9 @@ class SignUpPresenter(private var context: Context?,
             val result = userRepository.signUp(email, password)
             when (result) {
                 is Result.Success -> {
+                    withContext(appExecutors.ioContext) {
+                        userRepository.changeUserName(result.data, name)
+                    }
                     view?.navigateToMapScreen()
                 }
                 is Result.Error -> {

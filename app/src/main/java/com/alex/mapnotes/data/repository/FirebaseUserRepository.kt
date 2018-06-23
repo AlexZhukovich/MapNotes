@@ -18,18 +18,18 @@ class FirebaseUserRepository(private val appExecutors: AppExecutors) : UserRepos
     private val auth = FirebaseAuth.getInstance()
     private val database = FirebaseDatabase.getInstance()
 
-    override suspend fun signIn(email: String, password: String): Result<Boolean> = withContext(appExecutors.networkContext) {
-        suspendCoroutine<Result<Boolean>> {
+    override suspend fun signIn(email: String, password: String): Result<FirebaseUser> = withContext(appExecutors.networkContext) {
+        suspendCoroutine<Result<FirebaseUser>> {
             auth.signInWithEmailAndPassword(email, password).addOnCompleteListener { authResultTask ->
-                it.resume(Result.Success(authResultTask.result.user != null))
+                it.resume(Result.Success(authResultTask.result.user))
             }
         }
     }
 
-    override suspend fun signUp(email: String, password: String) : Result<Boolean> = withContext(appExecutors.networkContext) {
-        suspendCoroutine<Result<Boolean>> {
+    override suspend fun signUp(email: String, password: String) : Result<FirebaseUser> = withContext(appExecutors.networkContext) {
+        suspendCoroutine<Result<FirebaseUser>> {
             auth.createUserWithEmailAndPassword(email, password).addOnCompleteListener {authResultTask ->
-                it.resume(Result.Success(authResultTask.result != null))
+                it.resume(Result.Success(authResultTask.result.user))
             }
         }
     }
@@ -47,9 +47,11 @@ class FirebaseUserRepository(private val appExecutors: AppExecutors) : UserRepos
         }
     }
 
-    override fun changeUserName(user: FirebaseUser, name: String) {
-        val usersRef = database.getReference(usersPath)
-        usersRef.child(user.uid).setValue(hashMapOf(nameKey to name))
+    override suspend fun changeUserName(user: FirebaseUser, name: String) {
+        withContext(appExecutors.networkContext) {
+            val usersRef = database.getReference(usersPath)
+            usersRef.child(user.uid).setValue(hashMapOf(nameKey to name))
+        }
     }
 
     override suspend fun getHumanReadableName(userId: String) : Result<String> = withContext(appExecutors.networkContext) {
