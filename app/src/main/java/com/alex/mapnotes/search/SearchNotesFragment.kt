@@ -10,6 +10,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
+import com.alex.mapnotes.AppExecutors
 import com.alex.mapnotes.home.DISPLAY_LOCATION
 import com.alex.mapnotes.home.EXTRA_NOTE
 import com.alex.mapnotes.R
@@ -26,10 +27,11 @@ import kotlinx.android.synthetic.main.fragment_search_notes.view.*
 class SearchNotesFragment: Fragment(), SearchNotesView {
     private lateinit var adapter: NotesAdapter
     private val coordinateFormatter : LatLonFormatter by lazy { CoordinateFormatter() }
-    private val userRepository : UserRepository by lazy { FirebaseUserRepository() }
-    private val notesRepository : NotesRepository by lazy { FirebaseNotesRepository() }
+    private val userRepository : UserRepository by lazy { FirebaseUserRepository(appExecutors) }
+    private val appExecutors : AppExecutors by lazy { AppExecutors() }
+    private val notesRepository : NotesRepository by lazy { FirebaseNotesRepository(appExecutors) }
     private val presenter : SearchNotesMvpPresenter by lazy {
-        SearchNotesPresenter(this.context!!, userRepository, notesRepository)
+        SearchNotesPresenter(this.context!!, userRepository, notesRepository, appExecutors)
     }
 
     override fun onCreateView(inflater: LayoutInflater,
@@ -64,6 +66,10 @@ class SearchNotesFragment: Fragment(), SearchNotesView {
     override fun onStart() {
         super.onStart()
         presenter.onAttach(this)
+    }
+
+    override fun onResume() {
+        super.onResume()
         presenter.getNotes()
     }
 

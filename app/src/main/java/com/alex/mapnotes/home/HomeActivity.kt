@@ -17,6 +17,7 @@ import android.support.v7.app.AppCompatActivity
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import com.alex.mapnotes.AppExecutors
 import com.alex.mapnotes.nopermissions.NoLocationPermissionFragment
 import com.alex.mapnotes.R
 import com.alex.mapnotes.add.AddNoteFragment
@@ -39,8 +40,9 @@ const val EXTRA_NOTE = "note"
 class HomeActivity : AppCompatActivity(), HomeView {
     private var mapFragment: GoogleMapFragment? = null
     private val bottomSheetBehavior by lazy { BottomSheetBehavior.from(bottomSheet) }
-    private val userRepository : UserRepository by lazy { FirebaseUserRepository() }
-    private val presenter : HomeMvpPresenter by lazy { HomePresenter(userRepository) }
+    private val appExecutors: AppExecutors by lazy { AppExecutors() }
+    private val userRepository : UserRepository by lazy { FirebaseUserRepository(appExecutors) }
+    private val presenter : HomeMvpPresenter by lazy { HomePresenter(appExecutors, userRepository) }
 
     private val hideExpandedMenuListener = object : BroadcastReceiver() {
         override fun onReceive(context: Context?, intent: Intent?) {

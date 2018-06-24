@@ -3,6 +3,7 @@ package com.alex.mapnotes.login.signin
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.widget.Toast
+import com.alex.mapnotes.AppExecutors
 import com.alex.mapnotes.R
 import com.alex.mapnotes.data.repository.FirebaseUserRepository
 import com.alex.mapnotes.data.repository.UserRepository
@@ -11,8 +12,9 @@ import com.alex.mapnotes.home.HomeActivity
 import kotlinx.android.synthetic.main.activity_sign_in.*
 
 class SignInActivity : AppCompatActivity(), SignInView {
-    private val userRepository: UserRepository by lazy { FirebaseUserRepository() }
-    private val presenter: SignInMvpPresenter by lazy { SignInPresenter(this, userRepository) }
+    private val appExecutors: AppExecutors by lazy { AppExecutors() }
+    private val userRepository: UserRepository by lazy { FirebaseUserRepository(appExecutors) }
+    private val presenter: SignInMvpPresenter by lazy { SignInPresenter(this, appExecutors, userRepository) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
