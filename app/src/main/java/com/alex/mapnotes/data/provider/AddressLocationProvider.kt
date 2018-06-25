@@ -11,13 +11,14 @@ import com.google.android.gms.location.LocationRequest
 import com.google.android.gms.location.LocationResult
 import com.google.android.gms.location.LocationServices
 
-class AddressLocationProvider(private val context: Context) : LocationProvider {
+class AddressLocationProvider(private val context: Context,
+                              private val requestInterval: Long = 3_000) : LocationProvider {
     private var updatableListener :((Location) -> Unit)? = null
     private var singleListener: ((Location) -> Unit)? = null
     private val fusedLocationProviderClient by lazy { LocationServices.getFusedLocationProviderClient(context) }
 
     private val locationRequest = LocationRequest.create().apply {
-        interval = 3_000
+        interval = requestInterval
     }
     private val locationCallback = object : LocationCallback() {
         override fun onLocationResult(locationResult: LocationResult?) {
