@@ -15,6 +15,7 @@ buildscript {
     ext.test_runner_version = '1.0.2'
     ext.test_rules_version = '1.0.2'
     ext.espresso_version = '3.0.2'
+    ext.jacoco_version = '0.7.9'
 
     repositories {
         google()
@@ -24,6 +25,8 @@ buildscript {
         classpath "com.android.tools.build:gradle:$android_gradle_plugin_version"
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
         classpath "com.google.gms:google-services:$google_services_gradle_plugin_version"
+
+        classpath "org.jacoco:org.jacoco.core:$jacoco_version"
     }
 }
 
