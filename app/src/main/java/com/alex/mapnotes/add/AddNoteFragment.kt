@@ -20,9 +20,11 @@ import com.alex.mapnotes.data.repository.FirebaseNotesRepository
 import com.alex.mapnotes.data.repository.FirebaseUserRepository
 import com.alex.mapnotes.data.repository.NotesRepository
 import com.alex.mapnotes.data.repository.UserRepository
-import kotlinx.android.synthetic.main.fragment_add_note.*
-import kotlinx.android.synthetic.main.fragment_add_note.view.*
-import java.util.*
+import kotlinx.android.synthetic.main.fragment_add_note.note
+import kotlinx.android.synthetic.main.fragment_add_note.currentLocation
+import kotlinx.android.synthetic.main.fragment_add_note.view.add
+import kotlinx.android.synthetic.main.fragment_add_note.view.note
+import java.util.Locale
 
 class AddNoteFragment: Fragment(), AddNoteView {
     private val geocoder : Geocoder by lazy { Geocoder(this.context, Locale.getDefault()) }
