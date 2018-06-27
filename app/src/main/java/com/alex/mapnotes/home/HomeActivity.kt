@@ -41,8 +41,8 @@ class HomeActivity : AppCompatActivity(), HomeView {
     private var mapFragment: GoogleMapFragment? = null
     private val bottomSheetBehavior by lazy { BottomSheetBehavior.from(bottomSheet) }
     private val appExecutors: AppExecutors by lazy { AppExecutors() }
-    private val userRepository : UserRepository by lazy { FirebaseUserRepository(appExecutors) }
-    private val presenter : HomeMvpPresenter by lazy { HomePresenter(appExecutors, userRepository) }
+    private val userRepository: UserRepository by lazy { FirebaseUserRepository(appExecutors) }
+    private val presenter: HomeMvpPresenter by lazy { HomePresenter(appExecutors, userRepository) }
 
     private val hideExpandedMenuListener = object : BroadcastReceiver() {
         override fun onReceive(context: Context?, intent: Intent?) {
@@ -60,8 +60,8 @@ class HomeActivity : AppCompatActivity(), HomeView {
                 }
 
                 override fun onStateChanged(bottomSheet: View, newState: Int) {
-                    if (newState == BottomSheetBehavior.STATE_HIDDEN
-                            && navigation.selectedItemId != R.id.navigation_map) {
+                    if (newState == BottomSheetBehavior.STATE_HIDDEN &&
+                            navigation.selectedItemId != R.id.navigation_map) {
                         navigation.selectedItemId = R.id.navigation_map
                     }
                 }
@@ -69,8 +69,8 @@ class HomeActivity : AppCompatActivity(), HomeView {
         }
 
     private val mOnNavigationItemSelectedListener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
-        if (navigation.selectedItemId == item.itemId
-                && bottomSheetBehavior.state != BottomSheetBehavior.STATE_HIDDEN) {
+        if (navigation.selectedItemId == item.itemId &&
+                bottomSheetBehavior.state != BottomSheetBehavior.STATE_HIDDEN) {
             return@OnNavigationItemSelectedListener false
         }
         return@OnNavigationItemSelectedListener presenter.handleNavigationItemClick(item.itemId)
@@ -197,9 +197,7 @@ class HomeActivity : AppCompatActivity(), HomeView {
         super.onStop()
     }
 
-    override fun onRequestPermissionsResult(requestCode: Int,
-                                            permissions: Array<out String>,
-                                            grantResults: IntArray) {
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
         when (requestCode) {
             LOCATION_REQUEST_CODE -> {
                 if ((grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED)) {

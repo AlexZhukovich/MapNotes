@@ -8,7 +8,7 @@ import android.support.v4.app.ActivityCompat
 
 const val LOCATION_REQUEST_CODE = 100
 
-fun checkLocationPermission(context: Context) : Boolean {
+fun checkLocationPermission(context: Context): Boolean {
     return ActivityCompat.checkSelfPermission(context,
             Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
 }

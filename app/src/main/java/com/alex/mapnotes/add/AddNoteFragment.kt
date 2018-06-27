@@ -26,24 +26,23 @@ import kotlinx.android.synthetic.main.fragment_add_note.view.add
 import kotlinx.android.synthetic.main.fragment_add_note.view.note
 import java.util.Locale
 
-class AddNoteFragment: Fragment(), AddNoteView {
-    private val geocoder : Geocoder by lazy { Geocoder(this.context, Locale.getDefault()) }
-    private val locationProvider : LocationProvider by lazy { AddressLocationProvider(this.context!!) }
-    private val locationFormatter : LocationFormatter by lazy { FullAddressFormatter(geocoder) }
+class AddNoteFragment : Fragment(), AddNoteView {
+    private val geocoder: Geocoder by lazy { Geocoder(this.context, Locale.getDefault()) }
+    private val locationProvider: LocationProvider by lazy { AddressLocationProvider(this.context!!) }
+    private val locationFormatter: LocationFormatter by lazy { FullAddressFormatter(geocoder) }
     private val appExecutors: AppExecutors by lazy { AppExecutors() }
-    private val notesRepository : NotesRepository by lazy { FirebaseNotesRepository(appExecutors) }
-    private val userRepository : UserRepository by lazy { FirebaseUserRepository(appExecutors) }
-    private val presenter : AddNoteMvpPresenter by lazy {
-        AddNotePresenter(appExecutors,
-                         locationProvider,
-                         locationFormatter,
-                         userRepository,
-                         notesRepository)
+    private val notesRepository: NotesRepository by lazy { FirebaseNotesRepository(appExecutors) }
+    private val userRepository: UserRepository by lazy { FirebaseUserRepository(appExecutors) }
+    private val presenter: AddNoteMvpPresenter by lazy {
+        AddNotePresenter(
+            appExecutors,
+            locationProvider,
+            locationFormatter,
+            userRepository,
+            notesRepository)
     }
 
-    override fun onCreateView(inflater: LayoutInflater,
-                              container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val rootView = inflater.inflate(R.layout.fragment_add_note, container, false)
 
         rootView.note.addTextChangedListener(object : TextWatcher {

@@ -6,9 +6,11 @@ import com.alex.mapnotes.data.formatter.LatLonFormatter
 import com.alex.mapnotes.model.Note
 import kotlinx.android.synthetic.main.item_note.view.*
 
-class NoteViewHolder(view: View,
-                     private val itemClick: (Note) -> Unit,
-                     private val formatter: LatLonFormatter) : RecyclerView.ViewHolder(view) {
+class NoteViewHolder(
+    view: View,
+    private val itemClick: (Note) -> Unit,
+    private val formatter: LatLonFormatter
+) : RecyclerView.ViewHolder(view) {
 
     fun bindNote(note: Note) {
         with(note) {

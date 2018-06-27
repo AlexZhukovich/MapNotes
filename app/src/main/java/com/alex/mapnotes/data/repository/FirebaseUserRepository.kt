@@ -26,7 +26,7 @@ class FirebaseUserRepository(private val appExecutors: AppExecutors) : UserRepos
         }
     }
 
-    override suspend fun signUp(email: String, password: String) : Result<FirebaseUser> = withContext(appExecutors.networkContext) {
+    override suspend fun signUp(email: String, password: String): Result<FirebaseUser> = withContext(appExecutors.networkContext) {
         suspendCoroutine<Result<FirebaseUser>> {
             auth.createUserWithEmailAndPassword(email, password).addOnCompleteListener {authResultTask ->
                 it.resume(Result.Success(authResultTask.result.user))
@@ -38,7 +38,7 @@ class FirebaseUserRepository(private val appExecutors: AppExecutors) : UserRepos
         auth.signOut()
     }
 
-    override suspend fun getCurrentUser() : Result<FirebaseUser> = withContext(appExecutors.networkContext) {
+    override suspend fun getCurrentUser(): Result<FirebaseUser> = withContext(appExecutors.networkContext) {
         val user = auth.currentUser
         if (user != null) {
             return@withContext Result.Success(user)
@@ -54,7 +54,7 @@ class FirebaseUserRepository(private val appExecutors: AppExecutors) : UserRepos
         }
     }
 
-    override suspend fun getHumanReadableName(userId: String) : Result<String> = withContext(appExecutors.networkContext) {
+    override suspend fun getHumanReadableName(userId: String): Result<String> = withContext(appExecutors.networkContext) {
         suspendCoroutine<Result<String>> {
             database.getReference(usersPath).child(userId).addValueEventListener(object : ValueEventListener {
                 override fun onCancelled(databaseError: DatabaseError) {
@@ -70,7 +70,7 @@ class FirebaseUserRepository(private val appExecutors: AppExecutors) : UserRepos
         }
     }
 
-    override suspend fun getUserIdFromHumanReadableName(userName: String) : Result<String> = withContext(appExecutors.networkContext) {
+    override suspend fun getUserIdFromHumanReadableName(userName: String): Result<String> = withContext(appExecutors.networkContext) {
         suspendCoroutine<Result<String>> {
             database.getReference(usersPath)
                     .orderByChild(nameKey)

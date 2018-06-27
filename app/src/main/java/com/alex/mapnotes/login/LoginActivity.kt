@@ -9,7 +9,7 @@ import com.alex.mapnotes.login.signup.SignUpActivity
 import kotlinx.android.synthetic.main.activity_login.*
 
 class LoginActivity : AppCompatActivity(), LoginView {
-    private val presenter : LoginMvpPresenter by lazy { LoginPresenter() }
+    private val presenter: LoginMvpPresenter by lazy { LoginPresenter() }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
