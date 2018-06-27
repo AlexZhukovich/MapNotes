@@ -79,7 +79,7 @@ class AddressLocationProvider(
         try {
             isGpsEnabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)
         } catch (ex: RemoteException) {
-            //not needed because GPS disabled
+            // not needed because GPS disabled
         }
         return isGpsEnabled
     }

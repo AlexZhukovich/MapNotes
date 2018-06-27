@@ -12,6 +12,7 @@ fun launch(
     start: CoroutineStart = CoroutineStart.DEFAULT,
     parent: Job? = null,
     onCompletion: CompletionHandler? = null,
-    block: suspend CoroutineScope.() -> Unit) {
+    block: suspend CoroutineScope.() -> Unit
+) {
     kotlinx.coroutines.experimental.launch(context, start, parent, onCompletion, block)
 }

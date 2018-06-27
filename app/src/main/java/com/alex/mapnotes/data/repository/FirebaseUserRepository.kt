@@ -28,7 +28,7 @@ class FirebaseUserRepository(private val appExecutors: AppExecutors) : UserRepos
 
     override suspend fun signUp(email: String, password: String): Result<FirebaseUser> = withContext(appExecutors.networkContext) {
         suspendCoroutine<Result<FirebaseUser>> {
-            auth.createUserWithEmailAndPassword(email, password).addOnCompleteListener {authResultTask ->
+            auth.createUserWithEmailAndPassword(email, password).addOnCompleteListener { authResultTask ->
                 it.resume(Result.Success(authResultTask.result.user))
             }
         }
