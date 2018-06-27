@@ -8,9 +8,9 @@ interface NotesRepository {
 
     suspend fun addNote(note: Note)
 
-    suspend fun getNotes(replaceAuthorName: (Note) -> Job) : Result<List<Note>>
+    suspend fun getNotes(replaceAuthorName: (Note) -> Job): Result<List<Note>>
 
-    suspend fun getNotesByNoteText(text: String, replaceAuthorName: (Note) -> Job) : Result<List<Note>>
+    suspend fun getNotesByNoteText(text: String, replaceAuthorName: (Note) -> Job): Result<List<Note>>
 
-    suspend fun getNotesByUser(userId: String, humanReadableName: String) : Result<List<Note>>
+    suspend fun getNotesByUser(userId: String, humanReadableName: String): Result<List<Note>>
 }

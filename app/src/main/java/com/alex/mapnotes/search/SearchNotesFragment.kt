@@ -24,19 +24,17 @@ import com.alex.mapnotes.model.Note
 import com.alex.mapnotes.search.adapter.NotesAdapter
 import kotlinx.android.synthetic.main.fragment_search_notes.view.*
 
-class SearchNotesFragment: Fragment(), SearchNotesView {
+class SearchNotesFragment : Fragment(), SearchNotesView {
     private lateinit var adapter: NotesAdapter
-    private val coordinateFormatter : LatLonFormatter by lazy { CoordinateFormatter() }
-    private val userRepository : UserRepository by lazy { FirebaseUserRepository(appExecutors) }
-    private val appExecutors : AppExecutors by lazy { AppExecutors() }
-    private val notesRepository : NotesRepository by lazy { FirebaseNotesRepository(appExecutors) }
-    private val presenter : SearchNotesMvpPresenter by lazy {
+    private val coordinateFormatter: LatLonFormatter by lazy { CoordinateFormatter() }
+    private val userRepository: UserRepository by lazy { FirebaseUserRepository(appExecutors) }
+    private val appExecutors: AppExecutors by lazy { AppExecutors() }
+    private val notesRepository: NotesRepository by lazy { FirebaseNotesRepository(appExecutors) }
+    private val presenter: SearchNotesMvpPresenter by lazy {
         SearchNotesPresenter(this.context!!, userRepository, notesRepository, appExecutors)
     }
 
-    override fun onCreateView(inflater: LayoutInflater,
-                              container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
 
         val rootView = inflater.inflate(R.layout.fragment_search_notes, container, false)
         rootView.searchOptions.adapter = ArrayAdapter.createFromResource(

@@ -10,14 +10,17 @@ import com.alex.mapnotes.data.repository.UserRepository
 import com.alex.mapnotes.model.Note
 import kotlinx.coroutines.experimental.launch
 
-class AddNotePresenter(private val appExecutors: AppExecutors,
-                       private val locationProvider: LocationProvider,
-                       private val locationFormatter: LocationFormatter,
-                       private val userRepository: UserRepository,
-                       private val notesRepository: NotesRepository) : AddNoteMvpPresenter {
+class AddNotePresenter(
+    private val appExecutors: AppExecutors,
+    private val locationProvider: LocationProvider,
+    private val locationFormatter: LocationFormatter,
+    private val userRepository: UserRepository,
+    private val notesRepository: NotesRepository
+) : AddNoteMvpPresenter {
+
     private var view: AddNoteView? = null
     private var lastLocation: Location? = null
-    private var uid : String? = null
+    private var uid: String? = null
 
     override fun onAttach(view: AddNoteView?) {
         this.view = view

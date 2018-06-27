@@ -10,10 +10,13 @@ import com.alex.mapnotes.ext.launch
 import com.alex.mapnotes.model.Note
 import kotlinx.coroutines.experimental.Job
 
-class SearchNotesPresenter(private var context: Context?,
-                           private val userRepository: UserRepository,
-                           private val notesRepository: NotesRepository,
-                           private val appExecutors: AppExecutors) : SearchNotesMvpPresenter {
+class SearchNotesPresenter(
+    private var context: Context?,
+    private val userRepository: UserRepository,
+    private val notesRepository: NotesRepository,
+    private val appExecutors: AppExecutors
+) : SearchNotesMvpPresenter {
+
     private var view: SearchNotesView? = null
     private val notesSearchCategory = 0
     private val usersSearchCategory = 1
@@ -22,7 +25,7 @@ class SearchNotesPresenter(private var context: Context?,
         this.view = view
     }
 
-    private fun replaceNoteAuthorIdToNameJob(note: Note) : Job {
+    private fun replaceNoteAuthorIdToNameJob(note: Note): Job {
         return kotlinx.coroutines.experimental.launch {
             val userName = userRepository.getHumanReadableName(note.user!!)
             if (userName is Result.Success) {
@@ -35,7 +38,7 @@ class SearchNotesPresenter(private var context: Context?,
 
     override fun getNotes() = launch(appExecutors.uiContext) {
         view?.clearSearchResults()
-        val notes =  notesRepository.getNotes { replaceNoteAuthorIdToNameJob(it) }
+        val notes = notesRepository.getNotes { replaceNoteAuthorIdToNameJob(it) }
         when (notes) {
             is Result.Error -> {
                 // TODO: display an error
@@ -44,7 +47,6 @@ class SearchNotesPresenter(private var context: Context?,
                 notes.data.forEach {
                     view?.displayNote(it)
                 }
-
             }
         }
     }
@@ -68,7 +70,6 @@ class SearchNotesPresenter(private var context: Context?,
                             notes.data.forEach {
                                 view?.displayNote(it)
                             }
-
                         }
                     }
                 }

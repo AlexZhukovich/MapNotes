@@ -7,15 +7,18 @@ import com.alex.mapnotes.data.Result
 import com.alex.mapnotes.data.repository.UserRepository
 import kotlinx.coroutines.experimental.launch
 
-class HomePresenter(private val appExecutors: AppExecutors,
-                    private val userRepository: UserRepository) : HomeMvpPresenter {
+class HomePresenter(
+    private val appExecutors: AppExecutors,
+    private val userRepository: UserRepository
+) : HomeMvpPresenter {
+
     private var view: HomeView? = null
 
     override fun onAttach(view: HomeView?) {
         this.view = view
     }
 
-    override fun handleNavigationItemClick(itemId: Int) : Boolean {
+    override fun handleNavigationItemClick(itemId: Int): Boolean {
         when (itemId) {
             R.id.navigation_add_note -> {
                 view?.updateMapInteractionMode(true)

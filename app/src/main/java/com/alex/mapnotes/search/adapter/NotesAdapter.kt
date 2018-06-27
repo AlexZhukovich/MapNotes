@@ -7,8 +7,11 @@ import com.alex.mapnotes.R
 import com.alex.mapnotes.data.formatter.LatLonFormatter
 import com.alex.mapnotes.model.Note
 
-class NotesAdapter(private val formatter: LatLonFormatter,
-                   private val itemClick: (Note) -> Unit) : RecyclerView.Adapter<NoteViewHolder>() {
+class NotesAdapter(
+    private val formatter: LatLonFormatter,
+    private val itemClick: (Note) -> Unit
+) : RecyclerView.Adapter<NoteViewHolder>() {
+
     private var notes: MutableList<Note> = mutableListOf()
 
     fun addNote(note: Note) {

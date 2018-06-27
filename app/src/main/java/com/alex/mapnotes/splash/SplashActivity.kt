@@ -24,7 +24,7 @@ class SplashActivity : AppCompatActivity() {
         finish()
     }
 
-    private fun isAuthenticated() : Boolean = runBlocking {
+    private fun isAuthenticated(): Boolean = runBlocking {
         authRepository.getCurrentUser() is Result.Success
     }
 }

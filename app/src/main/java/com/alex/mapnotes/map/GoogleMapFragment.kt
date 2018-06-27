@@ -22,13 +22,12 @@ import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 
-
 class GoogleMapFragment : SupportMapFragment(), MapView, OnMapReadyCallback {
     private var map: GoogleMap? = null
     var markers = mutableListOf<MarkerOptions>()
 
-    val presenter : MapMvpPresenter by lazy { GoogleMapPresenter() }
-    private val locationProvider : LocationProvider by lazy { AddressLocationProvider(this.context!!) }
+    val presenter: MapMvpPresenter by lazy { GoogleMapPresenter() }
+    private val locationProvider: LocationProvider by lazy { AddressLocationProvider(this.context!!) }
 
     var isInteractionMode: Boolean = false
         set(value) {

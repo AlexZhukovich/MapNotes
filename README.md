@@ -1,3 +1,5 @@
+[![ktlint](https://img.shields.io/badge/code%20style-%E2%9D%A4-FF4081.svg)](https://ktlint.github.io/)
+
 # MapNotes
 
 An Android application which allows you to add notes to the current location 

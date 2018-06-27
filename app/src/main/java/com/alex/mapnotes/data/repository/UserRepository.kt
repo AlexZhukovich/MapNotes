@@ -5,17 +5,17 @@ import com.google.firebase.auth.FirebaseUser
 
 interface UserRepository {
 
-    suspend fun signIn(email: String, password: String) : Result<FirebaseUser>
+    suspend fun signIn(email: String, password: String): Result<FirebaseUser>
 
-    suspend fun signUp(email: String, password: String) : Result<FirebaseUser>
+    suspend fun signUp(email: String, password: String): Result<FirebaseUser>
 
     suspend fun signOut()
 
-    suspend fun getCurrentUser() : Result<FirebaseUser>
+    suspend fun getCurrentUser(): Result<FirebaseUser>
 
     suspend fun changeUserName(user: FirebaseUser, name: String)
 
-    suspend fun getHumanReadableName(userId: String) : Result<String>
+    suspend fun getHumanReadableName(userId: String): Result<String>
 
-    suspend fun getUserIdFromHumanReadableName(userName: String) : Result<String>
+    suspend fun getUserIdFromHumanReadableName(userName: String): Result<String>
 }

@@ -1,17 +1,25 @@
 apply plugin: 'com.android.application'
-
 apply plugin: 'kotlin-android'
-
 apply plugin: 'kotlin-android-extensions'
+apply plugin: 'jacoco'
 
 androidExtensions {
     experimental = true
+}
+
+jacoco {
+    toolVersion = "$jacoco_version"
+    reportsDir = file("$buildDir/reports")
 }
 
 kotlin {
     experimental {
         coroutines "enable"
     }
+}
+
+configurations {
+    ktlint
 }
 
 android {
@@ -31,7 +39,18 @@ android {
             resValue("string", "google_maps_api_key", "$System.env.GOOGLE_MAPS_API_KEY")
         }
         debug {
+            testCoverageEnabled true
             resValue("string", "google_maps_api_key", "$System.env.GOOGLE_MAPS_API_KEY")
+        }
+    }
+    testOptions {
+        unitTests {
+            all {
+                jacoco {
+                    includeNoLocationClasses = true
+                }
+            }
+            includeAndroidResources = true
         }
     }
 
@@ -48,8 +67,53 @@ android {
     }
 }
 
+task jacocoTestReport(type : JacocoReport, dependsOn : 'testDebugUnitTest') {
+    group = "Reporting"
+    description = "Generate Jacoco coverage reports for Debug build"
+
+    reports {
+        xml.enabled = true
+        html.enabled = true
+    }
+
+    def fileFilter = [
+            '**/R.class',
+            '**/BuildConfig.*',
+            '**/R$*.class',
+            '**/BuildConfig.*',
+            '**/Manifest*.*',
+            '**/*Test*.*',
+            'android/**/*.*']
+
+    def debugJavaTree = fileTree(dir: "${buildDir}/intermediates/classes/debug", excludes: fileFilter)
+    def debugKotlinTree = fileTree(dir: "${buildDir}/tmp/kotlin-classes/debug", excludes: fileFilter)
+    def mainSrc = "${project.projectDir}/src/main/java"
+
+    sourceDirectories = files([mainSrc])
+    classDirectories = files([debugJavaTree, debugKotlinTree])
+    def instrumentationFile = fileTree("${buildDir}/outputs/code-coverage/connected/")
+            .filter { it.name.endsWith(".ec") }
+            .filter { it.isFile() }
+            .files.name[0]
+
+    executionData = files(["${buildDir}/jacoco/testDebugUnitTest.exec",
+                           "${buildDir}/outputs/code-coverage/connected/${instrumentationFile}"])
+}
+
+task ktlint(type: JavaExec, group: "verification") {
+    description = "Check Kotlin code style."
+    classpath = configurations.ktlint
+    main = "com.github.shyiko.ktlint.Main"
+    args "--reporter=plain",
+            "--reporter=checkstyle,output=${buildDir}/reports/ktlint/checkstyle.xml",
+            "${projectDir}/**/src/**/*.kt"
+}
+
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
+
+    // KtLint
+    ktlint "com.github.shyiko:ktlint:$ktlint_version"
 
     // Kotlin
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"

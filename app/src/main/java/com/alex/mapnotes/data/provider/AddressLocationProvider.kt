@@ -11,13 +11,17 @@ import com.google.android.gms.location.LocationRequest
 import com.google.android.gms.location.LocationResult
 import com.google.android.gms.location.LocationServices
 
-class AddressLocationProvider(private val context: Context) : LocationProvider {
-    private var updatableListener :((Location) -> Unit)? = null
+class AddressLocationProvider(
+    private val context: Context,
+    private val requestInterval: Long = 3_000
+) : LocationProvider {
+
+    private var updatableListener: ((Location) -> Unit)? = null
     private var singleListener: ((Location) -> Unit)? = null
     private val fusedLocationProviderClient by lazy { LocationServices.getFusedLocationProviderClient(context) }
 
     private val locationRequest = LocationRequest.create().apply {
-        interval = 3_000
+        interval = requestInterval
     }
     private val locationCallback = object : LocationCallback() {
         override fun onLocationResult(locationResult: LocationResult?) {
@@ -70,12 +74,12 @@ class AddressLocationProvider(private val context: Context) : LocationProvider {
     }
 
     override fun isLocationAvailable(): Boolean {
-        val locationManager : LocationManager = context.getSystemService(Context.LOCATION_SERVICE) as LocationManager
+        val locationManager: LocationManager = context.getSystemService(Context.LOCATION_SERVICE) as LocationManager
         var isGpsEnabled = false
         try {
             isGpsEnabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)
         } catch (ex: RemoteException) {
-            //not needed because GPS disabled
+            // not needed because GPS disabled
         }
         return isGpsEnabled
     }

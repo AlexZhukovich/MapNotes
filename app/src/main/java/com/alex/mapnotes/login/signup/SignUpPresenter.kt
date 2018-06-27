@@ -9,9 +9,12 @@ import com.alex.mapnotes.ext.isValidEmail
 import kotlinx.coroutines.experimental.launch
 import kotlinx.coroutines.experimental.withContext
 
-class SignUpPresenter(private var context: Context?,
-                      private val appExecutors: AppExecutors,
-                      private val userRepository: UserRepository) : SignUpMvpPresenter {
+class SignUpPresenter(
+    private var context: Context?,
+    private val appExecutors: AppExecutors,
+    private val userRepository: UserRepository
+) : SignUpMvpPresenter {
+
     private var view: SignUpView? = null
 
     override fun onAttach(view: SignUpView?) {

@@ -1,6 +1,6 @@
 package com.alex.mapnotes.base
 
-interface MvpPresenter<V: MvpView> {
+interface MvpPresenter<V : MvpView> {
 
     fun onAttach(view: V?)
 
