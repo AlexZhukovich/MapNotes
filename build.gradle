@@ -16,6 +16,7 @@ buildscript {
     ext.test_rules_version = '1.0.2'
     ext.espresso_version = '3.0.2'
     ext.jacoco_version = '0.7.9'
+    ext.ktlint_version = '0.24.0'
 
     repositories {
         google()
