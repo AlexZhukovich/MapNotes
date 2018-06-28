@@ -54,6 +54,17 @@ references:
     environment:
       TERM: dumb
 
+  ## Google Services
+
+  export_gservices_key: &export_gservices_key
+    run:
+      name: Export Google Services key environment variable
+      command: echo 'export GOOGLE_SERVICES_KEY="$GOOGLE_SERVICES_KEY"' >> $BASH_ENV
+  decode_gservices_key: &decode_gservices_key
+    run:
+      name: Decode Google Services key
+      command: echo $GOOGLE_SERVICES_KEY | base64 -di > app/google-services.json
+
   ## Google Cloud Service
   export_gcloud_key: &export_gcloud_key
     run:
@@ -79,6 +90,8 @@ jobs:
           name: Download dependencies
           command: ./gradlew androidDependencies
       - *save_cache
+      - *export_gservices_key
+      - *decode_gservices_key
       - run:
           name: Gradle build (debug)
           command: ./gradlew :app:assembleDebug :app:assembleDebugAndroidTest
@@ -100,6 +113,8 @@ jobs:
           name: Download dependencies
           command: ./gradlew androidDependencies
       - *save_cache
+      - *export_gservices_key
+      - *decode_gservices_key
       - run:
           name: Run unit tests
           command: ./gradlew -PciBuild=true :app:testDebugUnitTest
@@ -155,6 +170,8 @@ jobs:
       - run:
           name: Move Firebase coverage report
           command: mkdir -p app/build/outputs/code-coverage/connected && cp firebase/Pixel2-27-en_US-portrait/artifacts/coverage.ec app/build/outputs/code-coverage/connected/coverage.ec
+      - *export_gservices_key
+      - *decode_gservices_key
       - run:
           name: Generate JaCoCo report
           command: ./gradlew -PciBuild=true :app:jacocoTestReport
