@@ -172,10 +172,10 @@ jobs:
           command: mkdir -p app/build/outputs/code-coverage/connected && cp firebase/Pixel2-27-en_US-portrait/artifacts/coverage.ec app/build/outputs/code-coverage/connected/coverage.ec
       - run:
           name: Generate lint report
-          comman: ./gradlew :app:lint
+          command: ./gradlew :app:lint
       - run:
           name: Generate ktlint report
-          comman: ./gradlew :app:ktlint
+          command: ./gradlew :app:ktlint
       - *export_gservices_key
       - *decode_gservices_key
       - run:
