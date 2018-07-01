@@ -5,7 +5,6 @@
     android:id="@+id/bottomSheet"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorBottomSheetFragment"
     android:orientation="vertical"
     app:behavior_hideable="true"
     app:behavior_peekHeight="180dp"
@@ -14,6 +13,6 @@
     <FrameLayout
         android:id="@+id/bottomSheetContainer"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
-
+        android:layout_height="match_parent"
+        android:background="@color/colorBottomSheetFragment"/>
 </LinearLayout>

@@ -1,5 +1,9 @@
 <resources>
-    <!-- Default screen margins, per the Android Design guidelines. -->
-    <dimen name="activity_horizontal_margin">16dp</dimen>
-    <dimen name="activity_vertical_margin">16dp</dimen>
+    <dimen name="vertical_guideline_begin_space">16dp</dimen>
+    <dimen name="vertical_guideline_end_space">16dp</dimen>
+
+    <dimen name="horizontal_guideline_begin_space">8dp</dimen>
+    <dimen name="horizontal_guideline_end_space">8dp</dimen>
+
+    <dimen name="search_padding_bottom">@dimen/design_bottom_navigation_height</dimen>
 </resources>
