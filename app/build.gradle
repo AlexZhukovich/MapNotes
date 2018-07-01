@@ -136,6 +136,9 @@ dependencies {
     // JUnit
     testImplementation "junit:junit:$junit_version"
 
+    // MockK
+    testImplementation "io.mockk:mockk:$mockk_version"
+
     // Android test runner and rules
     androidTestImplementation "com.android.support.test:runner:$test_runner_version"
     androidTestImplementation "com.android.support.test:rules:$test_rules_version"
