@@ -8,7 +8,7 @@ androidExtensions {
 }
 
 jacoco {
-    toolVersion = "$jacoco_version"
+    toolVersion = "$jacoco_tools_version"
     reportsDir = file("$buildDir/reports")
 }
 
@@ -16,6 +16,14 @@ kotlin {
     experimental {
         coroutines "enable"
     }
+}
+
+kotlinGenerated {
+    // The annotation to annotate the generated methods with
+    annotation = "lombok.Generated"
+
+    // A flag to indicate whether the annotation should be visible at runtime
+    visible = true
 }
 
 configurations {
@@ -145,5 +153,6 @@ dependencies {
 
     // Espresso
     androidTestImplementation "com.android.support.test.espresso:espresso-core:$espresso_version"
+    androidTestImplementation "com.android.support.test.espresso:espresso-intents:$espresso_version"
 }
 apply plugin: 'com.google.gms.google-services'

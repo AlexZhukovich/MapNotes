@@ -16,7 +16,8 @@ buildscript {
     ext.test_runner_version = '1.0.2'
     ext.test_rules_version = '1.0.2'
     ext.espresso_version = '3.0.2'
-    ext.jacoco_version = '0.7.9'
+    ext.jacoco_core_version = '0.7.9'
+    ext.jacoco_tools_version = '0.8.2-SNAPSHOT'
     ext.ktlint_version = '0.24.0'
 
     repositories {
@@ -28,12 +29,17 @@ buildscript {
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
         classpath "com.google.gms:google-services:$google_services_gradle_plugin_version"
 
-        classpath "org.jacoco:org.jacoco.core:$jacoco_version"
+        classpath "org.jacoco:org.jacoco.core:$jacoco_core_version"
     }
+}
+
+plugins {
+    id 'nl.fabianm.kotlin.plugin.generated' version "1.0"
 }
 
 allprojects {
     repositories {
+        maven { url = "https://oss.sonatype.org/content/repositories/snapshots" }
         google()
         jcenter()
     }
