@@ -11,28 +11,28 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        app:layout_constraintGuide_end="16dp" />
+        app:layout_constraintGuide_end="@dimen/vertical_guideline_begin_space" />
 
     <android.support.constraint.Guideline
         android:id="@+id/vertical_guideline_begin"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        app:layout_constraintGuide_begin="16dp" />
+        app:layout_constraintGuide_begin="@dimen/vertical_guideline_begin_space" />
 
     <android.support.constraint.Guideline
         android:id="@+id/horizontal_guideline_begin"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_begin="8dp" />
+        app:layout_constraintGuide_begin="@dimen/horizontal_guideline_begin_space" />
 
     <android.support.constraint.Guideline
         android:id="@+id/horizontal_guideline_end"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_end="8dp" />
+        app:layout_constraintGuide_end="@dimen/horizontal_guideline_end_space" />
 
     <EditText
         android:id="@+id/note"
