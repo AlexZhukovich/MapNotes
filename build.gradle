@@ -13,6 +13,7 @@ buildscript {
     ext.firebase_database_version = '16.0.1'
     ext.junit_version = '4.12'
     ext.mockk_version = '1.8.4'
+    ext.robolectric_version = '3.8'
     ext.test_runner_version = '1.0.2'
     ext.test_rules_version = '1.0.2'
     ext.espresso_version = '3.0.2'

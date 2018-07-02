@@ -5,5 +5,9 @@ import com.alex.mapnotes.base.MvpView
 interface SignInView : MvpView {
     fun navigateToMapScreen()
 
-    fun displayError(text: String)
+    fun displayEmailError()
+
+    fun displayPasswordError()
+
+    fun displaySignInError(message: String)
 }

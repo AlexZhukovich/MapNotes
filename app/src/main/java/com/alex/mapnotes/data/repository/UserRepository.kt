@@ -1,11 +1,12 @@
 package com.alex.mapnotes.data.repository
 
 import com.alex.mapnotes.data.Result
+import com.alex.mapnotes.model.AuthUser
 import com.google.firebase.auth.FirebaseUser
 
 interface UserRepository {
 
-    suspend fun signIn(email: String, password: String): Result<FirebaseUser>
+    suspend fun signIn(email: String, password: String): Result<AuthUser>
 
     suspend fun signUp(email: String, password: String): Result<FirebaseUser>
 
