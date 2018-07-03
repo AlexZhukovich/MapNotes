@@ -10,6 +10,7 @@ import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
 import kotlinx.coroutines.experimental.android.UI
+import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
@@ -25,6 +26,7 @@ class SignInPresenterTest {
     private val correctPassword = "password"
     private val incorrectPassword = "incorrect password"
     private val emptyPassword = ""
+    private val userNotAuthenticatedErrorMessage = "User not authenticated"
 
     private val view: SignInView = mockk()
     private val appExecutors: AppExecutors = mockk()
@@ -32,52 +34,47 @@ class SignInPresenterTest {
 
     private val presenter by lazy { SignInPresenter(appExecutors, userRepository) }
 
+    @Before
+    fun setUp() {
+        every { appExecutors.networkContext } returns UI
+        every { view.displayEmailError() } answers { nothing }
+        every { view.displayPasswordError() } answers { nothing }
+        every { view.displaySignInError(userNotAuthenticatedErrorMessage) } answers { nothing }
+        every { view.navigateToMapScreen() } answers { nothing }
+    }
+
     @Test
     fun `verify singIn with correct login and incorrect password, non-null view attached to presenter`() {
-        val errorMessage = "User not authenticated"
-
-        every { view.displaySignInError(errorMessage) } answers { nothing }
-        every { appExecutors.networkContext } returns UI
         coEvery { userRepository.signIn(correctUserName, incorrectPassword) } returns Result.Error(UserNotAuthenticatedException())
 
         presenter.onAttach(view)
         presenter.signIn(correctUserName, incorrectPassword)
 
-        verify { view.displaySignInError(errorMessage) }
+        verify { view.displaySignInError(userNotAuthenticatedErrorMessage) }
     }
 
     @Test
     fun `verify singIn with correct login and incorrect password, null view attached to presenter`() {
-        val errorMessage = "User not authenticated"
-
-        every { view.displaySignInError(errorMessage) } answers { nothing }
-        every { appExecutors.networkContext } returns UI
         coEvery { userRepository.signIn(correctUserName, incorrectPassword) } returns Result.Error(UserNotAuthenticatedException())
 
         presenter.onAttach(null)
         presenter.signIn(correctUserName, incorrectPassword)
 
-        verify(exactly = 0) { view.displaySignInError(errorMessage) }
+        verify(exactly = 0) { view.displaySignInError(userNotAuthenticatedErrorMessage) }
     }
 
     @Test
     fun `verify singIn with correct login and incorrect password, view detached to presenter`() {
-        val errorMessage = "User not authenticated"
-
-        every { view.displaySignInError(errorMessage) } answers { nothing }
-        every { appExecutors.networkContext } returns UI
         coEvery { userRepository.signIn(correctUserName, incorrectPassword) } returns Result.Error(UserNotAuthenticatedException())
 
         presenter.onDetach()
         presenter.signIn(correctUserName, incorrectPassword)
 
-        verify(exactly = 0) { view.displaySignInError(errorMessage) }
+        verify(exactly = 0) { view.displaySignInError(userNotAuthenticatedErrorMessage) }
     }
 
     @Test
     fun `verify signIn with correct login and password, non-null view attached to presenter`() {
-        every { view.navigateToMapScreen() } answers { nothing }
-        every { appExecutors.networkContext } returns UI
         coEvery { userRepository.signIn(any(), any()) } returns Result.Success(authUser)
 
         presenter.onAttach(view)
@@ -88,8 +85,6 @@ class SignInPresenterTest {
 
     @Test
     fun `verify signIn with correct login and password, null view attached to presenter`() {
-        every { view.navigateToMapScreen() } answers { nothing }
-        every { appExecutors.networkContext } returns UI
         coEvery { userRepository.signIn(any(), any()) } returns Result.Success(authUser)
 
         presenter.onAttach(null)
@@ -100,8 +95,6 @@ class SignInPresenterTest {
 
     @Test
     fun `verify signIn with correct login and password, view detached from presenter`() {
-        every { view.navigateToMapScreen() } answers { nothing }
-        every { appExecutors.networkContext } returns UI
         coEvery { userRepository.signIn(any(), any()) } returns Result.Success(authUser)
 
         presenter.onDetach()
@@ -112,8 +105,6 @@ class SignInPresenterTest {
 
     @Test
     fun `verify sinIn with empty login and password, non-null view attached to presenter`() {
-        every { view.displayEmailError() } answers { nothing }
-
         presenter.onAttach(view)
         presenter.signIn(emptyUserName, emptyPassword)
 
@@ -122,8 +113,6 @@ class SignInPresenterTest {
 
     @Test
     fun `verify sinIn with empty login and password, null view attached to presenter`() {
-        every { view.displayEmailError() } answers { nothing }
-
         presenter.onAttach(null)
         presenter.signIn(emptyUserName, emptyPassword)
 
@@ -132,8 +121,6 @@ class SignInPresenterTest {
 
     @Test
     fun `verify sinIn with empty login and password, view detached from presenter`() {
-        every { view.displayEmailError() } answers { nothing }
-
         presenter.onDetach()
         presenter.signIn(emptyUserName, emptyPassword)
 
@@ -142,8 +129,6 @@ class SignInPresenterTest {
 
     @Test
     fun `verify sinIn with incorrect login and empty password, non-null view attached to presenter`() {
-        every { view.displayEmailError() } answers { nothing }
-
         presenter.onAttach(view)
         presenter.signIn(incorrectUserName, emptyPassword)
 
@@ -152,8 +137,6 @@ class SignInPresenterTest {
 
     @Test
     fun `verify sinIn with incorrect login and empty password, null view attached to presenter`() {
-        every { view.displayEmailError() } answers { nothing }
-
         presenter.onAttach(null)
         presenter.signIn(incorrectUserName, emptyPassword)
 
@@ -162,8 +145,6 @@ class SignInPresenterTest {
 
     @Test
     fun `verify sinIn with incorrect login and empty password, view detached from presenter`() {
-        every { view.displayEmailError() } answers { nothing }
-
         presenter.onDetach()
         presenter.signIn(incorrectUserName, emptyPassword)
 
@@ -172,8 +153,6 @@ class SignInPresenterTest {
 
     @Test
     fun `verify sinIn with correct login and empty password, non-null view attached to presenter`() {
-        every { view.displayPasswordError() } answers { nothing }
-
         presenter.onAttach(view)
         presenter.signIn(correctUserName, emptyPassword)
 
@@ -182,8 +161,6 @@ class SignInPresenterTest {
 
     @Test
     fun `verify sinIn with correct login and empty password, null view attached to presenter`() {
-        every { view.displayPasswordError() } answers { nothing }
-
         presenter.onAttach(null)
         presenter.signIn(correctUserName, emptyPassword)
 
@@ -192,8 +169,6 @@ class SignInPresenterTest {
 
     @Test
     fun `verify sinIn with correct login and empty password, view detached from presenter`() {
-        every { view.displayPasswordError() } answers { nothing }
-
         presenter.onDetach()
         presenter.signIn(correctUserName, emptyPassword)
 
