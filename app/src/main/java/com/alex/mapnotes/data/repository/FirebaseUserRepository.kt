@@ -27,10 +27,10 @@ class FirebaseUserRepository(private val appExecutors: AppExecutors) : UserRepos
         }
     }
 
-    override suspend fun signUp(email: String, password: String): Result<FirebaseUser> = withContext(appExecutors.networkContext) {
-        suspendCoroutine<Result<FirebaseUser>> {
+    override suspend fun signUp(email: String, password: String): Result<AuthUser> = withContext(appExecutors.networkContext) {
+        suspendCoroutine<Result<AuthUser>> {
             auth.createUserWithEmailAndPassword(email, password).addOnCompleteListener { authResultTask ->
-                it.resume(Result.Success(authResultTask.result.user))
+                it.resume(Result.Success(AuthUser(authResultTask.result.user.uid)))
             }
         }
     }
@@ -48,7 +48,7 @@ class FirebaseUserRepository(private val appExecutors: AppExecutors) : UserRepos
         }
     }
 
-    override suspend fun changeUserName(user: FirebaseUser, name: String) {
+    override suspend fun changeUserName(user: AuthUser, name: String) {
         withContext(appExecutors.networkContext) {
             val usersRef = database.getReference(usersPath)
             usersRef.child(user.uid).setValue(hashMapOf(nameKey to name))
