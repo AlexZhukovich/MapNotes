@@ -8,8 +8,8 @@ import kotlinx.coroutines.experimental.launch
 import kotlinx.coroutines.experimental.withContext
 
 class SignUpPresenter(
-        private val appExecutors: AppExecutors,
-        private val userRepository: UserRepository
+    private val appExecutors: AppExecutors,
+    private val userRepository: UserRepository
 ) : SignUpMvpPresenter {
 
     private var view: SignUpView? = null
