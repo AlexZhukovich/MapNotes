@@ -14,7 +14,7 @@ import kotlinx.android.synthetic.main.activity_sign_up.*
 class SignUpActivity : AppCompatActivity(), SignUpView {
     private val appExecutors: AppExecutors by lazy { AppExecutors() }
     private val userRepository: UserRepository by lazy { FirebaseUserRepository(appExecutors) }
-    private val presenter: SignUpMvpPresenter by lazy { SignUpPresenter(this, appExecutors, userRepository) }
+    private val presenter: SignUpMvpPresenter by lazy { SignUpPresenter(appExecutors, userRepository) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -36,8 +36,20 @@ class SignUpActivity : AppCompatActivity(), SignUpView {
         clearAndNavigateTo(HomeActivity::class.java)
     }
 
-    override fun displayError(text: String) {
-        Toast.makeText(this, text, Toast.LENGTH_LONG).show()
+    override fun displayEmailError() {
+        Toast.makeText(this, R.string.error_email_should_be_valid, Toast.LENGTH_LONG).show()
+    }
+
+    override fun displayPasswordError() {
+        Toast.makeText(this, R.string.error_password_should_not_be_empty, Toast.LENGTH_LONG).show()
+    }
+
+    override fun displaySignUpError(message: String) {
+        Toast.makeText(this, message, Toast.LENGTH_LONG).show()
+    }
+
+    override fun displayEmptyUserNameError() {
+        Toast.makeText(this, R.string.error_name_should_not_be_empty, Toast.LENGTH_LONG).show()
     }
 
     override fun onStop() {
