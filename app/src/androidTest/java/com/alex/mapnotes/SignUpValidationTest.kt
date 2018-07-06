@@ -7,7 +7,6 @@ import android.support.test.espresso.matcher.ViewMatchers
 import android.support.test.rule.ActivityTestRule
 import android.support.test.runner.AndroidJUnit4
 import com.alex.mapnotes.login.signup.SignUpActivity
-import com.alex.mapnotes.matcher.RootMatcher
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -28,7 +27,6 @@ class SignUpValidationTest {
                 .perform(ViewActions.click())
 
         Espresso.onView(ViewMatchers.withText(R.string.error_email_should_be_valid))
-                .inRoot(RootMatcher.isRoot)
                 .check(ViewAssertions.matches(ViewMatchers.isDisplayed()))
     }
 
@@ -41,7 +39,6 @@ class SignUpValidationTest {
                 .perform(ViewActions.click())
 
         Espresso.onView(ViewMatchers.withText(R.string.error_email_should_be_valid))
-                .inRoot(RootMatcher.isRoot)
                 .check(ViewAssertions.matches(ViewMatchers.isDisplayed()))
     }
 
@@ -54,7 +51,6 @@ class SignUpValidationTest {
                 .perform(ViewActions.click())
 
         Espresso.onView(ViewMatchers.withText(R.string.error_password_should_not_be_empty))
-                .inRoot(RootMatcher.isRoot)
                 .check(ViewAssertions.matches(ViewMatchers.isDisplayed()))
     }
 
@@ -70,7 +66,6 @@ class SignUpValidationTest {
                 .perform(ViewActions.click())
 
         Espresso.onView(ViewMatchers.withText(R.string.error_name_should_not_be_empty))
-                .inRoot(RootMatcher.isRoot)
                 .check(ViewAssertions.matches(ViewMatchers.isDisplayed()))
     }
 }

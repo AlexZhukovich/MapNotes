@@ -1,8 +1,8 @@
 package com.alex.mapnotes.login.signup
 
 import android.os.Bundle
+import android.support.design.widget.Snackbar
 import android.support.v7.app.AppCompatActivity
-import android.widget.Toast
 import com.alex.mapnotes.AppExecutors
 import com.alex.mapnotes.R
 import com.alex.mapnotes.data.repository.FirebaseUserRepository
@@ -37,19 +37,19 @@ class SignUpActivity : AppCompatActivity(), SignUpView {
     }
 
     override fun displayEmailError() {
-        Toast.makeText(this, R.string.error_email_should_be_valid, Toast.LENGTH_LONG).show()
+        Snackbar.make(signUpRoot, R.string.error_email_should_be_valid, Snackbar.LENGTH_LONG).show()
     }
 
     override fun displayPasswordError() {
-        Toast.makeText(this, R.string.error_password_should_not_be_empty, Toast.LENGTH_LONG).show()
+        Snackbar.make(signUpRoot, R.string.error_password_should_not_be_empty, Snackbar.LENGTH_LONG).show()
     }
 
     override fun displaySignUpError(message: String) {
-        Toast.makeText(this, message, Toast.LENGTH_LONG).show()
+        Snackbar.make(signUpRoot, message, Snackbar.LENGTH_LONG).show()
     }
 
     override fun displayEmptyUserNameError() {
-        Toast.makeText(this, R.string.error_name_should_not_be_empty, Toast.LENGTH_LONG).show()
+        Snackbar.make(signUpRoot, R.string.error_name_should_not_be_empty, Snackbar.LENGTH_LONG).show()
     }
 
     override fun onStop() {

@@ -10,7 +10,6 @@ import android.support.test.espresso.matcher.ViewMatchers.isDisplayed
 import android.support.test.rule.ActivityTestRule
 import android.support.test.runner.AndroidJUnit4
 import com.alex.mapnotes.login.signin.SignInActivity
-import com.alex.mapnotes.matcher.RootMatcher
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -29,7 +28,6 @@ class SignInValidationTest {
                 .perform(click())
 
         onView(withText(R.string.error_email_should_be_valid))
-                .inRoot(RootMatcher.isRoot)
                 .check(matches(isDisplayed()))
     }
 
@@ -42,7 +40,6 @@ class SignInValidationTest {
                 .perform(click())
 
         onView(withText(R.string.error_email_should_be_valid))
-                .inRoot(RootMatcher.isRoot)
                 .check(matches(isDisplayed()))
     }
 
@@ -55,7 +52,6 @@ class SignInValidationTest {
                 .perform(click())
 
         onView(withText(R.string.error_password_should_not_be_empty))
-                .inRoot(RootMatcher.isRoot)
                 .check(matches(isDisplayed()))
     }
 }
