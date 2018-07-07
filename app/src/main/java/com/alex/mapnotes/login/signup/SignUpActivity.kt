@@ -3,18 +3,14 @@ package com.alex.mapnotes.login.signup
 import android.os.Bundle
 import android.support.design.widget.Snackbar
 import android.support.v7.app.AppCompatActivity
-import com.alex.mapnotes.AppExecutors
 import com.alex.mapnotes.R
-import com.alex.mapnotes.data.repository.FirebaseUserRepository
-import com.alex.mapnotes.data.repository.UserRepository
 import com.alex.mapnotes.ext.clearAndNavigateTo
 import com.alex.mapnotes.home.HomeActivity
 import kotlinx.android.synthetic.main.activity_sign_up.*
+import org.koin.android.ext.android.inject
 
 class SignUpActivity : AppCompatActivity(), SignUpView {
-    private val appExecutors: AppExecutors by lazy { AppExecutors() }
-    private val userRepository: UserRepository by lazy { FirebaseUserRepository(appExecutors) }
-    private val presenter: SignUpMvpPresenter by lazy { SignUpPresenter(appExecutors, userRepository) }
+    private val presenter: SignUpMvpPresenter by inject()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

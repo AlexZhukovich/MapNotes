@@ -4,15 +4,20 @@ import com.alex.mapnotes.AppExecutors
 import com.alex.mapnotes.data.Result
 import com.alex.mapnotes.data.exception.UserNotAuthenticatedException
 import com.alex.mapnotes.data.repository.UserRepository
+import com.alex.mapnotes.di.appModule
 import com.alex.mapnotes.model.AuthUser
 import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
 import kotlinx.coroutines.experimental.android.UI
+import org.junit.After
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.koin.standalone.StandAloneContext
+import org.koin.standalone.StandAloneContext.closeKoin
+import org.koin.standalone.StandAloneContext.loadKoinModules
 import org.robolectric.RobolectricTestRunner
 
 @RunWith(RobolectricTestRunner::class)
@@ -36,6 +41,8 @@ class SignInPresenterTest {
 
     @Before
     fun setUp() {
+        loadKoinModules(listOf(appModule))
+
         every { appExecutors.networkContext } returns UI
         every { view.displayEmailError() } answers { nothing }
         every { view.displayPasswordError() } answers { nothing }
@@ -173,5 +180,10 @@ class SignInPresenterTest {
         presenter.signIn(correctUserName, emptyPassword)
 
         verify(exactly = 0) { view.displayPasswordError() }
+    }
+
+    @After
+    fun tearDown() {
+        closeKoin()
     }
 }

@@ -3,18 +3,14 @@ package com.alex.mapnotes.login.signin
 import android.os.Bundle
 import android.support.design.widget.Snackbar
 import android.support.v7.app.AppCompatActivity
-import com.alex.mapnotes.AppExecutors
 import com.alex.mapnotes.R
-import com.alex.mapnotes.data.repository.FirebaseUserRepository
-import com.alex.mapnotes.data.repository.UserRepository
 import com.alex.mapnotes.ext.clearAndNavigateTo
 import com.alex.mapnotes.home.HomeActivity
 import kotlinx.android.synthetic.main.activity_sign_in.*
+import org.koin.android.ext.android.inject
 
 class SignInActivity : AppCompatActivity(), SignInView {
-    private val appExecutors: AppExecutors by lazy { AppExecutors() }
-    private val userRepository: UserRepository by lazy { FirebaseUserRepository(appExecutors) }
-    private val presenter: SignInMvpPresenter by lazy { SignInPresenter(appExecutors, userRepository) }
+    private val presenter: SignInMvpPresenter by inject()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -36,17 +32,14 @@ class SignInActivity : AppCompatActivity(), SignInView {
     }
 
     override fun displayEmailError() {
-//        Toast.makeText(this, R.string.error_email_should_be_valid, Toast.LENGTH_LONG).show()
         Snackbar.make(signInRoot, R.string.error_email_should_be_valid, Snackbar.LENGTH_SHORT).show()
     }
 
     override fun displayPasswordError() {
-//        Toast.makeText(this, R.string.error_password_should_not_be_empty, Toast.LENGTH_LONG).show()
         Snackbar.make(signInRoot, R.string.error_password_should_not_be_empty, Snackbar.LENGTH_SHORT).show()
     }
 
     override fun displaySignInError(message: String) {
-//        Toast.makeText(this, message, Toast.LENGTH_LONG).show()
         Snackbar.make(signInRoot, message, Snackbar.LENGTH_SHORT).show()
     }
 

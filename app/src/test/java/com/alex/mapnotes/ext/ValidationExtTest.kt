@@ -1,13 +1,23 @@
 package com.alex.mapnotes.ext
 
-import org.junit.Assert.assertTrue
+import com.alex.mapnotes.di.appModule
+import org.junit.After
 import org.junit.Assert.assertFalse
+import org.junit.Assert.assertTrue
+import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.koin.standalone.StandAloneContext.closeKoin
+import org.koin.standalone.StandAloneContext.loadKoinModules
 import org.robolectric.RobolectricTestRunner
 
 @RunWith(RobolectricTestRunner::class)
 class ValidationExtTest {
+
+    @Before
+    fun setUp() {
+        loadKoinModules(listOf(appModule))
+    }
 
     @Test
     fun `verify isValidEmail with correct email`() {
@@ -21,5 +31,10 @@ class ValidationExtTest {
         val email = "test"
 
         assertFalse(email.isValidEmail())
+    }
+
+    @After
+    fun tearDown() {
+        closeKoin()
     }
 }

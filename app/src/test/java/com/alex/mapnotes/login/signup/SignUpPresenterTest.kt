@@ -3,6 +3,7 @@ package com.alex.mapnotes.login.signup
 import com.alex.mapnotes.AppExecutors
 import com.alex.mapnotes.data.Result
 import com.alex.mapnotes.data.repository.UserRepository
+import com.alex.mapnotes.di.appModule
 import com.alex.mapnotes.model.AuthUser
 import io.mockk.every
 import io.mockk.coEvery
@@ -10,9 +11,12 @@ import io.mockk.verify
 import io.mockk.coVerify
 import io.mockk.mockk
 import kotlinx.coroutines.experimental.android.UI
+import org.junit.After
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.koin.standalone.StandAloneContext.closeKoin
+import org.koin.standalone.StandAloneContext.loadKoinModules
 import org.robolectric.RobolectricTestRunner
 
 @RunWith(RobolectricTestRunner::class)
@@ -38,6 +42,8 @@ class SignUpPresenterTest {
 
     @Before
     fun setUp() {
+        loadKoinModules(listOf(appModule))
+
         every { appExecutors.uiContext } returns UI
         every { appExecutors.ioContext } returns UI
 
@@ -224,5 +230,10 @@ class SignUpPresenterTest {
         presenter.signUp(correctUserName, correctEmail, correctPassword)
 
         verify(exactly = 0) { view.displaySignUpError(errorMessage) }
+    }
+
+    @After
+    fun tearDown() {
+        closeKoin()
     }
 }
