@@ -1,71 +1,128 @@
 package com.alex.mapnotes
 
-import android.support.test.espresso.Espresso
-import android.support.test.espresso.action.ViewActions
-import android.support.test.espresso.assertion.ViewAssertions
-import android.support.test.espresso.matcher.ViewMatchers
+import android.support.test.espresso.Espresso.onView
+import android.support.test.espresso.action.ViewActions.click
+import android.support.test.espresso.action.ViewActions.replaceText
+import android.support.test.espresso.assertion.ViewAssertions.matches
+import android.support.test.espresso.intent.Intents
+import android.support.test.espresso.intent.matcher.IntentMatchers.hasComponent
+import android.support.test.espresso.matcher.ViewMatchers.withId
+import android.support.test.espresso.matcher.ViewMatchers.withText
+import android.support.test.espresso.matcher.ViewMatchers.isDisplayed
 import android.support.test.rule.ActivityTestRule
+import android.support.test.rule.GrantPermissionRule
 import android.support.test.runner.AndroidJUnit4
+import com.alex.mapnotes.data.Result
+import com.alex.mapnotes.home.HomeActivity
 import com.alex.mapnotes.login.signup.SignUpActivity
+import com.alex.mapnotes.model.AuthUser
+import io.mockk.coEvery
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 
 @RunWith(AndroidJUnit4::class)
 class SignUpValidationTest {
+    private val username = "testUserName"
     private val incorrectEmail = "test"
     private val correctEmail = "test@test.com"
     private val password = "password"
 
-    @Rule
-    @JvmField
+    @Rule @JvmField
+    var permissionRule = GrantPermissionRule.grant(android.Manifest.permission.ACCESS_FINE_LOCATION)
+
+    @Rule @JvmField
     val activityRule = ActivityTestRule<SignUpActivity>(SignUpActivity::class.java)
 
     @Test
     fun shouldDisplayEmailErrorWhenEmailIsEmpty() {
-        Espresso.onView(ViewMatchers.withId(R.id.signUp))
-                .perform(ViewActions.click())
+        onView(withId(R.id.signUp))
+                .perform(click())
 
-        Espresso.onView(ViewMatchers.withText(R.string.error_email_should_be_valid))
-                .check(ViewAssertions.matches(ViewMatchers.isDisplayed()))
+        onView(withText(R.string.error_email_should_be_valid))
+                .check(matches(isDisplayed()))
     }
 
     @Test
     fun shouldDisplayEmailErrorWhenEmailIsNotCorrect() {
-        Espresso.onView(ViewMatchers.withId(R.id.email))
-                .perform(ViewActions.replaceText(incorrectEmail))
+        onView(withId(R.id.email))
+                .perform(replaceText(incorrectEmail))
 
-        Espresso.onView(ViewMatchers.withId(R.id.signUp))
-                .perform(ViewActions.click())
+        onView(withId(R.id.signUp))
+                .perform(click())
 
-        Espresso.onView(ViewMatchers.withText(R.string.error_email_should_be_valid))
-                .check(ViewAssertions.matches(ViewMatchers.isDisplayed()))
+        onView(withText(R.string.error_email_should_be_valid))
+                .check(matches(isDisplayed()))
     }
 
     @Test
     fun shouldDisplayPasswordErrorWhenPasswordIsEmpty() {
-        Espresso.onView(ViewMatchers.withId(R.id.email))
-                .perform(ViewActions.replaceText(correctEmail))
+        onView(withId(R.id.email))
+                .perform(replaceText(correctEmail))
 
-        Espresso.onView(ViewMatchers.withId(R.id.signUp))
-                .perform(ViewActions.click())
+        onView(withId(R.id.signUp))
+                .perform(click())
 
-        Espresso.onView(ViewMatchers.withText(R.string.error_password_should_not_be_empty))
-                .check(ViewAssertions.matches(ViewMatchers.isDisplayed()))
+        onView(withText(R.string.error_password_should_not_be_empty))
+                .check(matches(isDisplayed()))
     }
 
     @Test
     fun shouldDisplayNameErrorWhenNameIsEmpty() {
-        Espresso.onView(ViewMatchers.withId(R.id.email))
-                .perform(ViewActions.replaceText(correctEmail))
+        onView(withId(R.id.email))
+                .perform(replaceText(correctEmail))
 
-        Espresso.onView(ViewMatchers.withId(R.id.password))
-                .perform(ViewActions.replaceText(password))
+        onView(withId(R.id.password))
+                .perform(replaceText(password))
 
-        Espresso.onView(ViewMatchers.withId(R.id.signUp))
-                .perform(ViewActions.click())
+        onView(withId(R.id.signUp))
+                .perform(click())
 
-        Espresso.onView(ViewMatchers.withText(R.string.error_name_should_not_be_empty))
-                .check(ViewAssertions.matches(ViewMatchers.isDisplayed()))
+        onView(withText(R.string.error_name_should_not_be_empty))
+                .check(matches(isDisplayed()))
+    }
+
+    @Test
+    fun shouldDisplaySignUpError() {
+        coEvery { MockMapNotesApp.mockedUserRepository.signUp(any(), any()) } returns Result.Error(Exception("SignUp error"))
+
+        onView(withId(R.id.name))
+                .perform(replaceText(username))
+
+        onView(withId(R.id.email))
+                .perform(replaceText(correctEmail))
+
+        onView(withId(R.id.password))
+                .perform(replaceText(password))
+
+        onView(withId(R.id.signUp))
+                .perform(click())
+
+        onView(withText("SignUp error"))
+                .check(matches(isDisplayed()))
+    }
+
+    @Test
+    fun shouldOpenMapScreen() {
+        Intents.init()
+        val authUser = AuthUser("111111")
+        coEvery { MockMapNotesApp.mockedUserRepository.changeUserName(authUser, username) } answers { nothing }
+        coEvery { MockMapNotesApp.mockedUserRepository.signUp(correctEmail, password) } returns Result.Success(authUser)
+
+        onView(withId(R.id.name))
+                .perform(replaceText(username))
+
+        onView(withId(R.id.email))
+                .perform(replaceText(correctEmail))
+
+        onView(withId(R.id.password))
+                .perform(replaceText(password))
+
+        onView(withId(R.id.signUp))
+                .perform(click())
+
+        Intents.intended(hasComponent(HomeActivity::class.java.name))
+
+        Intents.release()
     }
 }
