@@ -1,4 +1,4 @@
-package com.alex.mapnotes
+package com.alex.mapnotes.login
 
 import android.support.test.espresso.Espresso.onView
 import android.support.test.espresso.action.ViewActions.click
@@ -12,6 +12,8 @@ import android.support.test.espresso.matcher.ViewMatchers.isDisplayed
 import android.support.test.rule.ActivityTestRule
 import android.support.test.rule.GrantPermissionRule
 import android.support.test.runner.AndroidJUnit4
+import com.alex.mapnotes.MockMapNotesApp
+import com.alex.mapnotes.R
 import com.alex.mapnotes.data.Result
 import com.alex.mapnotes.home.HomeActivity
 import com.alex.mapnotes.login.signup.SignUpActivity
@@ -22,14 +24,14 @@ import org.junit.Test
 import org.junit.runner.RunWith
 
 @RunWith(AndroidJUnit4::class)
-class SignUpValidationTest {
+class SignUpActivityTest {
     private val username = "testUserName"
     private val incorrectEmail = "test"
     private val correctEmail = "test@test.com"
     private val password = "password"
 
     @Rule @JvmField
-    var permissionRule = GrantPermissionRule.grant(android.Manifest.permission.ACCESS_FINE_LOCATION)
+    val permissionRule: GrantPermissionRule = GrantPermissionRule.grant(android.Manifest.permission.ACCESS_FINE_LOCATION)
 
     @Rule @JvmField
     val activityRule = ActivityTestRule<SignUpActivity>(SignUpActivity::class.java)
@@ -83,7 +85,7 @@ class SignUpValidationTest {
     }
 
     @Test
-    fun shouldDisplaySignUpError() {
+    fun shouldDisplaySignUpErrorAfterSignUpError() {
         coEvery { MockMapNotesApp.mockedUserRepository.signUp(any(), any()) } returns Result.Error(Exception("SignUp error"))
 
         onView(withId(R.id.name))
@@ -103,7 +105,7 @@ class SignUpValidationTest {
     }
 
     @Test
-    fun shouldOpenMapScreen() {
+    fun shouldOpenMapScreenAfterSuccessfulSignUp() {
         Intents.init()
         val authUser = AuthUser("111111")
         coEvery { MockMapNotesApp.mockedUserRepository.changeUserName(authUser, username) } answers { nothing }

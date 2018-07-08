@@ -1,4 +1,4 @@
-package com.alex.mapnotes
+package com.alex.mapnotes.login
 
 import android.support.test.espresso.Espresso.onView
 import android.support.test.espresso.action.ViewActions.click
@@ -12,6 +12,8 @@ import android.support.test.espresso.matcher.ViewMatchers.withText
 import android.support.test.rule.ActivityTestRule
 import android.support.test.rule.GrantPermissionRule
 import android.support.test.runner.AndroidJUnit4
+import com.alex.mapnotes.MockMapNotesApp
+import com.alex.mapnotes.R
 import com.alex.mapnotes.data.Result
 import com.alex.mapnotes.home.HomeActivity
 import com.alex.mapnotes.login.signin.SignInActivity
@@ -22,13 +24,13 @@ import org.junit.Test
 import org.junit.runner.RunWith
 
 @RunWith(AndroidJUnit4::class)
-class SignInValidationTest {
+class SignInActivityTest {
     private val incorrectEmail = "test"
     private val correctEmail = "test@test.com"
     private val password = "password"
 
     @Rule @JvmField
-    var permissionRule = GrantPermissionRule.grant(android.Manifest.permission.ACCESS_FINE_LOCATION)
+    val permissionRule: GrantPermissionRule = GrantPermissionRule.grant(android.Manifest.permission.ACCESS_FINE_LOCATION)
 
     @Rule @JvmField
     val activityRule = ActivityTestRule<SignInActivity>(SignInActivity::class.java)
@@ -67,7 +69,7 @@ class SignInValidationTest {
     }
 
     @Test
-    fun shouldDisplaySignInError() {
+    fun shouldDisplaySignInErrorAfterSignInError() {
         coEvery { MockMapNotesApp.mockedUserRepository.signIn(any(), any()) } returns Result.Error(Exception("SignIn error"))
 
         onView(withId(R.id.email))
@@ -84,7 +86,7 @@ class SignInValidationTest {
     }
 
     @Test
-    fun shouldOpenMapScreen() {
+    fun shouldOpenMapScreenAfterSuccessfulSignIn() {
         Intents.init()
 
         coEvery { MockMapNotesApp.mockedUserRepository.signIn(correctEmail, password) } returns Result.Success(AuthUser("111111"))
