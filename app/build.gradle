@@ -1,11 +1,33 @@
 apply plugin: 'com.android.application'
-
 apply plugin: 'kotlin-android'
-
 apply plugin: 'kotlin-android-extensions'
+apply plugin: 'jacoco'
 
 androidExtensions {
     experimental = true
+}
+
+jacoco {
+    toolVersion = "$jacoco_tools_version"
+    reportsDir = file("$buildDir/reports")
+}
+
+kotlin {
+    experimental {
+        coroutines "enable"
+    }
+}
+
+kotlinGenerated {
+    // The annotation to annotate the generated methods with
+    annotation = "lombok.Generated"
+
+    // A flag to indicate whether the annotation should be visible at runtime
+    visible = true
+}
+
+configurations {
+    ktlint
 }
 
 android {
@@ -16,7 +38,7 @@ android {
         targetSdkVersion 27
         versionCode 1
         versionName "1.0"
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner "com.alex.mapnotes.MockTestRunner"
     }
     buildTypes {
         release {
@@ -25,27 +47,123 @@ android {
             resValue("string", "google_maps_api_key", "$System.env.GOOGLE_MAPS_API_KEY")
         }
         debug {
+            testCoverageEnabled true
             resValue("string", "google_maps_api_key", "$System.env.GOOGLE_MAPS_API_KEY")
         }
     }
+    testOptions {
+        unitTests {
+            all {
+                jacoco {
+                    includeNoLocationClasses = true
+                }
+            }
+            includeAndroidResources = true
+        }
+    }
+    packagingOptions {
+        exclude 'META-INF/DEPENDENCIES'
+        exclude 'META-INF/LICENSE'
+        exclude 'META-INF/LICENSE.txt'
+        exclude 'META-INF/license.txt'
+        exclude 'META-INF/NOTICE'
+        exclude 'META-INF/NOTICE.txt'
+        exclude 'META-INF/notice.txt'
+        exclude 'META-INF/ASL2.0'
+        exclude  'META-INF/main.kotlin_module'
+    }
+}
+
+task jacocoTestReport(type : JacocoReport, dependsOn : 'testDebugUnitTest') {
+    group = "Reporting"
+    description = "Generate Jacoco coverage reports for Debug build"
+
+    reports {
+        xml.enabled = true
+        html.enabled = true
+    }
+
+    def fileFilter = [
+            '**/R.class',
+            '**/BuildConfig.*',
+            '**/R$*.class',
+            '**/BuildConfig.*',
+            '**/Manifest*.*',
+            '**/*Test*.*',
+            'android/**/*.*']
+
+    def debugJavaTree = fileTree(dir: "${buildDir}/intermediates/classes/debug", excludes: fileFilter)
+    def debugKotlinTree = fileTree(dir: "${buildDir}/tmp/kotlin-classes/debug", excludes: fileFilter)
+    def mainSrc = "${project.projectDir}/src/main/java"
+
+    sourceDirectories = files([mainSrc])
+    classDirectories = files([debugJavaTree, debugKotlinTree])
+    def instrumentationFile = fileTree("${buildDir}/outputs/code-coverage/connected/")
+            .filter { it.name.endsWith(".ec") }
+            .filter { it.isFile() }
+            .files.name[0]
+
+    executionData = files(["${buildDir}/jacoco/testDebugUnitTest.exec",
+                           "${buildDir}/outputs/code-coverage/connected/${instrumentationFile}"])
+}
+
+task ktlint(type: JavaExec, group: "verification") {
+    description = "Check Kotlin code style."
+    classpath = configurations.ktlint
+    main = "com.github.shyiko.ktlint.Main"
+    args "--reporter=plain",
+            "--reporter=checkstyle,output=${buildDir}/reports/ktlint/checkstyle.xml",
+            "${projectDir}/**/src/**/*.kt"
 }
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation"org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-    implementation 'com.android.support:appcompat-v7:27.1.1'
-    implementation 'com.android.support:design:27.1.1'
-    implementation 'com.android.support.constraint:constraint-layout:1.1.0'
-    implementation 'com.google.android.gms:play-services-maps:15.0.1'
-    implementation 'com.google.android.gms:play-services-location:15.0.1'
-    implementation 'com.google.firebase:firebase-auth:16.0.1'
-    implementation 'com.google.firebase:firebase-database:16.0.1'
-    implementation 'com.google.firebase:firebase-core:16.0.0'
 
-    testImplementation 'junit:junit:4.12'
+    // KtLint
+    ktlint "com.github.shyiko:ktlint:$ktlint_version"
 
-    androidTestImplementation 'com.android.support.test:runner:1.0.2'
-    androidTestImplementation 'com.android.support.test:rules:1.0.2'
-    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
+    // Kotlin
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$kotlin_coroutine_version"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$kotlin_coroutine_version"
+
+    // Android Support Libraries
+    implementation "com.android.support:appcompat-v7:$support_libs_version"
+    implementation "com.android.support:design:$support_libs_version"
+    implementation "com.android.support.constraint:constraint-layout:$constraint_layout_version"
+
+    // Google play services
+    implementation "com.google.android.gms:play-services-maps:$play_services_version"
+    implementation "com.google.android.gms:play-services-location:$play_services_version"
+
+    // Firebase
+    implementation "com.google.firebase:firebase-auth:$firebase_auth_version"
+    implementation "com.google.firebase:firebase-database:$firebase_database_version"
+    implementation "com.google.firebase:firebase-core:$firebase_core_version"
+
+    // Koin
+    implementation "org.koin:koin-core:$koin_version"
+    implementation "org.koin:koin-android:$koin_version"
+    testImplementation "org.koin:koin-test:$koin_version"
+    androidTestImplementation "org.koin:koin-test:$koin_version"
+
+    // JUnit
+    testImplementation "junit:junit:$junit_version"
+
+    // MockK
+    testImplementation "io.mockk:mockk:$mockk_version"
+    androidTestImplementation "io.mockk:mockk:$mockk_version"
+    androidTestImplementation "io.mockk:mockk-android:$mockk_version"
+
+    // Robolectric
+    testImplementation "org.robolectric:robolectric:$robolectric_version"
+
+    // Android test runner and rules
+    androidTestImplementation "com.android.support.test:runner:$test_runner_version"
+    androidTestImplementation "com.android.support.test:rules:$test_rules_version"
+
+    // Espresso
+    androidTestImplementation "com.android.support.test.espresso:espresso-core:$espresso_version"
+    androidTestImplementation "com.android.support.test.espresso:espresso-intents:$espresso_version"
 }
 apply plugin: 'com.google.gms.google-services'

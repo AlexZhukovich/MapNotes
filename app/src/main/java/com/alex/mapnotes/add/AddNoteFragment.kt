@@ -1,5 +1,6 @@
 package com.alex.mapnotes.add
 
+import android.content.Context
 import android.location.Geocoder
 import android.os.Bundle
 import android.support.v4.app.Fragment
@@ -8,35 +9,40 @@ import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.InputMethodManager
+import com.alex.mapnotes.AppExecutors
 import com.alex.mapnotes.R
 import com.alex.mapnotes.data.formatter.FullAddressFormatter
 import com.alex.mapnotes.data.formatter.LocationFormatter
 import com.alex.mapnotes.data.provider.AddressLocationProvider
 import com.alex.mapnotes.data.provider.LocationProvider
-import com.alex.mapnotes.data.repository.FirebaseUserRepository
 import com.alex.mapnotes.data.repository.FirebaseNotesRepository
+import com.alex.mapnotes.data.repository.FirebaseUserRepository
 import com.alex.mapnotes.data.repository.NotesRepository
 import com.alex.mapnotes.data.repository.UserRepository
-import kotlinx.android.synthetic.main.fragment_add_note.*
-import kotlinx.android.synthetic.main.fragment_add_note.view.*
-import java.util.*
+import kotlinx.android.synthetic.main.fragment_add_note.note
+import kotlinx.android.synthetic.main.fragment_add_note.currentLocation
+import kotlinx.android.synthetic.main.fragment_add_note.view.add
+import kotlinx.android.synthetic.main.fragment_add_note.view.note
+import java.util.Locale
 
-class AddNoteFragment: Fragment(), AddNoteView {
-    private val geocoder : Geocoder by lazy { Geocoder(this.context, Locale.getDefault()) }
-    private val locationProvider : LocationProvider by lazy { AddressLocationProvider(this.context!!) }
-    private val locationFormatter : LocationFormatter by lazy { FullAddressFormatter(geocoder) }
-    private val notesRepository : NotesRepository by lazy { FirebaseNotesRepository() }
-    private val userRepository : UserRepository by lazy { FirebaseUserRepository() }
-    private val presenter : AddNoteMvpPresenter by lazy {
-        AddNotePresenter(locationProvider,
-                         locationFormatter,
-                         userRepository,
-                         notesRepository)
+class AddNoteFragment : Fragment(), AddNoteView {
+    private val geocoder: Geocoder by lazy { Geocoder(this.context, Locale.getDefault()) }
+    private val locationProvider: LocationProvider by lazy { AddressLocationProvider(this.context!!) }
+    private val locationFormatter: LocationFormatter by lazy { FullAddressFormatter(geocoder) }
+    private val appExecutors: AppExecutors by lazy { AppExecutors() }
+    private val notesRepository: NotesRepository by lazy { FirebaseNotesRepository(appExecutors) }
+    private val userRepository: UserRepository by lazy { FirebaseUserRepository(appExecutors) }
+    private val presenter: AddNoteMvpPresenter by lazy {
+        AddNotePresenter(
+            appExecutors,
+            locationProvider,
+            locationFormatter,
+            userRepository,
+            notesRepository)
     }
 
-    override fun onCreateView(inflater: LayoutInflater,
-                              container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val rootView = inflater.inflate(R.layout.fragment_add_note, container, false)
 
         rootView.note.addTextChangedListener(object : TextWatcher {
@@ -75,6 +81,11 @@ class AddNoteFragment: Fragment(), AddNoteView {
 
     override fun displayCurrentLocation(address: String) {
         currentLocation.text = address
+    }
+
+    override fun hideKeyboard() {
+        val imm = context?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        imm.hideSoftInputFromWindow(note.windowToken, 0)
     }
 
     override fun onStop() {

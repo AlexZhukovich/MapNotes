@@ -1,15 +1,16 @@
 package com.alex.mapnotes.data.repository
 
+import com.alex.mapnotes.data.Result
 import com.alex.mapnotes.model.Note
-import com.google.firebase.database.ValueEventListener
+import kotlinx.coroutines.experimental.Job
 
 interface NotesRepository {
 
-    fun addNote(note: Note)
+    suspend fun addNote(note: Note)
 
-    fun getNotes(listener: ValueEventListener)
+    suspend fun getNotes(replaceAuthorName: (Note) -> Job): Result<List<Note>>
 
-    fun getNotesByNoteText(text: String, listener: ValueEventListener)
+    suspend fun getNotesByNoteText(text: String, replaceAuthorName: (Note) -> Job): Result<List<Note>>
 
-    fun getNotesByUser(userId: String, listener: ValueEventListener)
+    suspend fun getNotesByUser(userId: String, humanReadableName: String): Result<List<Note>>
 }

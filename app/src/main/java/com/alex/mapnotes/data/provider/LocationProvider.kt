@@ -12,5 +12,5 @@ interface LocationProvider {
 
     fun stopLocationUpdates()
 
-    fun isLocationAvailable() : Boolean
+    fun isLocationAvailable(): Boolean
 }

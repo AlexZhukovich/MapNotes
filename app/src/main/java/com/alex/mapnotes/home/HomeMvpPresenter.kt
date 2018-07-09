@@ -4,7 +4,7 @@ import com.alex.mapnotes.base.MvpPresenter
 
 interface HomeMvpPresenter : MvpPresenter<HomeView> {
 
-    fun handleNavigationItemClick(itemId: Int) : Boolean
+    fun handleNavigationItemClick(itemId: Int): Boolean
 
     fun showLocationPermissionRationale()
 
