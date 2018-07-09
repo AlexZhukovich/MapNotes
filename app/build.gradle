@@ -8,7 +8,7 @@ androidExtensions {
 }
 
 jacoco {
-    toolVersion = "$jacoco_version"
+    toolVersion = "$jacoco_tools_version"
     reportsDir = file("$buildDir/reports")
 }
 
@@ -16,6 +16,14 @@ kotlin {
     experimental {
         coroutines "enable"
     }
+}
+
+kotlinGenerated {
+    // The annotation to annotate the generated methods with
+    annotation = "lombok.Generated"
+
+    // A flag to indicate whether the annotation should be visible at runtime
+    visible = true
 }
 
 configurations {
@@ -30,7 +38,7 @@ android {
         targetSdkVersion 27
         versionCode 1
         versionName "1.0"
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner "com.alex.mapnotes.MockTestRunner"
     }
     buildTypes {
         release {
@@ -133,8 +141,22 @@ dependencies {
     implementation "com.google.firebase:firebase-database:$firebase_database_version"
     implementation "com.google.firebase:firebase-core:$firebase_core_version"
 
+    // Koin
+    implementation "org.koin:koin-core:$koin_version"
+    implementation "org.koin:koin-android:$koin_version"
+    testImplementation "org.koin:koin-test:$koin_version"
+    androidTestImplementation "org.koin:koin-test:$koin_version"
+
     // JUnit
     testImplementation "junit:junit:$junit_version"
+
+    // MockK
+    testImplementation "io.mockk:mockk:$mockk_version"
+    androidTestImplementation "io.mockk:mockk:$mockk_version"
+    androidTestImplementation "io.mockk:mockk-android:$mockk_version"
+
+    // Robolectric
+    testImplementation "org.robolectric:robolectric:$robolectric_version"
 
     // Android test runner and rules
     androidTestImplementation "com.android.support.test:runner:$test_runner_version"
@@ -142,5 +164,6 @@ dependencies {
 
     // Espresso
     androidTestImplementation "com.android.support.test.espresso:espresso-core:$espresso_version"
+    androidTestImplementation "com.android.support.test.espresso:espresso-intents:$espresso_version"
 }
 apply plugin: 'com.google.gms.google-services'

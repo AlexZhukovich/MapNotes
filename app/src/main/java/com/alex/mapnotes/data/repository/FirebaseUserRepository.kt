@@ -3,6 +3,7 @@ package com.alex.mapnotes.data.repository
 import com.alex.mapnotes.AppExecutors
 import com.alex.mapnotes.data.Result
 import com.alex.mapnotes.data.exception.UserNotAuthenticatedException
+import com.alex.mapnotes.model.AuthUser
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.database.DataSnapshot
@@ -18,18 +19,18 @@ class FirebaseUserRepository(private val appExecutors: AppExecutors) : UserRepos
     private val auth = FirebaseAuth.getInstance()
     private val database = FirebaseDatabase.getInstance()
 
-    override suspend fun signIn(email: String, password: String): Result<FirebaseUser> = withContext(appExecutors.networkContext) {
-        suspendCoroutine<Result<FirebaseUser>> {
+    override suspend fun signIn(email: String, password: String): Result<AuthUser> = withContext(appExecutors.networkContext) {
+        suspendCoroutine<Result<AuthUser>> {
             auth.signInWithEmailAndPassword(email, password).addOnCompleteListener { authResultTask ->
-                it.resume(Result.Success(authResultTask.result.user))
+                it.resume(Result.Success(AuthUser(authResultTask.result.user.uid)))
             }
         }
     }
 
-    override suspend fun signUp(email: String, password: String): Result<FirebaseUser> = withContext(appExecutors.networkContext) {
-        suspendCoroutine<Result<FirebaseUser>> {
+    override suspend fun signUp(email: String, password: String): Result<AuthUser> = withContext(appExecutors.networkContext) {
+        suspendCoroutine<Result<AuthUser>> {
             auth.createUserWithEmailAndPassword(email, password).addOnCompleteListener { authResultTask ->
-                it.resume(Result.Success(authResultTask.result.user))
+                it.resume(Result.Success(AuthUser(authResultTask.result.user.uid)))
             }
         }
     }
@@ -47,7 +48,7 @@ class FirebaseUserRepository(private val appExecutors: AppExecutors) : UserRepos
         }
     }
 
-    override suspend fun changeUserName(user: FirebaseUser, name: String) {
+    override suspend fun changeUserName(user: AuthUser, name: String) {
         withContext(appExecutors.networkContext) {
             val usersRef = database.getReference(usersPath)
             usersRef.child(user.uid).setValue(hashMapOf(nameKey to name))
