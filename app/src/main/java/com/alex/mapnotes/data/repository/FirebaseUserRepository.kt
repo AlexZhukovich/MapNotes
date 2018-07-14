@@ -5,7 +5,6 @@ import com.alex.mapnotes.data.Result
 import com.alex.mapnotes.data.exception.UserNotAuthenticatedException
 import com.alex.mapnotes.model.AuthUser
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
@@ -39,10 +38,10 @@ class FirebaseUserRepository(private val appExecutors: AppExecutors) : UserRepos
         auth.signOut()
     }
 
-    override suspend fun getCurrentUser(): Result<FirebaseUser> = withContext(appExecutors.networkContext) {
+    override suspend fun getCurrentUser(): Result<AuthUser> = withContext(appExecutors.networkContext) {
         val user = auth.currentUser
         if (user != null) {
-            return@withContext Result.Success(user)
+            return@withContext Result.Success(AuthUser(user.uid))
         } else {
             return@withContext Result.Error(UserNotAuthenticatedException())
         }

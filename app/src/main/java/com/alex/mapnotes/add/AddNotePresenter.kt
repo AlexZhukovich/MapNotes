@@ -1,12 +1,12 @@
 package com.alex.mapnotes.add
 
-import android.location.Location
 import com.alex.mapnotes.AppExecutors
 import com.alex.mapnotes.data.Result
 import com.alex.mapnotes.data.formatter.LocationFormatter
 import com.alex.mapnotes.data.provider.LocationProvider
 import com.alex.mapnotes.data.repository.NotesRepository
 import com.alex.mapnotes.data.repository.UserRepository
+import com.alex.mapnotes.model.Location
 import com.alex.mapnotes.model.Note
 import kotlinx.coroutines.experimental.launch
 
