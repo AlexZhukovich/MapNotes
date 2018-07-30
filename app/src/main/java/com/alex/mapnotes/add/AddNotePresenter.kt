@@ -24,12 +24,13 @@ class AddNotePresenter(
 
     override fun onAttach(view: AddNoteView?) {
         this.view = view
-        locationProvider.startLocationUpdates()
-
-        launch(appExecutors.ioContext) {
-            val userResult = userRepository.getCurrentUser()
-            if (userResult is Result.Success) {
-                uid = userResult.data.uid
+        view?.let {
+            locationProvider.startLocationUpdates()
+            launch(appExecutors.ioContext) {
+                val userResult = userRepository.getCurrentUser()
+                if (userResult is Result.Success) {
+                    uid = userResult.data.uid
+                }
             }
         }
     }
@@ -53,7 +54,9 @@ class AddNotePresenter(
     }
 
     override fun onDetach() {
-        locationProvider.stopLocationUpdates()
-        this.view = null
+        view?.let {
+            locationProvider.stopLocationUpdates()
+            this.view = null
+        }
     }
 }
