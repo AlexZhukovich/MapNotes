@@ -1,5 +1,6 @@
 package com.alex.mapnotes.add
 
+import android.support.annotation.VisibleForTesting
 import com.alex.mapnotes.AppExecutors
 import com.alex.mapnotes.data.Result
 import com.alex.mapnotes.data.formatter.LocationFormatter
@@ -22,6 +23,11 @@ class AddNotePresenter(
     private var lastLocation: Location? = null
     private var uid: String? = null
 
+    @VisibleForTesting
+    fun updateLastLocation(location: Location) {
+        lastLocation = location
+    }
+
     override fun onAttach(view: AddNoteView?) {
         this.view = view
         view?.let {
@@ -43,12 +49,14 @@ class AddNotePresenter(
     }
 
     override fun addNote(text: String) {
-        view?.clearNoteText()
-        view?.hideKeyboard()
-        launch(appExecutors.ioContext) {
-            uid?.let {
-                val note = Note(lastLocation?.latitude!!, lastLocation?.longitude!!, text, it)
-                notesRepository.addNote(note)
+        view?.let {
+            it.clearNoteText()
+            it.hideKeyboard()
+            launch(appExecutors.ioContext) {
+                uid?.let {
+                    val note = Note(lastLocation?.latitude!!, lastLocation?.longitude!!, text, it)
+                    notesRepository.addNote(note)
+                }
             }
         }
     }
