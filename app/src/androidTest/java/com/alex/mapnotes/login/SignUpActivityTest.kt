@@ -1,5 +1,7 @@
 package com.alex.mapnotes.login
 
+import android.content.Intent
+import android.support.test.InstrumentationRegistry
 import android.support.test.espresso.Espresso.onView
 import android.support.test.espresso.action.ViewActions.click
 import android.support.test.espresso.action.ViewActions.replaceText
@@ -18,10 +20,15 @@ import com.alex.mapnotes.data.Result
 import com.alex.mapnotes.home.HomeActivity
 import com.alex.mapnotes.login.signup.SignUpActivity
 import com.alex.mapnotes.model.AuthUser
+import com.alex.mapnotes.testAppModule
 import io.mockk.coEvery
+import org.junit.After
+import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.koin.standalone.StandAloneContext.closeKoin
+import org.koin.standalone.StandAloneContext.loadKoinModules
 
 @RunWith(AndroidJUnit4::class)
 class SignUpActivityTest {
@@ -34,7 +41,13 @@ class SignUpActivityTest {
     val permissionRule: GrantPermissionRule = GrantPermissionRule.grant(android.Manifest.permission.ACCESS_FINE_LOCATION)
 
     @Rule @JvmField
-    val activityRule = ActivityTestRule<SignUpActivity>(SignUpActivity::class.java)
+    val activityRule = ActivityTestRule<SignUpActivity>(SignUpActivity::class.java, true, false)
+
+    @Before
+    fun setUp() {
+        loadKoinModules(listOf(testAppModule))
+        activityRule.launchActivity(Intent(InstrumentationRegistry.getInstrumentation().targetContext, SignUpActivity::class.java))
+    }
 
     @Test
     fun shouldDisplayEmailErrorWhenEmailIsEmpty() {
@@ -126,5 +139,10 @@ class SignUpActivityTest {
         Intents.intended(hasComponent(HomeActivity::class.java.name))
 
         Intents.release()
+    }
+
+    @After
+    fun tearDown() {
+        closeKoin()
     }
 }
