@@ -49,12 +49,12 @@ class AddNotePresenter(
     }
 
     override fun addNote(text: String) {
-        view?.let {
-            it.clearNoteText()
-            it.hideKeyboard()
+        view?.let { view ->
+            view.clearNoteText()
+            view.hideKeyboard()
             launch(appExecutors.ioContext) {
-                uid?.let {
-                    val note = Note(lastLocation?.latitude!!, lastLocation?.longitude!!, text, it)
+                uid?.let { uid ->
+                    val note = Note(lastLocation?.latitude!!, lastLocation?.longitude!!, text, uid)
                     notesRepository.addNote(note)
                 }
             }
