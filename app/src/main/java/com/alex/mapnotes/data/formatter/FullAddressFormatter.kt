@@ -1,7 +1,7 @@
 package com.alex.mapnotes.data.formatter
 
 import android.location.Geocoder
-import android.location.Location
+import com.alex.mapnotes.model.Location
 
 class FullAddressFormatter(private val geocoder: Geocoder) : LocationFormatter {
     private val maxResults = 1

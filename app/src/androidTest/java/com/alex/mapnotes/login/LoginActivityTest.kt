@@ -9,6 +9,7 @@ import android.support.test.espresso.matcher.ViewMatchers.withId
 import android.support.test.rule.ActivityTestRule
 import android.support.test.runner.AndroidJUnit4
 import com.alex.mapnotes.R
+import com.alex.mapnotes.di.appModule
 import com.alex.mapnotes.login.signin.SignInActivity
 import com.alex.mapnotes.login.signup.SignUpActivity
 import org.junit.After
@@ -16,6 +17,8 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.koin.standalone.StandAloneContext.closeKoin
+import org.koin.standalone.StandAloneContext.loadKoinModules
 
 @RunWith(AndroidJUnit4::class)
 class LoginActivityTest {
@@ -26,6 +29,7 @@ class LoginActivityTest {
 
     @Before
     fun setUp() {
+        loadKoinModules(listOf(appModule))
         Intents.init()
     }
 
@@ -48,5 +52,6 @@ class LoginActivityTest {
     @After
     fun tearDown() {
         Intents.release()
+        closeKoin()
     }
 }

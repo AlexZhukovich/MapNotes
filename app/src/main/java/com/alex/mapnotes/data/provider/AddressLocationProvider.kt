@@ -2,10 +2,10 @@ package com.alex.mapnotes.data.provider
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.location.Location
 import android.location.LocationManager
 import android.os.RemoteException
 import com.alex.mapnotes.ext.checkLocationPermission
+import com.alex.mapnotes.model.Location
 import com.google.android.gms.location.LocationCallback
 import com.google.android.gms.location.LocationRequest
 import com.google.android.gms.location.LocationResult
@@ -26,9 +26,9 @@ class AddressLocationProvider(
     private val locationCallback = object : LocationCallback() {
         override fun onLocationResult(locationResult: LocationResult?) {
             locationResult ?: return
-            updatableListener?.invoke(locationResult.lastLocation)
+            updatableListener?.invoke(Location(locationResult.lastLocation.latitude, locationResult.lastLocation.longitude))
             if (singleListener != null) {
-                singleListener?.invoke(locationResult.lastLocation)
+                singleListener?.invoke(Location(locationResult.lastLocation.latitude, locationResult.lastLocation.longitude))
                 singleListener = null
             }
         }
@@ -60,9 +60,9 @@ class AddressLocationProvider(
     private fun useLastLocation() {
         fusedLocationProviderClient.lastLocation.addOnCompleteListener {
             if (it.isSuccessful && it.result != null) {
-                updatableListener?.invoke(it.result)
+                updatableListener?.invoke(Location(it.result.latitude, it.result.longitude))
                 if (singleListener != null) {
-                    singleListener?.invoke(it.result)
+                    singleListener?.invoke(Location(it.result.latitude, it.result.longitude))
                     singleListener = null
                 }
             }

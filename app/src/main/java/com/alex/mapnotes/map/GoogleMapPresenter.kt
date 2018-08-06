@@ -1,6 +1,6 @@
 package com.alex.mapnotes.map
 
-import android.location.Location
+import com.alex.mapnotes.model.Location
 import com.alex.mapnotes.model.Note
 
 class GoogleMapPresenter : MapMvpPresenter {

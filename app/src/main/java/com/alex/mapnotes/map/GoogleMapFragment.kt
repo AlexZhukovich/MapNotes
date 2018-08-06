@@ -4,7 +4,6 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
-import android.location.Location
 import android.provider.Settings
 import android.support.v4.content.LocalBroadcastManager
 import android.support.v7.app.AlertDialog
@@ -14,6 +13,7 @@ import com.alex.mapnotes.data.provider.LocationProvider
 import com.alex.mapnotes.ext.checkLocationPermission
 import com.alex.mapnotes.home.DISPLAY_LOCATION
 import com.alex.mapnotes.home.EXTRA_NOTE
+import com.alex.mapnotes.model.Location
 import com.alex.mapnotes.model.Note
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap

@@ -51,8 +51,6 @@ class HomePresenter(
         launch(appExecutors.uiContext) {
             val currentUser = userRepository.getCurrentUser()
             when (currentUser) {
-                is Result.Success -> {
-                }
                 is Result.Error -> {
                     view?.navigateToLoginScreen()
                 }
