@@ -33,3 +33,8 @@ An Android application which allows you to add notes to the current location
 * Interaction mode of the map
 * Adding markers to the map by search screen
 * Removing all markers by pressing "back"
+
+# Contributors
+* [@AlexZhukovich](https://github.com/AlexZhukovich) 
+* [@Yasujizr](https://github.com/Yasujizr) - design of icons
+ 
