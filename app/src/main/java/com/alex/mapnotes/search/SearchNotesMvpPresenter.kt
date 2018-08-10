@@ -4,7 +4,7 @@ import com.alex.mapnotes.base.MvpPresenter
 
 interface SearchNotesMvpPresenter : MvpPresenter<SearchNotesView> {
 
-    fun getNotes()
+    fun getNotes(defaultUserName: String)
 
-    fun searchNotes(text: String, categoryPosition: Int)
+    fun searchNotes(text: String, categoryPosition: Int, defaultUserName: String)
 }

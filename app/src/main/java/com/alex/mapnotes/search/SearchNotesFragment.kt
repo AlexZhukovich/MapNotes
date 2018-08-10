@@ -25,13 +25,15 @@ import com.alex.mapnotes.search.adapter.NotesAdapter
 import kotlinx.android.synthetic.main.fragment_search_notes.view.*
 
 class SearchNotesFragment : Fragment(), SearchNotesView {
+    private val defaultUserName by lazy { getString(R.string.unknown_user) }
+
     private lateinit var adapter: NotesAdapter
     private val coordinateFormatter: LatLonFormatter by lazy { CoordinateFormatter() }
     private val userRepository: UserRepository by lazy { FirebaseUserRepository(appExecutors) }
     private val appExecutors: AppExecutors by lazy { AppExecutors() }
     private val notesRepository: NotesRepository by lazy { FirebaseNotesRepository(appExecutors) }
     private val presenter: SearchNotesMvpPresenter by lazy {
-        SearchNotesPresenter(this.context!!, userRepository, notesRepository, appExecutors)
+        SearchNotesPresenter(userRepository, notesRepository, appExecutors)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -56,7 +58,7 @@ class SearchNotesFragment : Fragment(), SearchNotesView {
         rootView.recyclerView.adapter = adapter
 
         rootView.searchButton.setOnClickListener {
-            presenter.searchNotes(rootView.searchText.text.toString(), rootView.searchOptions.selectedItemPosition)
+            presenter.searchNotes(rootView.searchText.text.toString(), rootView.searchOptions.selectedItemPosition, defaultUserName)
         }
         return rootView
     }
@@ -68,7 +70,7 @@ class SearchNotesFragment : Fragment(), SearchNotesView {
 
     override fun onResume() {
         super.onResume()
-        presenter.getNotes()
+        presenter.getNotes(defaultUserName)
     }
 
     override fun clearSearchResults() {
