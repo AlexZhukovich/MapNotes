@@ -35,60 +35,64 @@ class SearchNotesPresenter(
     }
 
     override fun getNotes(defaultUserName: String) = launch(appExecutors.uiContext) {
-        view?.clearSearchResults()
-        val notes = notesRepository.getNotes { replaceNoteAuthorIdToNameJob(it, defaultUserName) }
-        when (notes) {
-            is Result.Error -> {
-                view?.displayLoadingNotesError()
-            }
-            is Result.Success -> {
-                notes.data.forEach {
-                    view?.displayNote(it)
+        view?.let { notesView ->
+            notesView.clearSearchResults()
+            val notes = notesRepository.getNotes { replaceNoteAuthorIdToNameJob(it, defaultUserName) }
+            when (notes) {
+                is Result.Error -> {
+                    notesView.displayLoadingNotesError()
+                }
+                is Result.Success -> {
+                    notes.data.forEach {
+                        notesView.displayNote(it)
+                    }
                 }
             }
         }
     }
 
     override fun searchNotes(text: String, categoryPosition: Int, defaultUserName: String) {
-        view?.clearSearchResults()
-        if (text.isEmpty()) {
-            getNotes(defaultUserName)
-            return
-        }
+        view?.let { notesView ->
+            notesView.clearSearchResults()
+            if (text.isEmpty()) {
+                getNotes(defaultUserName)
+                return
+            }
 
-        when (categoryPosition) {
-            notesSearchCategory -> {
-                launch(appExecutors.uiContext) {
-                    val notes = notesRepository.getNotesByNoteText(text) { replaceNoteAuthorIdToNameJob(it, defaultUserName) }
-                    when (notes) {
-                        is Result.Error -> {
-                            view?.displayLoadingNotesError()
-                        }
-                        is Result.Success -> {
-                            notes.data.forEach {
-                                view?.displayNote(it)
+            when (categoryPosition) {
+                notesSearchCategory -> {
+                    launch(appExecutors.uiContext) {
+                        val notes = notesRepository.getNotesByNoteText(text) { replaceNoteAuthorIdToNameJob(it, defaultUserName) }
+                        when (notes) {
+                            is Result.Error -> {
+                                notesView.displayLoadingNotesError()
+                            }
+                            is Result.Success -> {
+                                notes.data.forEach {
+                                    notesView.displayNote(it)
+                                }
                             }
                         }
                     }
                 }
-            }
-            usersSearchCategory -> {
-                launch(appExecutors.networkContext) {
-                    withContext(appExecutors.networkContext) {
-                        val userId = userRepository.getUserIdFromHumanReadableName(text)
-                        if (userId is Result.Success) {
-                            val notes = notesRepository.getNotesByUser(userId.data, text)
-                            if (notes is Result.Success) {
-                                notes.data.forEach {
-                                    launch(appExecutors.uiContext) {
-                                        view?.displayNote(it)
+                usersSearchCategory -> {
+                    launch(appExecutors.networkContext) {
+                        withContext(appExecutors.networkContext) {
+                            val userId = userRepository.getUserIdFromHumanReadableName(text)
+                            if (userId is Result.Success) {
+                                val notes = notesRepository.getNotesByUser(userId.data, text)
+                                if (notes is Result.Success) {
+                                    notes.data.forEach {
+                                        launch(appExecutors.uiContext) {
+                                            notesView.displayNote(it)
+                                        }
                                     }
+                                } else {
+                                    notesView.displayLoadingNotesError()
                                 }
                             } else {
-                                view?.displayLoadingNotesError()
+                                notesView.displayUnknownUserError()
                             }
-                        } else {
-                            view?.displayUnknownUserError()
                         }
                     }
                 }
