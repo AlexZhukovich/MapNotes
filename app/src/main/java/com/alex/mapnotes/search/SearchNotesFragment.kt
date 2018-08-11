@@ -2,6 +2,7 @@ package com.alex.mapnotes.search
 
 import android.content.Intent
 import android.os.Bundle
+import android.support.design.widget.Snackbar
 import android.support.v4.app.Fragment
 import android.support.v4.content.LocalBroadcastManager
 import android.support.v7.widget.DividerItemDecoration
@@ -22,6 +23,7 @@ import com.alex.mapnotes.data.repository.NotesRepository
 import com.alex.mapnotes.data.repository.UserRepository
 import com.alex.mapnotes.model.Note
 import com.alex.mapnotes.search.adapter.NotesAdapter
+import kotlinx.android.synthetic.main.fragment_search_notes.*
 import kotlinx.android.synthetic.main.fragment_search_notes.view.*
 
 class SearchNotesFragment : Fragment(), SearchNotesView {
@@ -79,6 +81,14 @@ class SearchNotesFragment : Fragment(), SearchNotesView {
 
     override fun displayNote(note: Note) {
         adapter.addNote(note)
+    }
+
+    override fun displayLoadingNotesError() {
+        Snackbar.make(recyclerView, R.string.loading_notes_error, Snackbar.LENGTH_LONG).show()
+    }
+
+    override fun displayUnknownUserError() {
+        Snackbar.make(recyclerView, R.string.unknown_user_error, Snackbar.LENGTH_LONG).show()
     }
 
     override fun onStop() {

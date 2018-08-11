@@ -39,7 +39,7 @@ class SearchNotesPresenter(
         val notes = notesRepository.getNotes { replaceNoteAuthorIdToNameJob(it, defaultUserName) }
         when (notes) {
             is Result.Error -> {
-                // TODO: display an error
+                view?.displayLoadingNotesError()
             }
             is Result.Success -> {
                 notes.data.forEach {
@@ -62,7 +62,7 @@ class SearchNotesPresenter(
                     val notes = notesRepository.getNotesByNoteText(text) { replaceNoteAuthorIdToNameJob(it, defaultUserName) }
                     when (notes) {
                         is Result.Error -> {
-                            // TODO: display an error
+                            view?.displayLoadingNotesError()
                         }
                         is Result.Success -> {
                             notes.data.forEach {
@@ -85,10 +85,10 @@ class SearchNotesPresenter(
                                     }
                                 }
                             } else {
-                                // TODO: display an error
+                                view?.displayLoadingNotesError()
                             }
                         } else {
-                            // TODO: display an error
+                            view?.displayUnknownUserError()
                         }
                     }
                 }

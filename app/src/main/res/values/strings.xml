@@ -47,6 +47,8 @@
     <!-- Error and warnings -->
     <string name="unknown_user">Unknown</string>
     <string name="use_location_message">To continue, turn on device location.</string>
+    <string name="loading_notes_error">An error during loading notes.</string>
+    <string name="unknown_user_error">You are looking for unknown user.</string>
 
     <string name="ok_button">OK</string>
     <string name="cancel_button">Cancel</string>
