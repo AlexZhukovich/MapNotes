@@ -7,6 +7,7 @@ import com.alex.mapnotes.data.repository.UserRepository
 import com.alex.mapnotes.ext.launch
 import com.alex.mapnotes.model.Note
 import kotlinx.coroutines.experimental.Job
+import kotlinx.coroutines.experimental.withContext
 
 class SearchNotesPresenter(
     private val userRepository: UserRepository,
@@ -73,7 +74,7 @@ class SearchNotesPresenter(
             }
             usersSearchCategory -> {
                 launch(appExecutors.networkContext) {
-                    kotlinx.coroutines.experimental.launch {
+                    withContext(appExecutors.networkContext) {
                         val userId = userRepository.getUserIdFromHumanReadableName(text)
                         if (userId is Result.Success) {
                             val notes = notesRepository.getNotesByUser(userId.data, text)
@@ -89,7 +90,7 @@ class SearchNotesPresenter(
                         } else {
                             // TODO: display an error
                         }
-                    }.join()
+                    }
                 }
             }
         }
