@@ -268,6 +268,33 @@ class SearchNotesPresenterTest {
         coVerify(exactly = 0) { notesRepository.getNotesByUser(any(), any()) }
     }
 
+    @Test
+    fun `verify searchNotes by note when non-null view is attached, text is empty and notesRepository returns correct data`() {
+        val emptySearchRequest = ""
+        every { view.displayNote(any()) } answers { nothing }
+        coEvery { notesRepository.getNotes(any()) } returns Result.Success(listOf())
+
+        presenter.onAttach(view)
+        presenter.searchNotes(emptySearchRequest, noteCategoryInSearch, unknownUserName)
+
+        verify { view.clearSearchResults() }
+        verify(exactly = 0) { view.displayNote(any()) }
+    }
+
+    @Test
+    fun `verify searchNotes by user when non-null view is attached, text is empty and notesRepository returns correct data`() {
+        val emptySearchRequest = ""
+
+        every { view.displayNote(any()) } answers { nothing }
+        coEvery { notesRepository.getNotes(any()) } returns Result.Success(listOf())
+
+        presenter.onAttach(view)
+        presenter.searchNotes(emptySearchRequest, userCategoryInSearch, unknownUserName)
+
+        verify { view.clearSearchResults() }
+        verify(exactly = 0) { view.displayNote(any()) }
+    }
+
     @After
     fun tearDown() {
         closeKoin()
