@@ -11,32 +11,23 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
-import com.alex.mapnotes.AppExecutors
-import com.alex.mapnotes.home.DISPLAY_LOCATION
-import com.alex.mapnotes.home.EXTRA_NOTE
 import com.alex.mapnotes.R
 import com.alex.mapnotes.data.formatter.CoordinateFormatter
 import com.alex.mapnotes.data.formatter.LatLonFormatter
-import com.alex.mapnotes.data.repository.FirebaseNotesRepository
-import com.alex.mapnotes.data.repository.FirebaseUserRepository
-import com.alex.mapnotes.data.repository.NotesRepository
-import com.alex.mapnotes.data.repository.UserRepository
+import com.alex.mapnotes.home.DISPLAY_LOCATION
+import com.alex.mapnotes.home.EXTRA_NOTE
 import com.alex.mapnotes.model.Note
 import com.alex.mapnotes.search.adapter.NotesAdapter
 import kotlinx.android.synthetic.main.fragment_search_notes.*
 import kotlinx.android.synthetic.main.fragment_search_notes.view.*
+import org.koin.android.ext.android.inject
 
 class SearchNotesFragment : Fragment(), SearchNotesView {
     private val defaultUserName by lazy { getString(R.string.unknown_user) }
-
-    private lateinit var adapter: NotesAdapter
     private val coordinateFormatter: LatLonFormatter by lazy { CoordinateFormatter() }
-    private val userRepository: UserRepository by lazy { FirebaseUserRepository(appExecutors) }
-    private val appExecutors: AppExecutors by lazy { AppExecutors() }
-    private val notesRepository: NotesRepository by lazy { FirebaseNotesRepository(appExecutors) }
-    private val presenter: SearchNotesMvpPresenter by lazy {
-        SearchNotesPresenter(userRepository, notesRepository, appExecutors)
-    }
+    private lateinit var adapter: NotesAdapter
+
+    private val presenter: SearchNotesMvpPresenter by inject()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
 

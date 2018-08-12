@@ -16,6 +16,8 @@ import com.alex.mapnotes.login.signin.SignInMvpPresenter
 import com.alex.mapnotes.login.signin.SignInPresenter
 import com.alex.mapnotes.login.signup.SignUpMvpPresenter
 import com.alex.mapnotes.login.signup.SignUpPresenter
+import com.alex.mapnotes.search.SearchNotesMvpPresenter
+import com.alex.mapnotes.search.SearchNotesPresenter
 import org.koin.dsl.module.applicationContext
 
 val appModule = applicationContext {
@@ -41,6 +43,9 @@ val appModule = applicationContext {
 
     // Add
     factory { AddNotePresenter(get(), get(), get(), get(), get()) as AddNoteMvpPresenter }
+
+    // Search
+    factory { SearchNotesPresenter(get(), get(), get()) as SearchNotesMvpPresenter }
 }
 
 object Properties {
