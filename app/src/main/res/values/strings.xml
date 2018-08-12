@@ -13,9 +13,11 @@
     <!-- Search notes -->
     <string name="search_hint">Search</string>
     <string name="search_button_text">Search</string>
+    <string name="search_users_category">Users</string>
+    <string name="search_notes_category">Notes</string>
     <string-array name="search_options">
-        <item>Notes</item>
-        <item>Users</item>
+        <item>@string/search_notes_category</item>
+        <item>@string/search_users_category</item>
     </string-array>
 
     <!-- Permissions -->

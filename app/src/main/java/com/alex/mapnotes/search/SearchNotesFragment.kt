@@ -75,11 +75,17 @@ class SearchNotesFragment : Fragment(), SearchNotesView {
     }
 
     override fun displayLoadingNotesError() {
-        Snackbar.make(recyclerView, R.string.loading_notes_error, Snackbar.LENGTH_LONG).show()
+        val context = activity
+        if (context != null) {
+            Snackbar.make(layout, R.string.loading_notes_error, Snackbar.LENGTH_LONG).show()
+        }
     }
 
     override fun displayUnknownUserError() {
-        Snackbar.make(recyclerView, R.string.unknown_user_error, Snackbar.LENGTH_LONG).show()
+        val context = activity
+        if (context != null) {
+            Snackbar.make(layout, R.string.unknown_user_error, Snackbar.LENGTH_LONG).show()
+        }
     }
 
     override fun onStop() {
