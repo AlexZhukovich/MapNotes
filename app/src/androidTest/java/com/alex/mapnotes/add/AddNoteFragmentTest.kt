@@ -11,7 +11,7 @@ import android.support.test.espresso.matcher.ViewMatchers.isEnabled
 import android.support.test.rule.ActivityTestRule
 import android.support.test.runner.AndroidJUnit4
 import com.alex.mapnotes.R
-import com.alex.mapnotes.TestActivity
+import com.alex.mapnotes.FragmentTestActivity
 import com.alex.mapnotes.di.appModule
 import org.hamcrest.CoreMatchers.not
 import org.junit.After
@@ -29,7 +29,7 @@ class AddNoteFragmentTest {
     private val emptyNoteText = ""
 
     @Rule @JvmField
-    val activityRule = ActivityTestRule<TestActivity>(TestActivity::class.java)
+    val activityRule = ActivityTestRule<FragmentTestActivity>(FragmentTestActivity::class.java)
 
     @Before
     fun setUp() {

@@ -6,7 +6,7 @@ import android.support.v7.app.AppCompatActivity
 import android.view.ViewGroup
 import android.widget.FrameLayout
 
-class TestActivity : AppCompatActivity() {
+class FragmentTestActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

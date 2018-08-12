@@ -15,7 +15,7 @@ import android.support.test.uiautomator.By
 import android.support.test.uiautomator.UiDevice
 import android.support.test.uiautomator.Until
 import com.alex.mapnotes.R
-import com.alex.mapnotes.TestActivity
+import com.alex.mapnotes.FragmentTestActivity
 import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Rule
@@ -26,7 +26,7 @@ import org.junit.runner.RunWith
 class NoLocationPermissionFragmentTest {
 
     @Rule @JvmField
-    val activityRule = ActivityTestRule<TestActivity>(TestActivity::class.java)
+    val activityRule = ActivityTestRule<FragmentTestActivity>(FragmentTestActivity::class.java)
 
     @Before
     fun setUp() {
