@@ -295,6 +295,18 @@ class SearchNotesPresenterTest {
         verify(exactly = 0) { view.displayNote(any()) }
     }
 
+    @Test
+    fun `verify searchNotes by user when non-null view is attached, userRepository returns Error`() {
+        every { view.displayUnknownUserError() } answers { nothing }
+        coEvery { userRepository.getUserIdFromHumanReadableName(any()) } returns Result.Error(RuntimeException())
+
+        presenter.onAttach(view)
+        presenter.searchNotes(searchByUserUIDRequest, userCategoryInSearch, unknownUserName)
+
+        verify { view.clearSearchResults() }
+        verify { view.displayUnknownUserError() }
+    }
+
     @After
     fun tearDown() {
         closeKoin()
