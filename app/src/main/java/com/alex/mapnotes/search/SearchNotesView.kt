@@ -7,5 +7,9 @@ interface SearchNotesView : MvpView {
 
     fun displayNote(note: Note)
 
+    fun displayLoadingNotesError()
+
+    fun displayUnknownUserError()
+
     fun clearSearchResults()
 }
