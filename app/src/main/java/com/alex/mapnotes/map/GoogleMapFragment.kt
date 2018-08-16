@@ -81,12 +81,12 @@ class GoogleMapFragment : SupportMapFragment(), MapView, OnMapReadyCallback {
         if (!locationProvider.isLocationAvailable()) {
             val dialog = AlertDialog.Builder(this.context!!).apply {
                 this.setMessage(R.string.use_location_message)
-                this.setPositiveButton(R.string.ok_button, { _, _ ->
+                this.setPositiveButton(R.string.ok_button) { _, _ ->
                     startActivity(Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS))
-                })
-                this.setNegativeButton(R.string.cancel_button, { _, _ ->
+                }
+                this.setNegativeButton(R.string.cancel_button) { _, _ ->
                     activity?.finish()
-                })
+                }
             }
             dialog.show()
         }
