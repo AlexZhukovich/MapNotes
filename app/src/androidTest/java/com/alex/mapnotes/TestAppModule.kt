@@ -12,6 +12,8 @@ import com.alex.mapnotes.login.signin.SignInMvpPresenter
 import com.alex.mapnotes.login.signin.SignInPresenter
 import com.alex.mapnotes.login.signup.SignUpMvpPresenter
 import com.alex.mapnotes.login.signup.SignUpPresenter
+import com.alex.mapnotes.map.GoogleMapPresenter
+import com.alex.mapnotes.map.MapMvpPresenter
 import com.alex.mapnotes.search.SearchNotesMvpPresenter
 import com.alex.mapnotes.search.SearchNotesPresenter
 import io.mockk.mockk
@@ -20,6 +22,8 @@ import org.koin.dsl.module.applicationContext
 val testAppModule = applicationContext {
 
     bean { AppExecutors() }
+
+    bean <LocationProvider> { mockk() }
 
     bean <UserRepository> { mockk() }
 
@@ -38,4 +42,6 @@ val testAppModule = applicationContext {
     factory { AddNotePresenter(get(), get(), get(), get(), get()) as AddNoteMvpPresenter }
 
     factory { SearchNotesPresenter(get(), get(), get()) as SearchNotesMvpPresenter }
+
+    factory { GoogleMapPresenter() as MapMvpPresenter }
 }

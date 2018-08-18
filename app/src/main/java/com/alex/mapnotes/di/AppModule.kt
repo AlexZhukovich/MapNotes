@@ -16,6 +16,8 @@ import com.alex.mapnotes.login.signin.SignInMvpPresenter
 import com.alex.mapnotes.login.signin.SignInPresenter
 import com.alex.mapnotes.login.signup.SignUpMvpPresenter
 import com.alex.mapnotes.login.signup.SignUpPresenter
+import com.alex.mapnotes.map.GoogleMapPresenter
+import com.alex.mapnotes.map.MapMvpPresenter
 import com.alex.mapnotes.search.SearchNotesMvpPresenter
 import com.alex.mapnotes.search.SearchNotesPresenter
 import org.koin.dsl.module.applicationContext
@@ -25,9 +27,9 @@ val appModule = applicationContext {
     bean { AppExecutors() }
 
     // Location
-    factory { Geocoder(getProperty(Properties.ADD_FRAGMENT_CONTEXT)) }
+    factory { Geocoder(getProperty(Properties.FRAGMENT_CONTEXT)) }
 
-    factory { AddressLocationProvider(getProperty(Properties.ADD_FRAGMENT_CONTEXT)) as LocationProvider }
+    factory { AddressLocationProvider(getProperty(Properties.FRAGMENT_CONTEXT)) as LocationProvider }
 
     factory { FullAddressFormatter(get()) as LocationFormatter }
 
@@ -46,8 +48,11 @@ val appModule = applicationContext {
 
     // Search
     factory { SearchNotesPresenter(get(), get(), get()) as SearchNotesMvpPresenter }
+
+    // Map
+    factory { GoogleMapPresenter() as MapMvpPresenter }
 }
 
 object Properties {
-    const val ADD_FRAGMENT_CONTEXT = "ADD_FRAGMENT_CONTEXT"
+    const val FRAGMENT_CONTEXT = "FRAGMENT_CONTEXT"
 }
