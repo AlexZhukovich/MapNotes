@@ -14,6 +14,7 @@ import com.alex.mapnotes.login.LoginActivity
 import com.alex.mapnotes.model.AuthUser
 import com.alex.mapnotes.testAppModule
 import io.mockk.coEvery
+import io.mockk.every
 import org.junit.After
 import org.junit.Before
 import org.junit.Rule
@@ -39,6 +40,10 @@ class SplashActivityTest {
 
     @Test
     fun shouldOpenHomeActivityWhenUserIsAuthenticated() {
+        every { MockMapNotesApp.mockedLocationProvider.startLocationUpdates() } answers { nothing }
+        every { MockMapNotesApp.mockedLocationProvider.stopLocationUpdates() } answers { nothing }
+        every { MockMapNotesApp.mockedLocationProvider.addUpdatableLocationListener(any()) } answers { nothing }
+        every { MockMapNotesApp.mockedLocationProvider.isLocationAvailable() } returns false
         coEvery { MockMapNotesApp.mockedUserRepository.getCurrentUser() } returns Result.Success(AuthUser("11111"))
         launchActivity()
 

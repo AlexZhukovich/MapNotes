@@ -22,6 +22,7 @@ import com.alex.mapnotes.login.signin.SignInActivity
 import com.alex.mapnotes.model.AuthUser
 import com.alex.mapnotes.testAppModule
 import io.mockk.coEvery
+import io.mockk.every
 import org.junit.After
 import org.junit.Before
 import org.junit.Rule
@@ -101,7 +102,10 @@ class SignInActivityTest {
     @Test
     fun shouldOpenMapScreenAfterSuccessfulSignIn() {
         Intents.init()
-
+        every { MockMapNotesApp.mockedLocationProvider.startLocationUpdates() } answers { nothing }
+        every { MockMapNotesApp.mockedLocationProvider.stopLocationUpdates() } answers { nothing }
+        every { MockMapNotesApp.mockedLocationProvider.addUpdatableLocationListener(any()) } answers { nothing }
+        every { MockMapNotesApp.mockedLocationProvider.isLocationAvailable() } returns false
         coEvery { MockMapNotesApp.mockedUserRepository.signIn(correctEmail, password) } returns Result.Success(AuthUser("111111"))
 
         onView(withId(R.id.email))
