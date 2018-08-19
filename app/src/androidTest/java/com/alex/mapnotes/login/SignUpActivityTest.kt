@@ -128,6 +128,7 @@ class SignUpActivityTest {
         every { MockMapNotesApp.mockedLocationProvider.isLocationAvailable() } returns false
         coEvery { MockMapNotesApp.mockedUserRepository.changeUserName(authUser, username) } answers { nothing }
         coEvery { MockMapNotesApp.mockedUserRepository.signUp(correctEmail, password) } returns Result.Success(authUser)
+        coEvery { MockMapNotesApp.mockedUserRepository.getCurrentUser() } returns Result.Success(authUser)
 
         onView(withId(R.id.name))
                 .perform(replaceText(username))
