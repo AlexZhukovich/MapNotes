@@ -44,6 +44,4 @@ val testAppModule = applicationContext {
     factory { SearchNotesPresenter(get(), get(), get()) as SearchNotesMvpPresenter }
 
     factory { GoogleMapPresenter() as MapMvpPresenter }
-
-    factory { HomePresenter(get(), get()) as HomeMvpPresenter }
 }
