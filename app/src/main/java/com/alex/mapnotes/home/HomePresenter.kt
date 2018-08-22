@@ -19,22 +19,25 @@ class HomePresenter(
     }
 
     override fun handleNavigationItemClick(itemId: Int): Boolean {
-        when (itemId) {
-            R.id.navigation_add_note -> {
-                view?.updateMapInteractionMode(true)
-                view?.displayAddNote()
-                view?.updateNavigationState(BottomSheetBehavior.STATE_COLLAPSED)
-                return true
-            }
-            R.id.navigation_map -> {
-                view?.updateNavigationState(BottomSheetBehavior.STATE_HIDDEN)
-                return true
-            }
-            R.id.navigation_search_notes -> {
-                view?.updateMapInteractionMode(true)
-                view?.displaySearchNotes()
-                view?.updateNavigationState(BottomSheetBehavior.STATE_EXPANDED)
-                return true
+        view?.let { view ->
+            when (itemId) {
+                R.id.navigation_add_note -> {
+                    view.updateMapInteractionMode(true)
+                    view.displayAddNote()
+                    view.updateNavigationState(BottomSheetBehavior.STATE_COLLAPSED)
+                    return true
+                }
+                R.id.navigation_map -> {
+                    view.updateNavigationState(BottomSheetBehavior.STATE_HIDDEN)
+                    return true
+                }
+                R.id.navigation_search_notes -> {
+                    view.updateMapInteractionMode(true)
+                    view.displaySearchNotes()
+                    view.updateNavigationState(BottomSheetBehavior.STATE_EXPANDED)
+                    return true
+                }
+                else -> throw IllegalArgumentException("Unknown itemId")
             }
         }
         return false
