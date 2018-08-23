@@ -98,6 +98,18 @@ class HomePresenterTest {
         verify(exactly = 0) { view.updateMapInteractionMode(any()) }
     }
 
+    @Test
+    fun `verify showLocationPermissionRationale when non-null view is attached`() {
+        every { view.showPermissionExplanationSnackBar() } answers { nothing }
+        every { view.hideContentWhichRequirePermissions() } answers { nothing }
+
+        presenter.onAttach(view)
+        presenter.showLocationPermissionRationale()
+
+        verify { view.showPermissionExplanationSnackBar() }
+        verify { view.hideContentWhichRequirePermissions() }
+    }
+
     // null view
 
     @Test
@@ -146,6 +158,15 @@ class HomePresenterTest {
         verify(exactly = 0) { view.displayAddNote() }
         verify(exactly = 0) { view.displaySearchNotes() }
         verify(exactly = 0) { view.updateMapInteractionMode(any()) }
+    }
+
+    @Test
+    fun `verify showLocationPermissionRationale when null view is attached`() {
+        presenter.onAttach(null)
+        presenter.showLocationPermissionRationale()
+
+        verify(exactly = 0) { view.showPermissionExplanationSnackBar() }
+        verify(exactly = 0) { view.showContentWhichRequirePermissions() }
     }
 
     // view is detached
@@ -200,6 +221,16 @@ class HomePresenterTest {
         verify(exactly = 0) { view.displayAddNote() }
         verify(exactly = 0) { view.displaySearchNotes() }
         verify(exactly = 0) { view.updateMapInteractionMode(any()) }
+    }
+
+    @Test
+    fun `verify showLocationPermissionRationale when view is detached`() {
+        presenter.onAttach(view)
+        presenter.onDetach()
+        presenter.showLocationPermissionRationale()
+
+        verify(exactly = 0) { view.showPermissionExplanationSnackBar() }
+        verify(exactly = 0) { view.showContentWhichRequirePermissions() }
     }
 
     @After
