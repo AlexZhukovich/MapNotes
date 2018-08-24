@@ -11,6 +11,7 @@ import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
+import io.mockk.coVerify
 import kotlinx.coroutines.experimental.android.UI
 import org.junit.After
 import org.junit.Assert.assertFalse
@@ -137,6 +138,20 @@ class HomePresenterTest {
         verify { view.navigateToLoginScreen() }
     }
 
+    @Test
+    fun `verify signOut when non-null view is attached`() {
+        every { view.navigateToLoginScreen() } answers { nothing }
+        every { appExecutors.uiContext } returns UI
+        every { appExecutors.ioContext } returns UI
+        coEvery { userRepository.signOut() } answers { nothing }
+
+        presenter.onAttach(view)
+        presenter.signOut()
+
+        coVerify { userRepository.signOut() }
+        verify { view.navigateToLoginScreen() }
+    }
+
     // null view
 
     @Test
@@ -215,6 +230,20 @@ class HomePresenterTest {
         presenter.onAttach(null)
         presenter.checkUser()
 
+        verify(exactly = 0) { view.navigateToLoginScreen() }
+    }
+
+    @Test
+    fun `verify signOut when null view is attached`() {
+        every { view.navigateToLoginScreen() } answers { nothing }
+        every { appExecutors.uiContext } returns UI
+        every { appExecutors.ioContext } returns UI
+        coEvery { userRepository.signOut() } answers { nothing }
+
+        presenter.onAttach(null)
+        presenter.signOut()
+
+        coVerify(exactly = 0) { userRepository.signOut() }
         verify(exactly = 0) { view.navigateToLoginScreen() }
     }
 
@@ -303,6 +332,21 @@ class HomePresenterTest {
         presenter.onDetach()
         presenter.checkUser()
 
+        verify(exactly = 0) { view.navigateToLoginScreen() }
+    }
+
+    @Test
+    fun `verify signOut when view is detached`() {
+        every { view.navigateToLoginScreen() } answers { nothing }
+        every { appExecutors.uiContext } returns UI
+        every { appExecutors.ioContext } returns UI
+        coEvery { userRepository.signOut() } answers { nothing }
+
+        presenter.onAttach(view)
+        presenter.onDetach()
+        presenter.signOut()
+
+        coVerify(exactly = 0) { userRepository.signOut() }
         verify(exactly = 0) { view.navigateToLoginScreen() }
     }
 
