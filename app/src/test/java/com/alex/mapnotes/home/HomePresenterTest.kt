@@ -3,11 +3,15 @@ package com.alex.mapnotes.home
 import android.support.design.widget.BottomSheetBehavior
 import com.alex.mapnotes.AppExecutors
 import com.alex.mapnotes.R
+import com.alex.mapnotes.data.Result
 import com.alex.mapnotes.data.repository.UserRepository
 import com.alex.mapnotes.di.appModule
+import com.alex.mapnotes.model.AuthUser
+import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
+import kotlinx.coroutines.experimental.android.UI
 import org.junit.After
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
@@ -110,6 +114,29 @@ class HomePresenterTest {
         verify { view.hideContentWhichRequirePermissions() }
     }
 
+    @Test
+    fun `verify checkUser when non-null view is attached and repository returns success`() {
+        every { appExecutors.uiContext } returns UI
+        coEvery { userRepository.getCurrentUser() } returns Result.Success(AuthUser("1111111"))
+
+        presenter.onAttach(view)
+        presenter.checkUser()
+
+        verify(exactly = 0) { view.navigateToLoginScreen() }
+    }
+
+    @Test
+    fun `verify checkUser when non-null view is attached and repository returns error`() {
+        every { view.navigateToLoginScreen() } answers { nothing }
+        every { appExecutors.uiContext } returns UI
+        coEvery { userRepository.getCurrentUser() } returns Result.Error(RuntimeException())
+
+        presenter.onAttach(view)
+        presenter.checkUser()
+
+        verify { view.navigateToLoginScreen() }
+    }
+
     // null view
 
     @Test
@@ -167,6 +194,28 @@ class HomePresenterTest {
 
         verify(exactly = 0) { view.showPermissionExplanationSnackBar() }
         verify(exactly = 0) { view.showContentWhichRequirePermissions() }
+    }
+
+    @Test
+    fun `verify checkUser when null view is attached and repository returns success`() {
+        every { appExecutors.uiContext } returns UI
+        coEvery { userRepository.getCurrentUser() } returns Result.Success(AuthUser("1111111"))
+
+        presenter.onAttach(null)
+        presenter.checkUser()
+
+        verify(exactly = 0) { view.navigateToLoginScreen() }
+    }
+
+    @Test
+    fun `verify checkUser when null view is attached and repository returns error`() {
+        every { appExecutors.uiContext } returns UI
+        coEvery { userRepository.getCurrentUser() } returns Result.Error(RuntimeException())
+
+        presenter.onAttach(null)
+        presenter.checkUser()
+
+        verify(exactly = 0) { view.navigateToLoginScreen() }
     }
 
     // view is detached
@@ -231,6 +280,30 @@ class HomePresenterTest {
 
         verify(exactly = 0) { view.showPermissionExplanationSnackBar() }
         verify(exactly = 0) { view.showContentWhichRequirePermissions() }
+    }
+
+    @Test
+    fun `verify checkUser when view is detached and repository returns success`() {
+        every { appExecutors.uiContext } returns UI
+        coEvery { userRepository.getCurrentUser() } returns Result.Success(AuthUser("1111111"))
+
+        presenter.onAttach(view)
+        presenter.onDetach()
+        presenter.checkUser()
+
+        verify(exactly = 0) { view.navigateToLoginScreen() }
+    }
+
+    @Test
+    fun `verify checkUser when view is detached and repository returns error`() {
+        every { appExecutors.uiContext } returns UI
+        coEvery { userRepository.getCurrentUser() } returns Result.Error(RuntimeException())
+
+        presenter.onAttach(view)
+        presenter.onDetach()
+        presenter.checkUser()
+
+        verify(exactly = 0) { view.navigateToLoginScreen() }
     }
 
     @After
