@@ -6,6 +6,7 @@ import com.alex.mapnotes.R
 import com.alex.mapnotes.data.Result
 import com.alex.mapnotes.data.repository.UserRepository
 import kotlinx.coroutines.experimental.launch
+import kotlinx.coroutines.experimental.withContext
 
 class HomePresenter(
     private val appExecutors: AppExecutors,
@@ -64,14 +65,15 @@ class HomePresenter(
     }
 
     override fun signOut() {
-        launch(appExecutors.uiContext) {
-            launch(appExecutors.ioContext) {
-                userRepository.signOut()
-            }.join()
-            view?.navigateToLoginScreen()
+        view?.let { view ->
+            launch(appExecutors.uiContext) {
+                withContext(appExecutors.ioContext) {
+                    userRepository.signOut()
+                }
+                view.navigateToLoginScreen()
+            }
         }
     }
-
     override fun onDetach() {
         this.view = null
     }
