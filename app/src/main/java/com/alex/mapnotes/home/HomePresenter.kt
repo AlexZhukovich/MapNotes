@@ -51,11 +51,13 @@ class HomePresenter(
     }
 
     override fun checkUser() {
-        launch(appExecutors.uiContext) {
-            val currentUser = userRepository.getCurrentUser()
-            when (currentUser) {
-                is Result.Error -> {
-                    view?.navigateToLoginScreen()
+        view?.let {view ->
+            launch(appExecutors.uiContext) {
+                val currentUser = userRepository.getCurrentUser()
+                when (currentUser) {
+                    is Result.Error -> {
+                        view.navigateToLoginScreen()
+                    }
                 }
             }
         }
