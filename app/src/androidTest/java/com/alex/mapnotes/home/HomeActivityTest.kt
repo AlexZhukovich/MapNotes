@@ -1,10 +1,14 @@
 package com.alex.mapnotes.home
 
 import android.support.test.espresso.Espresso.onView
+import android.support.test.espresso.Espresso.openActionBarOverflowOrOptionsMenu
 import android.support.test.espresso.action.ViewActions.click
 import android.support.test.espresso.assertion.ViewAssertions.matches
+import android.support.test.espresso.intent.Intents
+import android.support.test.espresso.intent.matcher.IntentMatchers
 import android.support.test.espresso.matcher.ViewMatchers.withId
 import android.support.test.espresso.matcher.ViewMatchers.withHint
+import android.support.test.espresso.matcher.ViewMatchers.withText
 import android.support.test.espresso.matcher.ViewMatchers.isDisplayed
 import android.support.test.espresso.matcher.ViewMatchers.isEnabled
 import android.support.test.rule.ActivityTestRule
@@ -13,6 +17,7 @@ import android.support.test.runner.AndroidJUnit4
 import com.alex.mapnotes.MockMapNotesApp
 import com.alex.mapnotes.R
 import com.alex.mapnotes.data.Result
+import com.alex.mapnotes.login.LoginActivity
 import com.alex.mapnotes.matchers.BottomNavigationViewMatchers.hasItemTitle
 import com.alex.mapnotes.matchers.BottomNavigationViewMatchers.withItemCount
 import com.alex.mapnotes.matchers.BottomNavigationViewMatchers.hasCheckedItem
@@ -101,6 +106,18 @@ class HomeActivityTest {
                 .perform(click())
         onView(withId(R.id.navigation))
                 .check(matches(hasCheckedItem(R.id.navigation_map)))
+    }
+
+    @Test
+    fun shouldVerifySignOut() {
+        coEvery { MockMapNotesApp.mockedUserRepository.signOut() } answers { nothing }
+
+        Intents.init()
+        openActionBarOverflowOrOptionsMenu(activityRule.activity)
+        onView(withText(R.string.nav_sign_out_title))
+                .perform(click())
+        Intents.intended(IntentMatchers.hasComponent(LoginActivity::class.java.name))
+        Intents.release()
     }
 
     private fun getStr(resId: Int): String {
