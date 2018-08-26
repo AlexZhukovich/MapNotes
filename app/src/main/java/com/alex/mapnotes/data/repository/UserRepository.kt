@@ -2,7 +2,6 @@ package com.alex.mapnotes.data.repository
 
 import com.alex.mapnotes.data.Result
 import com.alex.mapnotes.model.AuthUser
-import com.google.firebase.auth.FirebaseUser
 
 interface UserRepository {
 
@@ -12,7 +11,7 @@ interface UserRepository {
 
     suspend fun signOut()
 
-    suspend fun getCurrentUser(): Result<FirebaseUser>
+    suspend fun getCurrentUser(): Result<AuthUser>
 
     suspend fun changeUserName(user: AuthUser, name: String)
 

@@ -1,6 +1,6 @@
 package com.alex.mapnotes.data.formatter
 
-import android.location.Location
+import com.alex.mapnotes.model.Location
 
 interface LocationFormatter {
 

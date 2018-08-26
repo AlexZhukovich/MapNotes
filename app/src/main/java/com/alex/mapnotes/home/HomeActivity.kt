@@ -17,12 +17,8 @@ import android.support.v7.app.AppCompatActivity
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
-import com.alex.mapnotes.AppExecutors
-import com.alex.mapnotes.nopermissions.NoLocationPermissionFragment
 import com.alex.mapnotes.R
 import com.alex.mapnotes.add.AddNoteFragment
-import com.alex.mapnotes.data.repository.FirebaseUserRepository
-import com.alex.mapnotes.data.repository.UserRepository
 import com.alex.mapnotes.ext.LOCATION_REQUEST_CODE
 import com.alex.mapnotes.ext.checkLocationPermission
 import com.alex.mapnotes.ext.navigateTo
@@ -30,9 +26,11 @@ import com.alex.mapnotes.ext.requestLocationPermissions
 import com.alex.mapnotes.login.LoginActivity
 import com.alex.mapnotes.map.GoogleMapFragment
 import com.alex.mapnotes.model.Note
+import com.alex.mapnotes.nopermissions.NoLocationPermissionFragment
 import com.alex.mapnotes.search.SearchNotesFragment
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.button_sheet.*
+import org.koin.android.ext.android.inject
 
 const val DISPLAY_LOCATION = "display_location"
 const val EXTRA_NOTE = "note"
@@ -40,9 +38,8 @@ const val EXTRA_NOTE = "note"
 class HomeActivity : AppCompatActivity(), HomeView {
     private var mapFragment: GoogleMapFragment? = null
     private val bottomSheetBehavior by lazy { BottomSheetBehavior.from(bottomSheet) }
-    private val appExecutors: AppExecutors by lazy { AppExecutors() }
-    private val userRepository: UserRepository by lazy { FirebaseUserRepository(appExecutors) }
-    private val presenter: HomeMvpPresenter by lazy { HomePresenter(appExecutors, userRepository) }
+
+    private val presenter: HomeMvpPresenter by inject()
 
     private val hideExpandedMenuListener = object : BroadcastReceiver() {
         override fun onReceive(context: Context?, intent: Intent?) {

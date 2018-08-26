@@ -20,6 +20,7 @@ An Android application which allows you to add notes to the current location
 * Espresso
 * Kotlin
 * Kotlin coroutines 
+* Koin
 
 # Configuration
 * Firebase project should be created, and ```google-services.json``` should be added to the **app** folder.

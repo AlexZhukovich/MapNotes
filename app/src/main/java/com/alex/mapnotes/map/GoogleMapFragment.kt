@@ -4,16 +4,16 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
-import android.location.Location
 import android.provider.Settings
 import android.support.v4.content.LocalBroadcastManager
 import android.support.v7.app.AlertDialog
 import com.alex.mapnotes.R
-import com.alex.mapnotes.data.provider.AddressLocationProvider
 import com.alex.mapnotes.data.provider.LocationProvider
+import com.alex.mapnotes.di.Properties
 import com.alex.mapnotes.ext.checkLocationPermission
 import com.alex.mapnotes.home.DISPLAY_LOCATION
 import com.alex.mapnotes.home.EXTRA_NOTE
+import com.alex.mapnotes.model.Location
 import com.alex.mapnotes.model.Note
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
@@ -21,13 +21,16 @@ import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
+import org.koin.android.ext.android.inject
+import org.koin.android.ext.android.releaseProperties
+import org.koin.android.ext.android.setProperty
 
 class GoogleMapFragment : SupportMapFragment(), MapView, OnMapReadyCallback {
     private var map: GoogleMap? = null
     var markers = mutableListOf<MarkerOptions>()
 
-    val presenter: MapMvpPresenter by lazy { GoogleMapPresenter() }
-    private val locationProvider: LocationProvider by lazy { AddressLocationProvider(this.context!!) }
+    val presenter: MapMvpPresenter by inject()
+    private val locationProvider: LocationProvider by inject()
 
     var isInteractionMode: Boolean = false
         set(value) {
@@ -44,6 +47,7 @@ class GoogleMapFragment : SupportMapFragment(), MapView, OnMapReadyCallback {
 
     override fun onStart() {
         super.onStart()
+        setProperty(Properties.FRAGMENT_CONTEXT, this.context!!)
         presenter.onAttach(this)
         locationProvider.startLocationUpdates()
         locationProvider.addUpdatableLocationListener {
@@ -81,12 +85,12 @@ class GoogleMapFragment : SupportMapFragment(), MapView, OnMapReadyCallback {
         if (!locationProvider.isLocationAvailable()) {
             val dialog = AlertDialog.Builder(this.context!!).apply {
                 this.setMessage(R.string.use_location_message)
-                this.setPositiveButton(R.string.ok_button, { _, _ ->
+                this.setPositiveButton(R.string.ok_button) { _, _ ->
                     startActivity(Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS))
-                })
-                this.setNegativeButton(R.string.cancel_button, { _, _ ->
+                }
+                this.setNegativeButton(R.string.cancel_button) { _, _ ->
                     activity?.finish()
-                })
+                }
             }
             dialog.show()
         }
@@ -123,6 +127,7 @@ class GoogleMapFragment : SupportMapFragment(), MapView, OnMapReadyCallback {
 
     override fun onStop() {
         locationProvider.stopLocationUpdates()
+        releaseProperties(Properties.FRAGMENT_CONTEXT)
         presenter.onDetach()
         super.onStop()
     }
