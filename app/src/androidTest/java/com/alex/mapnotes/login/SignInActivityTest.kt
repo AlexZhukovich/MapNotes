@@ -102,11 +102,13 @@ class SignInActivityTest {
     @Test
     fun shouldOpenMapScreenAfterSuccessfulSignIn() {
         Intents.init()
+        val authUser = AuthUser("111111")
         every { MockMapNotesApp.mockedLocationProvider.startLocationUpdates() } answers { nothing }
         every { MockMapNotesApp.mockedLocationProvider.stopLocationUpdates() } answers { nothing }
         every { MockMapNotesApp.mockedLocationProvider.addUpdatableLocationListener(any()) } answers { nothing }
         every { MockMapNotesApp.mockedLocationProvider.isLocationAvailable() } returns false
-        coEvery { MockMapNotesApp.mockedUserRepository.signIn(correctEmail, password) } returns Result.Success(AuthUser("111111"))
+        coEvery { MockMapNotesApp.mockedUserRepository.signIn(correctEmail, password) } returns Result.Success(authUser)
+        coEvery { MockMapNotesApp.mockedUserRepository.getCurrentUser() } returns Result.Success(authUser)
 
         onView(withId(R.id.email))
                 .perform(replaceText(correctEmail))

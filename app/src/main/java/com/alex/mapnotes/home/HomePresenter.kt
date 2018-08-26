@@ -6,6 +6,7 @@ import com.alex.mapnotes.R
 import com.alex.mapnotes.data.Result
 import com.alex.mapnotes.data.repository.UserRepository
 import kotlinx.coroutines.experimental.launch
+import kotlinx.coroutines.experimental.withContext
 
 class HomePresenter(
     private val appExecutors: AppExecutors,
@@ -19,22 +20,25 @@ class HomePresenter(
     }
 
     override fun handleNavigationItemClick(itemId: Int): Boolean {
-        when (itemId) {
-            R.id.navigation_add_note -> {
-                view?.updateMapInteractionMode(true)
-                view?.displayAddNote()
-                view?.updateNavigationState(BottomSheetBehavior.STATE_COLLAPSED)
-                return true
-            }
-            R.id.navigation_map -> {
-                view?.updateNavigationState(BottomSheetBehavior.STATE_HIDDEN)
-                return true
-            }
-            R.id.navigation_search_notes -> {
-                view?.updateMapInteractionMode(true)
-                view?.displaySearchNotes()
-                view?.updateNavigationState(BottomSheetBehavior.STATE_EXPANDED)
-                return true
+        view?.let { view ->
+            when (itemId) {
+                R.id.navigation_add_note -> {
+                    view.updateMapInteractionMode(true)
+                    view.displayAddNote()
+                    view.updateNavigationState(BottomSheetBehavior.STATE_COLLAPSED)
+                    return true
+                }
+                R.id.navigation_map -> {
+                    view.updateNavigationState(BottomSheetBehavior.STATE_HIDDEN)
+                    return true
+                }
+                R.id.navigation_search_notes -> {
+                    view.updateMapInteractionMode(true)
+                    view.displaySearchNotes()
+                    view.updateNavigationState(BottomSheetBehavior.STATE_EXPANDED)
+                    return true
+                }
+                else -> throw IllegalArgumentException("Unknown itemId")
             }
         }
         return false
@@ -48,25 +52,28 @@ class HomePresenter(
     }
 
     override fun checkUser() {
-        launch(appExecutors.uiContext) {
-            val currentUser = userRepository.getCurrentUser()
-            when (currentUser) {
-                is Result.Error -> {
-                    view?.navigateToLoginScreen()
+        view?.let { view ->
+            launch(appExecutors.uiContext) {
+                val currentUser = userRepository.getCurrentUser()
+                when (currentUser) {
+                    is Result.Error -> {
+                        view.navigateToLoginScreen()
+                    }
                 }
             }
         }
     }
 
     override fun signOut() {
-        launch(appExecutors.uiContext) {
-            launch(appExecutors.ioContext) {
-                userRepository.signOut()
-            }.join()
-            view?.navigateToLoginScreen()
+        view?.let { view ->
+            launch(appExecutors.uiContext) {
+                withContext(appExecutors.ioContext) {
+                    userRepository.signOut()
+                }
+                view.navigateToLoginScreen()
+            }
         }
     }
-
     override fun onDetach() {
         this.view = null
     }

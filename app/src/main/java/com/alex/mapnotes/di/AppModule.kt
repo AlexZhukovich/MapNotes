@@ -12,6 +12,8 @@ import com.alex.mapnotes.data.repository.FirebaseNotesRepository
 import com.alex.mapnotes.data.repository.FirebaseUserRepository
 import com.alex.mapnotes.data.repository.NotesRepository
 import com.alex.mapnotes.data.repository.UserRepository
+import com.alex.mapnotes.home.HomeMvpPresenter
+import com.alex.mapnotes.home.HomePresenter
 import com.alex.mapnotes.login.signin.SignInMvpPresenter
 import com.alex.mapnotes.login.signin.SignInPresenter
 import com.alex.mapnotes.login.signup.SignUpMvpPresenter
@@ -51,6 +53,9 @@ val appModule = applicationContext {
 
     // Map
     factory { GoogleMapPresenter() as MapMvpPresenter }
+
+    // Home
+    factory { HomePresenter(get(), get()) as HomeMvpPresenter }
 }
 
 object Properties {
