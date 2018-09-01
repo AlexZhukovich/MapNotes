@@ -1,6 +1,6 @@
 package com.alex.mapnotes.matchers
 
-import android.support.v7.widget.RecyclerView
+import androidx.recyclerview.widget.RecyclerView
 import android.view.View
 import org.hamcrest.Description
 import org.hamcrest.Matcher
@@ -12,7 +12,7 @@ object RecyclerViewMatchers {
             override fun matchesSafely(view: View): Boolean {
                 val recyclerView = view as RecyclerView
                 val adapter = recyclerView.adapter
-                return adapter.itemCount == count
+                return adapter?.itemCount == count
             }
 
             override fun describeTo(description: Description) {

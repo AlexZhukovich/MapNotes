@@ -3,7 +3,7 @@ package com.alex.mapnotes
 import android.app.Application
 import android.app.Instrumentation
 import android.content.Context
-import android.support.test.runner.AndroidJUnitRunner
+import androidx.test.runner.AndroidJUnitRunner
 
 class MockTestRunner : AndroidJUnitRunner() {
 

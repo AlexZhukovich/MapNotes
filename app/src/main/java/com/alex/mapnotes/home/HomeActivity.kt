@@ -7,13 +7,13 @@ import android.content.Intent
 import android.content.IntentFilter
 import android.content.pm.PackageManager
 import android.os.Bundle
-import android.support.design.widget.BottomNavigationView
-import android.support.design.widget.BottomSheetBehavior
-import android.support.design.widget.Snackbar
-import android.support.v4.app.ActivityCompat
-import android.support.v4.app.Fragment
-import android.support.v4.content.LocalBroadcastManager
-import android.support.v7.app.AppCompatActivity
+import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.android.material.bottomsheet.BottomSheetBehavior
+import com.google.android.material.snackbar.Snackbar
+import androidx.core.app.ActivityCompat
+import androidx.fragment.app.Fragment
+import androidx.localbroadcastmanager.content.LocalBroadcastManager
+import androidx.appcompat.app.AppCompatActivity
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
@@ -154,10 +154,12 @@ class HomeActivity : AppCompatActivity(), HomeView {
 
     override fun showContentWhichRequirePermissions() {
         mapFragment = GoogleMapFragment()
-        supportFragmentManager.beginTransaction()
-                .replace(R.id.mapContainer, mapFragment)
-                .commit()
-        navigation.visibility = View.VISIBLE
+        mapFragment?.let {
+            supportFragmentManager.beginTransaction()
+                    .replace(R.id.mapContainer, it)
+                    .commit()
+            navigation.visibility = View.VISIBLE
+        }
     }
 
     override fun hideContentWhichRequirePermissions() {
