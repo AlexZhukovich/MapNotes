@@ -1,7 +1,7 @@
 package com.alex.mapnotes.login
 
 import android.os.Bundle
-import android.support.v7.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatActivity
 import com.alex.mapnotes.R
 import com.alex.mapnotes.ext.navigateTo
 import com.alex.mapnotes.login.signin.SignInActivity

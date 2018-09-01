@@ -1,6 +1,6 @@
 package com.alex.mapnotes.add
 
-import android.support.annotation.VisibleForTesting
+import androidx.annotation.VisibleForTesting
 import com.alex.mapnotes.AppExecutors
 import com.alex.mapnotes.data.Result
 import com.alex.mapnotes.data.formatter.LocationFormatter

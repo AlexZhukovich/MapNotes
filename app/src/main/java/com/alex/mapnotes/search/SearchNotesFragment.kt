@@ -2,11 +2,11 @@ package com.alex.mapnotes.search
 
 import android.content.Intent
 import android.os.Bundle
-import android.support.design.widget.Snackbar
-import android.support.v4.app.Fragment
-import android.support.v4.content.LocalBroadcastManager
-import android.support.v7.widget.DividerItemDecoration
-import android.support.v7.widget.LinearLayoutManager
+import com.google.android.material.snackbar.Snackbar
+import androidx.fragment.app.Fragment
+import androidx.localbroadcastmanager.content.LocalBroadcastManager
+import androidx.recyclerview.widget.DividerItemDecoration
+import androidx.recyclerview.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -33,7 +33,7 @@ class SearchNotesFragment : Fragment(), SearchNotesView {
 
         val rootView = inflater.inflate(R.layout.fragment_search_notes, container, false)
         rootView.searchOptions.adapter = ArrayAdapter.createFromResource(
-                activity,
+                activity!!,
                 R.array.search_options,
                 android.R.layout.simple_dropdown_item_1line)
         adapter = NotesAdapter(coordinateFormatter) {

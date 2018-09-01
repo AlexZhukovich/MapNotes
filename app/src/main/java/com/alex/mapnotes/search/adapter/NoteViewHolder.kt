@@ -1,6 +1,6 @@
 package com.alex.mapnotes.search.adapter
 
-import android.support.v7.widget.RecyclerView
+import androidx.recyclerview.widget.RecyclerView
 import android.view.View
 import com.alex.mapnotes.data.formatter.LatLonFormatter
 import com.alex.mapnotes.model.Note

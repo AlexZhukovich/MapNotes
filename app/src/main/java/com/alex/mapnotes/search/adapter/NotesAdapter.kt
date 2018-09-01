@@ -1,6 +1,6 @@
 package com.alex.mapnotes.search.adapter
 
-import android.support.v7.widget.RecyclerView
+import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import com.alex.mapnotes.R
