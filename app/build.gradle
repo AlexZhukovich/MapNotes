@@ -127,9 +127,13 @@ dependencies {
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$kotlin_coroutine_version"
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$kotlin_coroutine_version"
 
-    // Android Support Libraries
-    implementation "androidx.appcompat:appcompat:$support_libs_version"
-    implementation "com.google.android.material:material:$support_libs_version"
+    // App Compat
+    implementation "androidx.appcompat:appcompat:$app_compat_version"
+
+    // Material Design Components
+    implementation "com.google.android.material:material:$material_design_version"
+
+    // Constraint Layout
     implementation "androidx.constraintlayout:constraintlayout:$constraint_layout_version"
 
     // Google play services
