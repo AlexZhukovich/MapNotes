@@ -5,8 +5,8 @@ import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.provider.Settings
-import android.support.v4.content.LocalBroadcastManager
-import android.support.v7.app.AlertDialog
+import androidx.localbroadcastmanager.content.LocalBroadcastManager
+import androidx.appcompat.app.AlertDialog
 import com.alex.mapnotes.R
 import com.alex.mapnotes.data.provider.LocationProvider
 import com.alex.mapnotes.di.Properties

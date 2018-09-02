@@ -1,8 +1,8 @@
 package com.alex.mapnotes.login.signin
 
 import android.os.Bundle
-import android.support.design.widget.Snackbar
-import android.support.v7.app.AppCompatActivity
+import com.google.android.material.snackbar.Snackbar
+import androidx.appcompat.app.AppCompatActivity
 import com.alex.mapnotes.R
 import com.alex.mapnotes.ext.clearAndNavigateTo
 import com.alex.mapnotes.home.HomeActivity

@@ -1,12 +1,12 @@
 package com.alex.mapnotes.splash
 
 import android.content.Intent
-import android.support.test.InstrumentationRegistry
-import android.support.test.espresso.intent.Intents
-import android.support.test.espresso.intent.matcher.IntentMatchers
-import android.support.test.rule.ActivityTestRule
-import android.support.test.rule.GrantPermissionRule
-import android.support.test.runner.AndroidJUnit4
+import androidx.test.InstrumentationRegistry
+import androidx.test.espresso.intent.Intents
+import androidx.test.espresso.intent.matcher.IntentMatchers
+import androidx.test.rule.ActivityTestRule
+import androidx.test.rule.GrantPermissionRule
+import androidx.test.runner.AndroidJUnit4
 import com.alex.mapnotes.MockMapNotesApp
 import com.alex.mapnotes.data.Result
 import com.alex.mapnotes.home.HomeActivity

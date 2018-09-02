@@ -1,7 +1,7 @@
 package com.alex.mapnotes.splash
 
 import android.os.Bundle
-import android.support.v7.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatActivity
 import com.alex.mapnotes.data.Result
 import com.alex.mapnotes.data.repository.UserRepository
 import com.alex.mapnotes.ext.navigateTo

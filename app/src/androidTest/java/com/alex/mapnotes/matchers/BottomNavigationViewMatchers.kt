@@ -1,6 +1,6 @@
 package com.alex.mapnotes.matchers
 
-import android.support.design.widget.BottomNavigationView
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import android.view.View
 import org.hamcrest.Description
 import org.hamcrest.Matcher
