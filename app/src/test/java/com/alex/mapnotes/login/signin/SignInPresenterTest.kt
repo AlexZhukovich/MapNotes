@@ -10,7 +10,8 @@ import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
-import kotlinx.coroutines.experimental.android.UI
+import kotlinx.coroutines.experimental.Dispatchers
+import kotlinx.coroutines.experimental.android.Main
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
@@ -42,7 +43,7 @@ class SignInPresenterTest {
     fun setUp() {
         loadKoinModules(listOf(appModule))
 
-        every { appExecutors.networkContext } returns UI
+        every { appExecutors.networkContext } returns Dispatchers.Main
         every { view.displayEmailError() } answers { nothing }
         every { view.displayPasswordError() } answers { nothing }
         every { view.displaySignInError(userNotAuthenticatedErrorMessage) } answers { nothing }
@@ -73,6 +74,7 @@ class SignInPresenterTest {
     fun `verify singIn with correct login and incorrect password, view detached to presenter`() {
         coEvery { userRepository.signIn(correctUserName, incorrectPassword) } returns Result.Error(UserNotAuthenticatedException())
 
+        presenter.onAttach(view)
         presenter.onDetach()
         presenter.signIn(correctUserName, incorrectPassword)
 
@@ -103,6 +105,7 @@ class SignInPresenterTest {
     fun `verify signIn with correct login and password, view detached from presenter`() {
         coEvery { userRepository.signIn(any(), any()) } returns Result.Success(authUser)
 
+        presenter.onAttach(view)
         presenter.onDetach()
         presenter.signIn(correctUserName, correctPassword)
 
@@ -126,7 +129,8 @@ class SignInPresenterTest {
     }
 
     @Test
-    fun `verify sinIn with empty login and password, view detached from presenter`() {
+    fun `verify signIn with empty login and password, view detached from presenter`() {
+        presenter.onAttach(view)
         presenter.onDetach()
         presenter.signIn(emptyUserName, emptyPassword)
 
@@ -150,7 +154,8 @@ class SignInPresenterTest {
     }
 
     @Test
-    fun `verify sinIn with incorrect login and empty password, view detached from presenter`() {
+    fun `verify signIn with incorrect login and empty password, view detached from presenter`() {
+        presenter.onAttach(view)
         presenter.onDetach()
         presenter.signIn(incorrectUserName, emptyPassword)
 
@@ -174,7 +179,8 @@ class SignInPresenterTest {
     }
 
     @Test
-    fun `verify sinIn with correct login and empty password, view detached from presenter`() {
+    fun `verify signIn with correct login and empty password, view detached from presenter`() {
+        presenter.onAttach(view)
         presenter.onDetach()
         presenter.signIn(correctUserName, emptyPassword)
 

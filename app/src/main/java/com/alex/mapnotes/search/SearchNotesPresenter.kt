@@ -1,6 +1,7 @@
 package com.alex.mapnotes.search
 
 import com.alex.mapnotes.AppExecutors
+import com.alex.mapnotes.base.ScopedPresenter
 import com.alex.mapnotes.data.Result
 import com.alex.mapnotes.data.repository.NotesRepository
 import com.alex.mapnotes.data.repository.UserRepository
@@ -13,7 +14,7 @@ class SearchNotesPresenter(
     private val userRepository: UserRepository,
     private val notesRepository: NotesRepository,
     private val appExecutors: AppExecutors
-) : SearchNotesMvpPresenter {
+) : ScopedPresenter<SearchNotesView>(), SearchNotesMvpPresenter {
 
     private var view: SearchNotesView? = null
     private val notesSearchCategory = 0
