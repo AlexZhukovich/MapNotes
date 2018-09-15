@@ -4,7 +4,7 @@ buildscript {
     ext.android_gradle_plugin_version = '3.3.0-alpha10'
     ext.google_services_gradle_plugin_version = '4.0.0'
     ext.kotlin_version = '1.2.70'
-    ext.kotlin_coroutine_version = '0.23.0'
+    ext.kotlin_coroutine_version = '0.26.0'
     ext.app_compat_version = '1.0.0-rc02'
     ext.material_design_version = '1.0.0-rc02'
     ext.constraint_layout_version = '1.1.3'
