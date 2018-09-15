@@ -12,7 +12,8 @@ import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
 import io.mockk.coVerify
-import kotlinx.coroutines.experimental.android.UI
+import kotlinx.coroutines.experimental.Dispatchers
+import kotlinx.coroutines.experimental.android.Main
 import org.junit.After
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
@@ -117,7 +118,7 @@ class HomePresenterTest {
 
     @Test
     fun `verify checkUser when non-null view is attached and repository returns success`() {
-        every { appExecutors.uiContext } returns UI
+        every { appExecutors.uiContext } returns Dispatchers.Main
         coEvery { userRepository.getCurrentUser() } returns Result.Success(AuthUser("1111111"))
 
         presenter.onAttach(view)
@@ -129,7 +130,7 @@ class HomePresenterTest {
     @Test
     fun `verify checkUser when non-null view is attached and repository returns error`() {
         every { view.navigateToLoginScreen() } answers { nothing }
-        every { appExecutors.uiContext } returns UI
+        every { appExecutors.uiContext } returns Dispatchers.Main
         coEvery { userRepository.getCurrentUser() } returns Result.Error(RuntimeException())
 
         presenter.onAttach(view)
@@ -141,8 +142,8 @@ class HomePresenterTest {
     @Test
     fun `verify signOut when non-null view is attached`() {
         every { view.navigateToLoginScreen() } answers { nothing }
-        every { appExecutors.uiContext } returns UI
-        every { appExecutors.ioContext } returns UI
+        every { appExecutors.uiContext } returns Dispatchers.Main
+        every { appExecutors.ioContext } returns Dispatchers.Main
         coEvery { userRepository.signOut() } answers { nothing }
 
         presenter.onAttach(view)
@@ -213,7 +214,7 @@ class HomePresenterTest {
 
     @Test
     fun `verify checkUser when null view is attached and repository returns success`() {
-        every { appExecutors.uiContext } returns UI
+        every { appExecutors.uiContext } returns Dispatchers.Main
         coEvery { userRepository.getCurrentUser() } returns Result.Success(AuthUser("1111111"))
 
         presenter.onAttach(null)
@@ -224,7 +225,7 @@ class HomePresenterTest {
 
     @Test
     fun `verify checkUser when null view is attached and repository returns error`() {
-        every { appExecutors.uiContext } returns UI
+        every { appExecutors.uiContext } returns Dispatchers.Main
         coEvery { userRepository.getCurrentUser() } returns Result.Error(RuntimeException())
 
         presenter.onAttach(null)
@@ -236,8 +237,8 @@ class HomePresenterTest {
     @Test
     fun `verify signOut when null view is attached`() {
         every { view.navigateToLoginScreen() } answers { nothing }
-        every { appExecutors.uiContext } returns UI
-        every { appExecutors.ioContext } returns UI
+        every { appExecutors.uiContext } returns Dispatchers.Main
+        every { appExecutors.ioContext } returns Dispatchers.Main
         coEvery { userRepository.signOut() } answers { nothing }
 
         presenter.onAttach(null)
@@ -313,7 +314,7 @@ class HomePresenterTest {
 
     @Test
     fun `verify checkUser when view is detached and repository returns success`() {
-        every { appExecutors.uiContext } returns UI
+        every { appExecutors.uiContext } returns Dispatchers.Main
         coEvery { userRepository.getCurrentUser() } returns Result.Success(AuthUser("1111111"))
 
         presenter.onAttach(view)
@@ -325,7 +326,7 @@ class HomePresenterTest {
 
     @Test
     fun `verify checkUser when view is detached and repository returns error`() {
-        every { appExecutors.uiContext } returns UI
+        every { appExecutors.uiContext } returns Dispatchers.Main
         coEvery { userRepository.getCurrentUser() } returns Result.Error(RuntimeException())
 
         presenter.onAttach(view)
@@ -338,8 +339,8 @@ class HomePresenterTest {
     @Test
     fun `verify signOut when view is detached`() {
         every { view.navigateToLoginScreen() } answers { nothing }
-        every { appExecutors.uiContext } returns UI
-        every { appExecutors.ioContext } returns UI
+        every { appExecutors.uiContext } returns Dispatchers.Main
+        every { appExecutors.ioContext } returns Dispatchers.Main
         coEvery { userRepository.signOut() } answers { nothing }
 
         presenter.onAttach(view)
