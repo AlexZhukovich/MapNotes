@@ -1,30 +1,33 @@
 package com.alex.mapnotes.search
 
 import com.alex.mapnotes.AppExecutors
+import com.alex.mapnotes.base.ScopedPresenter
 import com.alex.mapnotes.data.Result
 import com.alex.mapnotes.data.repository.NotesRepository
 import com.alex.mapnotes.data.repository.UserRepository
-import com.alex.mapnotes.ext.launch
 import com.alex.mapnotes.model.Note
 import kotlinx.coroutines.experimental.Job
+import kotlinx.coroutines.experimental.launch
 import kotlinx.coroutines.experimental.withContext
+import java.lang.IllegalArgumentException
 
 class SearchNotesPresenter(
     private val userRepository: UserRepository,
     private val notesRepository: NotesRepository,
     private val appExecutors: AppExecutors
-) : SearchNotesMvpPresenter {
+) : ScopedPresenter<SearchNotesView>(), SearchNotesMvpPresenter {
 
     private var view: SearchNotesView? = null
     private val notesSearchCategory = 0
     private val usersSearchCategory = 1
 
     override fun onAttach(view: SearchNotesView?) {
+        super.onAttach(view)
         this.view = view
     }
 
     private fun replaceNoteAuthorIdToNameJob(note: Note, defaultUserName: String): Job {
-        return kotlinx.coroutines.experimental.launch {
+        return launch {
             val userName = userRepository.getHumanReadableName(note.user!!)
             if (userName is Result.Success) {
                 note.user = userName.data
@@ -34,17 +37,19 @@ class SearchNotesPresenter(
         }
     }
 
-    override fun getNotes(defaultUserName: String) = launch(appExecutors.uiContext) {
+    override fun getNotes(defaultUserName: String) {
         view?.let { notesView ->
             notesView.clearSearchResults()
-            val notes = notesRepository.getNotes { replaceNoteAuthorIdToNameJob(it, defaultUserName) }
-            when (notes) {
-                is Result.Error -> {
-                    notesView.displayLoadingNotesError()
-                }
-                is Result.Success -> {
-                    notes.data.forEach {
-                        notesView.displayNote(it)
+            launch(appExecutors.uiContext) {
+                val notes = notesRepository.getNotes { replaceNoteAuthorIdToNameJob(it, defaultUserName) }
+                when (notes) {
+                    is Result.Error -> {
+                        notesView.displayLoadingNotesError()
+                    }
+                    is Result.Success -> {
+                        notes.data.forEach {
+                            notesView.displayNote(it)
+                        }
                     }
                 }
             }
@@ -96,11 +101,13 @@ class SearchNotesPresenter(
                         }
                     }
                 }
+                else -> throw IllegalArgumentException("Incorrect ID of category")
             }
         }
     }
 
     override fun onDetach() {
+        super.onDetach()
         this.view = null
     }
 }

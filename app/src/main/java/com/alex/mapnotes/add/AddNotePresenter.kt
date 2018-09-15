@@ -2,6 +2,7 @@ package com.alex.mapnotes.add
 
 import androidx.annotation.VisibleForTesting
 import com.alex.mapnotes.AppExecutors
+import com.alex.mapnotes.base.ScopedPresenter
 import com.alex.mapnotes.data.Result
 import com.alex.mapnotes.data.formatter.LocationFormatter
 import com.alex.mapnotes.data.provider.LocationProvider
@@ -17,7 +18,7 @@ class AddNotePresenter(
     private val locationFormatter: LocationFormatter,
     private val userRepository: UserRepository,
     private val notesRepository: NotesRepository
-) : AddNoteMvpPresenter {
+) : ScopedPresenter<AddNoteView>(), AddNoteMvpPresenter {
 
     private var view: AddNoteView? = null
     private var lastLocation: Location? = null
@@ -29,6 +30,7 @@ class AddNotePresenter(
     }
 
     override fun onAttach(view: AddNoteView?) {
+        super.onAttach(view)
         this.view = view
         view?.let {
             locationProvider.startLocationUpdates()
@@ -62,6 +64,7 @@ class AddNotePresenter(
     }
 
     override fun onDetach() {
+        super.onDetach()
         view?.let {
             locationProvider.stopLocationUpdates()
             this.view = null
