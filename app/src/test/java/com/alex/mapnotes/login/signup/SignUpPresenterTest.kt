@@ -10,8 +10,7 @@ import io.mockk.coEvery
 import io.mockk.verify
 import io.mockk.coVerify
 import io.mockk.mockk
-import kotlinx.coroutines.experimental.Dispatchers
-import kotlinx.coroutines.experimental.android.Main
+import kotlinx.coroutines.experimental.android.UI
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
@@ -45,8 +44,8 @@ class SignUpPresenterTest {
     fun setUp() {
         loadKoinModules(listOf(appModule))
 
-        every { appExecutors.uiContext } returns Dispatchers.Main
-        every { appExecutors.ioContext } returns Dispatchers.Main
+        every { appExecutors.uiContext } returns UI
+        every { appExecutors.ioContext } returns UI
 
         every { view.displaySignUpError(any()) } answers { nothing }
         every { view.displayEmptyUserNameError() } answers { nothing }
@@ -86,7 +85,6 @@ class SignUpPresenterTest {
 
     @Test
     fun `verify signUp with correct email, password and name, view detached from presenter`() {
-        presenter.onAttach(view)
         presenter.onDetach()
         presenter.signUp(correctUserName, correctEmail, correctPassword)
 
@@ -118,7 +116,6 @@ class SignUpPresenterTest {
 
     @Test
     fun `verify signUp with empty email, correct password and name, view detached from presenter`() {
-        presenter.onAttach(view)
         presenter.onDetach()
         presenter.signUp(correctUserName, emptyEmail, correctPassword)
 
@@ -145,7 +142,6 @@ class SignUpPresenterTest {
 
     @Test
     fun `verify signUp with incorrect email, password and name, view detached to presenter`() {
-        presenter.onAttach(view)
         presenter.onDetach()
         presenter.signUp(correctUserName, incorrectEmail, correctPassword)
 
@@ -172,7 +168,6 @@ class SignUpPresenterTest {
 
     @Test
     fun `verify signUp with correct email, empty password and name, view detached from presenter`() {
-        presenter.onAttach(view)
         presenter.onDetach()
         presenter.signUp(correctUserName, correctEmail, emptyPassword)
 
@@ -199,7 +194,6 @@ class SignUpPresenterTest {
 
     @Test
     fun `verify signUp with correct email, correct password and empty name, view detached from presenter`() {
-        presenter.onAttach(view)
         presenter.onDetach()
         presenter.signUp(emptyUserName, correctEmail, correctPassword)
 
@@ -232,7 +226,6 @@ class SignUpPresenterTest {
     fun `verify signUp with correct email, password and name, when server send error, view detached from presenter`() {
         coEvery { userRepository.signUp(correctEmail, correctPassword) } returns Result.Error(Exception(errorMessage))
 
-        presenter.onAttach(view)
         presenter.onDetach()
         presenter.signUp(correctUserName, correctEmail, correctPassword)
 

@@ -3,7 +3,6 @@ package com.alex.mapnotes.home
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.alex.mapnotes.AppExecutors
 import com.alex.mapnotes.R
-import com.alex.mapnotes.base.ScopedPresenter
 import com.alex.mapnotes.data.Result
 import com.alex.mapnotes.data.repository.UserRepository
 import kotlinx.coroutines.experimental.launch
@@ -12,12 +11,11 @@ import kotlinx.coroutines.experimental.withContext
 class HomePresenter(
     private val appExecutors: AppExecutors,
     private val userRepository: UserRepository
-) : ScopedPresenter<HomeView>(), HomeMvpPresenter {
+) : HomeMvpPresenter {
 
     private var view: HomeView? = null
 
     override fun onAttach(view: HomeView?) {
-        super.onAttach(view)
         this.view = view
     }
 
@@ -77,7 +75,6 @@ class HomePresenter(
         }
     }
     override fun onDetach() {
-        super.onDetach()
         this.view = null
     }
 }

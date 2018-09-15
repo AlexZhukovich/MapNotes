@@ -11,8 +11,7 @@ import io.mockk.every
 import io.mockk.coEvery
 import io.mockk.verify
 import io.mockk.coVerify
-import kotlinx.coroutines.experimental.Dispatchers
-import kotlinx.coroutines.experimental.android.Main
+import kotlinx.coroutines.experimental.android.UI
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
@@ -45,8 +44,8 @@ class SearchNotesPresenterTest {
     @Before
     fun setUp() {
         loadKoinModules(listOf(appModule))
-        every { appExecutors.uiContext } returns Dispatchers.Main
-        every { appExecutors.networkContext } returns Dispatchers.Main
+        every { appExecutors.uiContext } returns UI
+        every { appExecutors.networkContext } returns UI
         every { view.clearSearchResults() } answers { nothing }
         every { view.displayLoadingNotesError() } answers { nothing }
     }

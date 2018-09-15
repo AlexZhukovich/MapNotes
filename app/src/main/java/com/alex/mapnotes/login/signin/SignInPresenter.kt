@@ -1,7 +1,6 @@
 package com.alex.mapnotes.login.signin
 
 import com.alex.mapnotes.AppExecutors
-import com.alex.mapnotes.base.ScopedPresenter
 import com.alex.mapnotes.data.Result
 import com.alex.mapnotes.data.repository.UserRepository
 import com.alex.mapnotes.ext.isValidEmail
@@ -10,12 +9,11 @@ import kotlinx.coroutines.experimental.launch
 class SignInPresenter(
     private val appExecutors: AppExecutors,
     private val userRepository: UserRepository
-) : ScopedPresenter<SignInView>(), SignInMvpPresenter {
+) : SignInMvpPresenter {
 
     private var view: SignInView? = null
 
     override fun onAttach(view: SignInView?) {
-        super.onAttach(view)
         this.view = view
     }
 
@@ -45,7 +43,6 @@ class SignInPresenter(
     }
 
     override fun onDetach() {
-        super.onDetach()
         this.view = null
     }
 }
