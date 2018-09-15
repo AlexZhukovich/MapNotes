@@ -12,7 +12,7 @@ buildscript {
     ext.play_services_version = '15.0.1'
     ext.firebase_core_version = '16.0.3'
     ext.firebase_auth_version = '16.0.3'
-    ext.firebase_database_version = '16.0.2'
+    ext.firebase_database_version = '16.0.1'
     ext.junit_version = '4.12'
     ext.mockk_version = '1.8.4'
     ext.robolectric_version = '4.0-alpha-3-SNAPSHOT'
