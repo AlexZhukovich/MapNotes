@@ -2,13 +2,13 @@ package com.alex.mapnotes.data.repository
 
 import com.alex.mapnotes.AppExecutors
 import com.alex.mapnotes.data.Result
-import com.alex.mapnotes.ext.launch
 import com.alex.mapnotes.model.Note
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import kotlinx.coroutines.experimental.Job
+import kotlinx.coroutines.experimental.launch
 import kotlinx.coroutines.experimental.withContext
 import kotlin.coroutines.experimental.suspendCoroutine
 
@@ -40,8 +40,8 @@ class FirebaseNotesRepository(private val appExecutors: AppExecutors) : NotesRep
 
                         if (dataSnapshot.exists()) {
                             val noteResults = mutableListOf<Note>()
-                            dataSnapshot.children.forEach {
-                                val note = it.getValue(Note::class.java)!!
+                            dataSnapshot.children.forEach { childrenDataSnapshot ->
+                                val note = childrenDataSnapshot.getValue(Note::class.java)!!
                                 replaceAuthorName(note).join()
                                 noteResults.add(note)
                             }
@@ -67,8 +67,8 @@ class FirebaseNotesRepository(private val appExecutors: AppExecutors) : NotesRep
                             launch(appExecutors.networkContext) {
                                 if (dataSnapshot.exists()) {
                                     val noteResults = mutableListOf<Note>()
-                                    dataSnapshot.children.forEach {
-                                        val note = it.getValue(Note::class.java)!!
+                                    dataSnapshot.children.forEach { childrenDataSnapshot ->
+                                        val note = childrenDataSnapshot.getValue(Note::class.java)!!
                                         replaceAuthorName(note).join()
                                         noteResults.add(note)
                                     }
@@ -93,8 +93,8 @@ class FirebaseNotesRepository(private val appExecutors: AppExecutors) : NotesRep
                         override fun onDataChange(dataSnapshot: DataSnapshot) {
                             if (dataSnapshot.exists()) {
                                 val noteResults = mutableListOf<Note>()
-                                dataSnapshot.children.forEach {
-                                    val note = it.getValue(Note::class.java)!!
+                                dataSnapshot.children.forEach { childrenDataSnapshot ->
+                                    val note = childrenDataSnapshot.getValue(Note::class.java)!!
                                     note.user = humanReadableName
                                     noteResults.add(note)
                                 }
