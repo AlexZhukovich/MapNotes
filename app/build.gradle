@@ -167,6 +167,7 @@ dependencies {
     androidTestImplementation "androidx.test:rules:$test_rules_version"
 
     // Espresso
+    implementation "androidx.test.espresso:espresso-core:$espresso_version"
     androidTestImplementation "androidx.test.espresso:espresso-core:$espresso_version"
     androidTestImplementation "androidx.test.espresso:espresso-intents:$espresso_version"
 
