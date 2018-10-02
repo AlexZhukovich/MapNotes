@@ -22,7 +22,7 @@ buildscript {
     ext.uiuatomator_version = '2.2.0-alpha4'
     ext.jacoco_core_version = '0.8.2'
     ext.jacoco_tools_version = '0.8.2'
-    ext.ktlint_version = '0.24.0'
+    ext.ktlint_version = '0.29.0'
 
     repositories {
         google()
