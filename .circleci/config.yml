@@ -193,7 +193,7 @@ jobs:
       - *decode_gservices_key
       - run:
           name: Generate JaCoCo report
-          command: ./gradlew -PciBuild=true :app:jacocoTestReport
+          command: ./gradlew -PciBuild=true :app:jacocoDevTestReport
       - run:
           name: Upload coverage report to CodeCov
           command: bash <(curl -s https://codecov.io/bash)
