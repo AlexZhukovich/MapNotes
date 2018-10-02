@@ -109,13 +109,13 @@ task jacocoDevTestReport(type : JacocoReport, dependsOn : 'testDevDebugUnitTest'
 
     sourceDirectories = files([mainSrc])
     classDirectories = files([debugJavaTree, debugKotlinTree])
-//    def instrumentationFile = fileTree("${buildDir}/outputs/code_coverage/devDebugAndroidTest/connected/testDevDebugUnitTest.ec")
-//            .filter { it.name.endsWith("testDevDebugUnitTest.ec") }
-//            .filter { it.isFile() }
-//            .files.name[0]
+    def instrumentationFile = fileTree("${buildDir}/outputs/code_coverage/devDebugAndroidTest/connected/")
+            .filter { it.name.endsWith(".ec") }
+            .filter { it.isFile() }
+            .files.name[0]
 
     executionData = files(["${buildDir}/jacoco/testDevDebugUnitTest.exec",
-                           "${buildDir}/outputs/code_coverage/devDebugAndroidTest/connected/testDevDebugUnitTest.ec"])
+                           "${buildDir}/outputs/code_coverage/devDebugAndroidTest/connected/${instrumentationFile}"])
 }
 
 task ktlint(type: JavaExec, group: "verification") {
