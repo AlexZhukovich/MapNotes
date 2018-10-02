@@ -181,7 +181,7 @@ jobs:
       - run:
           name: Move Firebase coverage report
           command: >
-            mkdir -p app/build/outputs/code-coverage/connected && \
+            mkdir -p app/build/outputs/code_coverage/devDebugAndroidTest/connected && \
               cp firebase/Pixel2-28-en_US-portrait/artifacts/sdcard/coverage.ec app/build/outputs/code_coverage/devDebugAndroidTest/connected/coverage.ec
       - run:
           name: Generate lint report
