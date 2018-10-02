@@ -78,7 +78,7 @@ references:
 jobs:
 
   ## Build debug APK and instrumented test APK
-  build_debug:
+  build_dev_debug:
     <<: *android_config
     steps:
       - checkout
@@ -94,14 +94,14 @@ jobs:
       - *decode_gservices_key
       - run:
           name: Gradle build (debug)
-          command: ./gradlew :app:assembleDebug :app:assembleDebugAndroidTest
+          command: ./gradlew :app:assembleDevDebug :app:assembleDevDebugAndroidTest
       - *persist_debug_workspace
       - store_artifacts:
           path: app/build/outputs/apk/
           destination: /apk/
 
   ## Run unit tests
-  test_unit:
+  test_dev_unit:
     <<: *android_config
     steps:
       - checkout
@@ -117,7 +117,7 @@ jobs:
       - *decode_gservices_key
       - run:
           name: Run unit tests
-          command: ./gradlew -PciBuild=true :app:testDebugUnitTest
+          command: ./gradlew -PciBuild=true :app:testDevDebugUnitTest
       - *persist_debug_workspace
       - store_artifacts:
           path: app/build/reports/
@@ -127,7 +127,7 @@ jobs:
           destination: /test-results/
 
   ## Run instrumentation tests
-  test_instrumented:
+  test_dev_instrumented:
     <<: *gcloud_config
     steps:
       - *attach_debug_workspace
@@ -146,8 +146,8 @@ jobs:
           command: >
             gcloud firebase test android run \
               --type instrumentation \
-              --app app/build/outputs/apk/debug/app-debug.apk \
-              --test app/build/outputs/apk/androidTest/debug/app-debug-androidTest.apk \
+              --app app/build/outputs/apk/dev/debug/app-dev-debug.apk \
+              --test app/build/outputs/apk/androidTest/dev/debug/app-dev-debug-androidTest.apk \
               --device model=Pixel2,version=28,locale=en_US,orientation=portrait \
               --timeout 20m \
               --environment-variables coverage=true,coverageFile=/sdcard/coverage.ec --directories-to-pull=/sdcard/
@@ -205,12 +205,12 @@ workflows:
   version: 2
   workflow:
     jobs:
-      - build_debug
-      - test_unit
-      - test_instrumented:
+      - build_dev_debug
+      - test_dev_unit
+      - test_dev_instrumented:
           requires:
-            - build_debug
+            - build_dev_debug
       - report_coverage:
           requires:
-            - test_unit
-            - test_instrumented
+            - test_dev_unit
+            - test_dev_instrumented

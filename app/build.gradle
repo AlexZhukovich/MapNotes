@@ -40,6 +40,17 @@ android {
         versionName "1.0"
         testInstrumentationRunner "com.alex.mapnotes.MockTestRunner"
     }
+    flavorDimensions "server"
+    productFlavors {
+        prod {
+            dimension "server"
+            versionNameSuffix "-prod"
+        }
+        dev {
+            dimension "server"
+            versionNameSuffix "-dev"
+        }
+    }
     buildTypes {
         release {
             minifyEnabled false
