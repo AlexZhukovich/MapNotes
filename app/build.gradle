@@ -38,17 +38,19 @@ android {
         targetSdkVersion 28
         versionCode 1
         versionName "1.0"
-        testInstrumentationRunner "com.alex.mapnotes.MockTestRunner"
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
     flavorDimensions "server"
     productFlavors {
         prod {
             dimension "server"
             versionNameSuffix "-prod"
+            testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         }
         dev {
             dimension "server"
             versionNameSuffix "-dev"
+            testInstrumentationRunner "com.alex.mapnotes.MockTestRunner"
         }
     }
     buildTypes {

@@ -14,8 +14,8 @@ import androidx.test.runner.AndroidJUnit4
 import androidx.test.uiautomator.By
 import androidx.test.uiautomator.UiDevice
 import androidx.test.uiautomator.Until
-import com.alex.mapnotes.R
 import com.alex.mapnotes.FragmentTestActivity
+import com.alex.mapnotes.R
 import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Rule

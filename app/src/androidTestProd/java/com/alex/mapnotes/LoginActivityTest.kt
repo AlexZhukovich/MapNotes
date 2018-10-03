@@ -1,4 +1,4 @@
-package com.alex.mapnotes.login
+package com.alex.mapnotes
 
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
@@ -8,8 +8,8 @@ import androidx.test.espresso.intent.matcher.IntentMatchers.hasComponent
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.rule.ActivityTestRule
 import androidx.test.runner.AndroidJUnit4
-import com.alex.mapnotes.R
 import com.alex.mapnotes.di.appModule
+import com.alex.mapnotes.login.LoginActivity
 import com.alex.mapnotes.login.signin.SignInActivity
 import com.alex.mapnotes.login.signup.SignUpActivity
 import org.junit.After
