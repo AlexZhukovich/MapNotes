@@ -10,8 +10,8 @@ import androidx.test.espresso.matcher.ViewMatchers.withHint
 import androidx.test.espresso.matcher.ViewMatchers.isEnabled
 import androidx.test.rule.ActivityTestRule
 import androidx.test.runner.AndroidJUnit4
-import com.alex.mapnotes.R
 import com.alex.mapnotes.FragmentTestActivity
+import com.alex.mapnotes.R
 import com.alex.mapnotes.di.appModule
 import org.hamcrest.CoreMatchers.not
 import org.junit.After
