@@ -27,6 +27,7 @@ import org.junit.After
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
+import org.junit.Ignore
 import org.junit.runner.RunWith
 import org.koin.standalone.StandAloneContext.closeKoin
 import org.koin.standalone.StandAloneContext.loadKoinModules
@@ -84,7 +85,7 @@ class SearchNotesFragmentTest {
                 .check(matches(withItemCount(expectedItemCount)))
     }
 
-    @Test
+    @Test @Ignore
     fun shouldDisplayLoadingNotesError() {
         coEvery { MockMapNotesApp.mockedNotesRepository.getNotes(any()) } returns Result.Error(RuntimeException())
         activityRule.activity.setFragment(SearchNotesFragment())
