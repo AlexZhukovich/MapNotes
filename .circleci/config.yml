@@ -231,7 +231,7 @@ jobs:
         command: >
           gcloud firebase test android run \
             --type instrumentation \
-            --app app/build/outputs/apk/dev/debug/app-prod-debug.apk \
+            --app app/build/outputs/apk/prod/debug/app-prod-debug.apk \
             --test app/build/outputs/apk/androidTest/prod/debug/app-prod-debug-androidTest.apk \
             --device model=Pixel2,version=28,locale=en_US,orientation=portrait \
             --timeout 20m \
