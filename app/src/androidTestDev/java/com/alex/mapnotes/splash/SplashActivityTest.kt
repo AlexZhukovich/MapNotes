@@ -19,6 +19,7 @@ import org.junit.After
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
+import org.junit.Ignore
 import org.junit.runner.RunWith
 import org.koin.standalone.StandAloneContext.closeKoin
 import org.koin.standalone.StandAloneContext.loadKoinModules
@@ -38,7 +39,7 @@ class SplashActivityTest {
         Intents.init()
     }
 
-    @Test
+    @Test @Ignore
     fun shouldOpenHomeActivityWhenUserIsAuthenticated() {
         every { MockMapNotesApp.mockedLocationProvider.startLocationUpdates() } answers { nothing }
         every { MockMapNotesApp.mockedLocationProvider.stopLocationUpdates() } answers { nothing }
