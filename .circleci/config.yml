@@ -149,6 +149,32 @@ jobs:
           path: app/build/test-results/
           destination: /test-results/
 
+  ## Run unit tests
+  test_prod_unit:
+    <<: *android_config
+    steps:
+    - checkout
+    - *restore_cache
+    - run:
+        name: chmod permissions
+        command: chmod +x ./gradlew
+    - run:
+        name: Download dependencies
+        command: ./gradlew androidDependencies
+    - *save_cache
+    - *export_gservices_key
+    - *decode_gservices_key
+    - run:
+        name: Run unit tests
+        command: ./gradlew -PciBuild=true :app:testProdDebugUnitTest
+    - *persist_debug_workspace
+    - store_artifacts:
+        path: app/build/reports/
+        destination: /reports/
+    - store_test_results:
+        path: app/build/test-results/
+        destination: /test-results/
+
   ## Run instrumentation tests
   test_dev_instrumented:
     <<: *gcloud_config
@@ -231,6 +257,7 @@ workflows:
       - build_dev_debug
       - build_prod_debug
       - test_dev_unit
+      - test_prod_unit
 #      - test_dev_instrumented:
 #          requires:
 #            - build_dev_debug
