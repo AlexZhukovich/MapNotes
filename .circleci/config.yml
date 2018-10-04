@@ -273,7 +273,7 @@ jobs:
           command: >
             mkdir -p app/build/outputs/code_coverage/devDebugAndroidTest/connected && \
               cp firebase/Pixel2-28-en_US-portrait/artifacts/sdcard/prod-coverage.ec app/build/outputs/code_coverage/devDebugAndroidTest/connected/prod-coverage.ec
-        - run:
+      - run:
           name: Generate lint report
           command: ./gradlew :app:lint
       - run:
