@@ -205,7 +205,7 @@ jobs:
           command: mkdir firebase
       - run:
           name: Download instrumented test results from Firebase Test Lab
-          command: gsutil -m cp -r -U "`gsutil ls gs://test-lab-481xmdq2w17is-h08zk45a575ds | tail -1`*" /root/workspace/firebase/
+          command: gsutil -m cp -r -U "`gsutil ls gs://test-lab-481xmdq2w17is-h08zk45a575ds | tail -1`/Pixel2-28-en_US-portrait/artifacts/sdcard/dev-coverage.ec" /root/workspace/firebase/
       - *persist_firebase_workspace
       - store_artifacts:
           path: firebase/
