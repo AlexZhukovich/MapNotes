@@ -200,16 +200,16 @@ jobs:
               --device model=Pixel2,version=28,locale=en_US,orientation=portrait \
               --timeout 20m \
               --environment-variables coverage=true,coverageFile=/sdcard/dev-coverage.ec --directories-to-pull=/sdcard/
-#      - run:
-#          name: Create directory to store test results
-#          command: mkdir firebase
-#      - run:
-#          name: Download instrumented test results from Firebase Test Lab
-#          command: gsutil -m cp -r -U "`gsutil ls gs://test-lab-481xmdq2w17is-h08zk45a575ds | tail -1`Pixel2-28-en_US-portrait/artifacts/sdcard/dev-coverage.ec" /root/workspace/firebase/
-#      - *persist_firebase_workspace
-#      - store_artifacts:
-#          path: firebase/
-#          destination: /firebase/
+      - run:
+          name: Create directory to store test results
+          command: mkdir firebase
+      - run:
+          name: Download instrumented test results from Firebase Test Lab
+          command: gsutil -m cp -r -U "`gsutil ls gs://test-lab-481xmdq2w17is-h08zk45a575ds | tail -1`Pixel2-28-en_US-portrait/artifacts/sdcard/*.ec" /root/workspace/firebase/
+      - *persist_firebase_workspace
+      - store_artifacts:
+          path: firebase/
+          destination: /firebase/
 
   ## Run prod instrumentation tests
   test_prod_instrumented:
@@ -236,38 +236,9 @@ jobs:
             --device model=Pixel2,version=28,locale=en_US,orientation=portrait \
             --timeout 20m \
             --environment-variables coverage=true,coverageFile=/sdcard/prod-coverage.ec --directories-to-pull=/sdcard/
-#    - run:
-#        name: Create directory to store test results
-#        command: mkdir firebase
-#    - run:
-#        name: Download instrumented test results from Firebase Test Lab
-#        command: gsutil -m cp -r -U "`gsutil ls gs://test-lab-481xmdq2w17is-h08zk45a575ds | tail -1`*" /root/workspace/firebase/
-#    - *persist_firebase_workspace
-#    - store_artifacts:
-#        path: firebase/
-#        destination: /firebase/
-
-  ## Download coverage files from dev and prod instrumentation runs
-  download_coverage_from_test_lab:
-    <<: *gcloud_config
-    steps:
-    - *attach_debug_workspace
-    - *export_gcloud_key
-    - *decode_gcloud_key
-    - run:
-        name: Set Google Cloud target project
-        command: gcloud config set project mapnotes-ea9d9
-    - run:
-        name: Authenticate with Google Cloud
-        command: >
-          gcloud auth activate-service-account firebase-adminsdk-ovtn6@mapnotes-ea9d9.iam.gserviceaccount.com \
-            --key-file ${HOME}/client-secret.json
     - run:
         name: Create directory to store test results
         command: mkdir firebase
-    - run:
-        name: Download instrumented test results from Firebase Test Lab
-        command: gsutil -m cp -r -U "`gsutil ls gs://test-lab-481xmdq2w17is-h08zk45a575ds | tail -1`Pixel2-28-en_US-portrait/artifacts/sdcard/*.ec" /root/workspace/firebase/
     - run:
         name: Download instrumented test results from Firebase Test Lab
         command: gsutil -m cp -r -U "`gsutil ls gs://test-lab-481xmdq2w17is-h08zk45a575ds | tail -1`Pixel2-28-en_US-portrait/artifacts/sdcard/*.ec" /root/workspace/firebase/
@@ -275,6 +246,35 @@ jobs:
     - store_artifacts:
         path: firebase/
         destination: /firebase/
+
+  ## Download coverage files from dev and prod instrumentation runs
+#  download_coverage_from_test_lab:
+#    <<: *gcloud_config
+#    steps:
+#    - *attach_debug_workspace
+#    - *export_gcloud_key
+#    - *decode_gcloud_key
+#    - run:
+#        name: Set Google Cloud target project
+#        command: gcloud config set project mapnotes-ea9d9
+#    - run:
+#        name: Authenticate with Google Cloud
+#        command: >
+#          gcloud auth activate-service-account firebase-adminsdk-ovtn6@mapnotes-ea9d9.iam.gserviceaccount.com \
+#            --key-file ${HOME}/client-secret.json
+#    - run:
+#        name: Create directory to store test results
+#        command: mkdir firebase
+#    - run:
+#        name: Download instrumented test results from Firebase Test Lab
+#        command: gsutil -m cp -r -U "`gsutil ls gs://test-lab-481xmdq2w17is-h08zk45a575ds | tail -1`Pixel2-28-en_US-portrait/artifacts/sdcard/*.ec" /root/workspace/firebase/
+#    - run:
+#        name: Download instrumented test results from Firebase Test Lab
+#        command: gsutil -m cp -r -U "`gsutil ls gs://test-lab-481xmdq2w17is-h08zk45a575ds | tail -1`Pixel2-28-en_US-portrait/artifacts/sdcard/*.ec" /root/workspace/firebase/
+#    - *persist_firebase_workspace
+#    - store_artifacts:
+#        path: firebase/
+#        destination: /firebase/
 
   ## Generate Coverage Report
   report_coverage:
@@ -334,12 +334,14 @@ workflows:
       - test_prod_instrumented:
           requires:
             - build_prod_debug
-      - download_coverage_from_test_lab:
-          requires:
-            - test_dev_instrumented
-            - test_prod_instrumented
+#      - download_coverage_from_test_lab:
+#          requires:
+#            - test_dev_instrumented
+#            - test_prod_instrumented
       - report_coverage:
           requires:
             - test_dev_unit
             - test_prod_unit
-            - download_coverage_from_test_lab
+#            - download_coverage_from_test_lab
+            - test_dev_instrumented
+            - test_prod_instrumented
