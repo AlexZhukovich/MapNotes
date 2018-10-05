@@ -342,4 +342,4 @@ workflows:
           requires:
             - test_dev_unit
             - test_prod_unit
-            - download_coverage
+            - download_coverage_from_test_lab
