@@ -105,20 +105,22 @@ task jacocoTestReport(type : JacocoReport, dependsOn : 'testDevDebugUnitTest') {
             '**/*Test*.*',
             'android/**/*.*']
 
-    def debugJavaTree = fileTree(dir: "${buildDir}/intermediates/classes/debug", excludes: fileFilter)
-    def debugKotlinTree = fileTree(dir: "${buildDir}/tmp/kotlin-classes/debug", excludes: fileFilter)
+//    def debugJavaTree = fileTree(dir: "${buildDir}/intermediates/classes/debug", excludes: fileFilter)
+    def debugKotlinTree = fileTree(dir: "${buildDir}/tmp/kotlin-classes/devDebug", excludes: fileFilter)
     def mainSrc = "${project.projectDir}/src/main/java"
 
     sourceDirectories = files([mainSrc])
-    classDirectories = files([debugJavaTree, debugKotlinTree])
+    classDirectories = files([
+//            debugJavaTree,
+            debugKotlinTree])
 //    def instrumentationFile = fileTree("${buildDir}/outputs/code_coverage/devDebugAndroidTest/connected/")
 //            .filter { it.name.endsWith(".ec") }
 //            .filter { it.isFile() }
 //            .files.name[0]
 
     executionData = files(["${buildDir}/jacoco/testDevDebugUnitTest.exec",
-                           "${buildDir}/outputs/code_coverage/devDebugAndroidTest/connected/dev-coverage.ec",
-                           "${buildDir}/outputs/code_coverage/devDebugAndroidTest/connected/prod-coverage.ec"])
+                           "${buildDir}/outputs/code_coverage/connected/dev-coverage.ec",
+                           "${buildDir}/outputs/code_coverage/connected/prod-coverage.ec"])
 }
 
 task ktlint(type: JavaExec, group: "verification") {
