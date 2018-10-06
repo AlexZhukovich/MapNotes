@@ -87,7 +87,7 @@ android {
     }
 }
 
-task jacocoDevTestReport(type : JacocoReport, dependsOn : 'testDevDebugUnitTest') {
+task jacocoTestReport(type : JacocoReport, dependsOn : 'testDevDebugUnitTest') {
     group = "Reporting"
     description = "Generate Jacoco coverage reports for Debug build"
 
@@ -105,19 +105,20 @@ task jacocoDevTestReport(type : JacocoReport, dependsOn : 'testDevDebugUnitTest'
             '**/*Test*.*',
             'android/**/*.*']
 
-    def debugJavaTree = fileTree(dir: "${buildDir}/intermediates/classes/debug", excludes: fileFilter)
-    def debugKotlinTree = fileTree(dir: "${buildDir}/tmp/kotlin-classes/debug", excludes: fileFilter)
+    def debugKotlinTree = fileTree(dir: "${buildDir}/tmp/kotlin-classes/devDebug", excludes: fileFilter)
     def mainSrc = "${project.projectDir}/src/main/java"
 
     sourceDirectories = files([mainSrc])
-    classDirectories = files([debugJavaTree, debugKotlinTree])
-    def instrumentationFile = fileTree("${buildDir}/outputs/code_coverage/devDebugAndroidTest/connected/")
+    classDirectories = files([debugKotlinTree])
+
+    def localTestsFiles = fileTree("${buildDir}/jacoco/")
+            .filter { it.name.endsWith(".exec") }
+            .filter { it.isFile() }
+    def instrumentationTestsFiles = fileTree("${buildDir}/outputs/code_coverage/devDebugAndroidTest/connected/")
             .filter { it.name.endsWith(".ec") }
             .filter { it.isFile() }
-            .files.name[0]
 
-    executionData = files(["${buildDir}/jacoco/testDevDebugUnitTest.exec",
-                           "${buildDir}/outputs/code_coverage/devDebugAndroidTest/connected/${instrumentationFile}"])
+    executionData = files(localTestsFiles + instrumentationTestsFiles)
 }
 
 task ktlint(type: JavaExec, group: "verification") {
