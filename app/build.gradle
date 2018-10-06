@@ -87,7 +87,7 @@ android {
     }
 }
 
-task jacocoDevTestReport(type : JacocoReport, dependsOn : 'testDevDebugUnitTest') {
+task jacocoTestReport(type : JacocoReport, dependsOn : 'testDevDebugUnitTest') {
     group = "Reporting"
     description = "Generate Jacoco coverage reports for Debug build"
 
@@ -111,13 +111,14 @@ task jacocoDevTestReport(type : JacocoReport, dependsOn : 'testDevDebugUnitTest'
 
     sourceDirectories = files([mainSrc])
     classDirectories = files([debugJavaTree, debugKotlinTree])
-    def instrumentationFile = fileTree("${buildDir}/outputs/code_coverage/devDebugAndroidTest/connected/")
-            .filter { it.name.endsWith(".ec") }
-            .filter { it.isFile() }
-            .files.name[0]
+//    def instrumentationFile = fileTree("${buildDir}/outputs/code_coverage/devDebugAndroidTest/connected/")
+//            .filter { it.name.endsWith(".ec") }
+//            .filter { it.isFile() }
+//            .files.name[0]
 
     executionData = files(["${buildDir}/jacoco/testDevDebugUnitTest.exec",
-                           "${buildDir}/outputs/code_coverage/devDebugAndroidTest/connected/${instrumentationFile}"])
+                           "${buildDir}/outputs/code_coverage/devDebugAndroidTest/connected/dev-coverage.ec",
+                           "${buildDir}/outputs/code_coverage/devDebugAndroidTest/connected/prod-coverage.ec"])
 }
 
 task ktlint(type: JavaExec, group: "verification") {
