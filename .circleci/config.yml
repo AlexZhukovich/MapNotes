@@ -295,13 +295,13 @@ jobs:
       - run:
           name: Move Firebase dev coverage report
           command: >
-            mkdir -p app/build/outputs/code_coverage/connected && \
-              cp firebase/dev-coverage.ec app/build/outputs/code_coverage/connected/dev-coverage.ec
+            mkdir -p app/build/outputs/code_coverage/devDebugAndroidTest/connected && \
+              cp firebase/dev-coverage.ec app/build/outputs/code_coverage/devDebugAndroidTest/connected/dev-coverage.ec
       - run:
           name: Move Firebase prod coverage report
           command: >
-            mkdir -p app/build/outputs/code_coverage/connected && \
-              cp firebase/prod-coverage.ec app/build/outputs/code_coverage/connected/prod-coverage.ec
+            mkdir -p app/build/outputs/code_coverage/devDebugAndroidTest/connected && \
+              cp firebase/prod-coverage.ec app/build/outputs/code_coverage/devDebugAndroidTest/connected/prod-coverage.ec
       - run:
           name: Generate lint report
           command: ./gradlew :app:lint
