@@ -296,12 +296,12 @@ jobs:
           name: Move Firebase dev coverage report
           command: >
             mkdir -p app/build/outputs/code_coverage/devDebugAndroidTest/connected && \
-              cp firebase/Pixel2-28-en_US-portrait/artifacts/sdcard/dev-coverage.ec app/build/outputs/code_coverage/devDebugAndroidTest/connected/dev-coverage.ec
+              cp firebase/dev-coverage.ec app/build/outputs/code_coverage/devDebugAndroidTest/connected/dev-coverage.ec
       - run:
           name: Move Firebase prod coverage report
           command: >
             mkdir -p app/build/outputs/code_coverage/devDebugAndroidTest/connected && \
-              cp firebase/Pixel2-28-en_US-portrait/artifacts/sdcard/prod-coverage.ec app/build/outputs/code_coverage/devDebugAndroidTest/connected/prod-coverage.ec
+              cp firebase/prod-coverage.ec app/build/outputs/code_coverage/devDebugAndroidTest/connected/prod-coverage.ec
       - run:
           name: Generate lint report
           command: ./gradlew :app:lint
@@ -324,10 +324,10 @@ workflows:
   version: 2
   workflow:
     jobs:
-#      - build_dev_debug
-#      - build_prod_debug
-#      - test_dev_unit
-#      - test_prod_unit
+      - build_dev_debug
+      - build_prod_debug
+      - test_dev_unit
+      - test_prod_unit
 #      - test_dev_instrumented:
 #          requires:
 #            - build_dev_debug
@@ -335,13 +335,17 @@ workflows:
 #          requires:
 #            - build_prod_debug
       - download_coverage_from_test_lab
-#          requires:
+          requires:
+             - build_dev_debug
+             - build_prod_debug
+             - test_dev_unit
+             - test_prod_unit
 #            - test_dev_instrumented
 #            - test_prod_instrumented
-#      - report_coverage:
-#          requires:
-#            - test_dev_unit
-#            - test_prod_unit
-#            - download_coverage_from_test_lab
+      - report_coverage:
+          requires:
+            - test_dev_unit
+            - test_prod_unit
+            - download_coverage_from_test_lab
 #            - test_dev_instrumented
 #            - test_prod_instrumented
