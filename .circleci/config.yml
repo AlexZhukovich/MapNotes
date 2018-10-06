@@ -200,7 +200,6 @@ jobs:
               --device model=Pixel2,version=28,locale=en_US,orientation=portrait \
               --timeout 20m \
               --environment-variables coverage=true,coverageFile=/sdcard/dev-coverage.ec --directories-to-pull=/sdcard/
-      - *persist_firebase_workspace
 
   ## Run prod instrumentation tests
   test_prod_instrumented:
@@ -227,7 +226,6 @@ jobs:
             --device model=Pixel2,version=28,locale=en_US,orientation=portrait \
             --timeout 20m \
             --environment-variables coverage=true,coverageFile=/sdcard/prod-coverage.ec --directories-to-pull=/sdcard/
-    - *persist_firebase_workspace
 
   ## Download coverage files from dev and prod instrumentation runs
   download_coverage_from_test_lab:
