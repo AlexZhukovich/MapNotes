@@ -334,7 +334,7 @@ workflows:
 #      - test_prod_instrumented:
 #          requires:
 #            - build_prod_debug
-      - download_coverage_from_test_lab
+      - download_coverage_from_test_lab:
           requires:
              - build_dev_debug
              - build_prod_debug
