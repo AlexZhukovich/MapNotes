@@ -200,16 +200,7 @@ jobs:
               --device model=Pixel2,version=28,locale=en_US,orientation=portrait \
               --timeout 20m \
               --environment-variables coverage=true,coverageFile=/sdcard/dev-coverage.ec --directories-to-pull=/sdcard/
-      - run:
-          name: Create directory to store test results
-          command: mkdir firebase
-      - run:
-          name: Download instrumented test results from Firebase Test Lab
-          command: gsutil -m cp -r -U "`gsutil ls gs://test-lab-481xmdq2w17is-h08zk45a575ds | tail -1`Pixel2-28-en_US-portrait/artifacts/sdcard/*.ec" /root/workspace/firebase/
       - *persist_firebase_workspace
-      - store_artifacts:
-          path: firebase/
-          destination: /firebase/
 
   ## Run prod instrumentation tests
   test_prod_instrumented:
@@ -236,16 +227,7 @@ jobs:
             --device model=Pixel2,version=28,locale=en_US,orientation=portrait \
             --timeout 20m \
             --environment-variables coverage=true,coverageFile=/sdcard/prod-coverage.ec --directories-to-pull=/sdcard/
-    - run:
-        name: Create directory to store test results
-        command: mkdir firebase
-    - run:
-        name: Download instrumented test results from Firebase Test Lab
-        command: gsutil -m cp -r -U "`gsutil ls gs://test-lab-481xmdq2w17is-h08zk45a575ds | tail -1`Pixel2-28-en_US-portrait/artifacts/sdcard/*.ec" /root/workspace/firebase/
     - *persist_firebase_workspace
-    - store_artifacts:
-        path: firebase/
-        destination: /firebase/
 
   ## Download coverage files from dev and prod instrumentation runs
   download_coverage_from_test_lab:
@@ -328,24 +310,18 @@ workflows:
       - build_prod_debug
       - test_dev_unit
       - test_prod_unit
-#      - test_dev_instrumented:
-#          requires:
-#            - build_dev_debug
-#      - test_prod_instrumented:
-#          requires:
-#            - build_prod_debug
+      - test_dev_instrumented:
+          requires:
+            - build_dev_debug
+      - test_prod_instrumented:
+          requires:
+            - build_prod_debug
       - download_coverage_from_test_lab:
           requires:
-             - build_dev_debug
-             - build_prod_debug
-             - test_dev_unit
-             - test_prod_unit
-#            - test_dev_instrumented
-#            - test_prod_instrumented
+            - test_dev_instrumented
+            - test_prod_instrumented
       - report_coverage:
           requires:
             - test_dev_unit
             - test_prod_unit
             - download_coverage_from_test_lab
-#            - test_dev_instrumented
-#            - test_prod_instrumented
