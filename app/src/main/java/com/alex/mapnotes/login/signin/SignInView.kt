@@ -9,5 +9,5 @@ interface SignInView : MvpView {
 
     fun displayPasswordError()
 
-    fun displaySignInError(message: String)
+    fun displaySignInError()
 }

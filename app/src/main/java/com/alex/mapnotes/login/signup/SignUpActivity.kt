@@ -40,8 +40,8 @@ class SignUpActivity : AppCompatActivity(), SignUpView {
         Snackbar.make(signUpRoot, R.string.error_password_should_not_be_empty, Snackbar.LENGTH_LONG).show()
     }
 
-    override fun displaySignUpError(message: String) {
-        Snackbar.make(signUpRoot, message, Snackbar.LENGTH_LONG).show()
+    override fun displaySignUpError() {
+        Snackbar.make(signUpRoot, R.string.error_account_cannot_be_created, Snackbar.LENGTH_LONG).show()
     }
 
     override fun displayEmptyUserNameError() {

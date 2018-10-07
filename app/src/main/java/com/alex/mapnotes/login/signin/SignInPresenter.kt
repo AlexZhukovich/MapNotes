@@ -37,7 +37,7 @@ class SignInPresenter(
                         it.navigateToMapScreen()
                     }
                     is Result.Error -> {
-                        it.displaySignInError(result.exception.message!!)
+                        it.displaySignInError()
                     }
                 }
             }

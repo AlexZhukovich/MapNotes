@@ -2,6 +2,7 @@ package com.alex.mapnotes.data.repository
 
 import com.alex.mapnotes.AppExecutors
 import com.alex.mapnotes.data.Result
+import com.alex.mapnotes.data.exception.AccountNotCreatedException
 import com.alex.mapnotes.data.exception.UserNotAuthenticatedException
 import com.alex.mapnotes.model.AuthUser
 import com.google.firebase.auth.FirebaseAuth
@@ -21,7 +22,11 @@ class FirebaseUserRepository(private val appExecutors: AppExecutors) : UserRepos
     override suspend fun signIn(email: String, password: String): Result<AuthUser> = withContext(appExecutors.networkContext) {
         suspendCoroutine<Result<AuthUser>> {
             auth.signInWithEmailAndPassword(email, password).addOnCompleteListener { authResultTask ->
-                it.resume(Result.Success(AuthUser(authResultTask.result.user.uid)))
+                if (authResultTask.isSuccessful) {
+                    it.resume(Result.Success(AuthUser(authResultTask.result.user.uid)))
+                } else {
+                    it.resume(Result.Error(UserNotAuthenticatedException()))
+                }
             }
         }
     }
@@ -29,7 +34,11 @@ class FirebaseUserRepository(private val appExecutors: AppExecutors) : UserRepos
     override suspend fun signUp(email: String, password: String): Result<AuthUser> = withContext(appExecutors.networkContext) {
         suspendCoroutine<Result<AuthUser>> {
             auth.createUserWithEmailAndPassword(email, password).addOnCompleteListener { authResultTask ->
-                it.resume(Result.Success(AuthUser(authResultTask.result.user.uid)))
+                if (authResultTask.isSuccessful) {
+                    it.resume(Result.Success(AuthUser(authResultTask.result.user.uid)))
+                } else {
+                    it.resume(Result.Error(AccountNotCreatedException()))
+                }
             }
         }
     }

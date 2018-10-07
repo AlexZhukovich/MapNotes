@@ -39,8 +39,8 @@ class SignInActivity : AppCompatActivity(), SignInView {
         Snackbar.make(signInRoot, R.string.error_password_should_not_be_empty, Snackbar.LENGTH_SHORT).show()
     }
 
-    override fun displaySignInError(message: String) {
-        Snackbar.make(signInRoot, message, Snackbar.LENGTH_SHORT).show()
+    override fun displaySignInError() {
+        Snackbar.make(signInRoot, R.string.error_user_cannot_be_authenticated, Snackbar.LENGTH_SHORT).show()
     }
 
     override fun onStop() {
