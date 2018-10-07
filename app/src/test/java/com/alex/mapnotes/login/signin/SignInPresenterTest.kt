@@ -31,7 +31,6 @@ class SignInPresenterTest {
     private val correctPassword = "password"
     private val incorrectPassword = "incorrect password"
     private val emptyPassword = ""
-    private val userNotAuthenticatedErrorMessage = "User not authenticated"
 
     private val view: SignInView = mockk()
     private val appExecutors: AppExecutors = mockk()
@@ -46,7 +45,7 @@ class SignInPresenterTest {
         every { appExecutors.networkContext } returns Dispatchers.Main
         every { view.displayEmailError() } answers { nothing }
         every { view.displayPasswordError() } answers { nothing }
-        every { view.displaySignInError(userNotAuthenticatedErrorMessage) } answers { nothing }
+        every { view.displaySignInError() } answers { nothing }
         every { view.navigateToMapScreen() } answers { nothing }
     }
 
@@ -57,7 +56,7 @@ class SignInPresenterTest {
         presenter.onAttach(view)
         presenter.signIn(correctUserName, incorrectPassword)
 
-        verify { view.displaySignInError(userNotAuthenticatedErrorMessage) }
+        verify { view.displaySignInError() }
     }
 
     @Test
@@ -67,7 +66,7 @@ class SignInPresenterTest {
         presenter.onAttach(null)
         presenter.signIn(correctUserName, incorrectPassword)
 
-        verify(exactly = 0) { view.displaySignInError(userNotAuthenticatedErrorMessage) }
+        verify(exactly = 0) { view.displaySignInError() }
     }
 
     @Test
@@ -78,7 +77,7 @@ class SignInPresenterTest {
         presenter.onDetach()
         presenter.signIn(correctUserName, incorrectPassword)
 
-        verify(exactly = 0) { view.displaySignInError(userNotAuthenticatedErrorMessage) }
+        verify(exactly = 0) { view.displaySignInError() }
     }
 
     @Test

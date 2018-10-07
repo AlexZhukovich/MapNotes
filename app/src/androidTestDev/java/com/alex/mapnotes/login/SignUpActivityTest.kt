@@ -114,7 +114,7 @@ class SignUpActivityTest {
         onView(withId(R.id.signUp))
                 .perform(click())
 
-        onView(withText("SignUp error"))
+        onView(withText(R.string.error_account_cannot_be_created))
                 .check(matches(isDisplayed()))
     }
 

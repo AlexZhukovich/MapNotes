@@ -9,7 +9,7 @@ interface SignUpView : MvpView {
 
     fun displayPasswordError()
 
-    fun displaySignUpError(message: String)
+    fun displaySignUpError()
 
     fun displayEmptyUserNameError()
 }

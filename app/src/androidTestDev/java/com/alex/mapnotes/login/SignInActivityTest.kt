@@ -95,7 +95,7 @@ class SignInActivityTest {
         onView(withId(R.id.signIn))
                 .perform(click())
 
-        onView(withText("SignIn error"))
+        onView(withText(R.string.error_user_cannot_be_authenticated))
                 .check(matches(isDisplayed()))
     }
 
