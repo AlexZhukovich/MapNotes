@@ -43,7 +43,7 @@ class SignUpPresenter(
                         it.navigateToMapScreen()
                     }
                     is Result.Error -> {
-                        it.displaySignUpError(result.exception.message!!)
+                        it.displaySignUpError()
                     }
                 }
             }

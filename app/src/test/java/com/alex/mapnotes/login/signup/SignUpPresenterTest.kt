@@ -48,7 +48,7 @@ class SignUpPresenterTest {
         every { appExecutors.uiContext } returns Dispatchers.Main
         every { appExecutors.ioContext } returns Dispatchers.Main
 
-        every { view.displaySignUpError(any()) } answers { nothing }
+        every { view.displaySignUpError() } answers { nothing }
         every { view.displayEmptyUserNameError() } answers { nothing }
         every { view.displayEmailError() } answers { nothing }
         every { view.displayPasswordError() } answers { nothing }
@@ -215,7 +215,7 @@ class SignUpPresenterTest {
         presenter.onAttach(view)
         presenter.signUp(correctUserName, correctEmail, correctPassword)
 
-        verify { view.displaySignUpError(errorMessage) }
+        verify { view.displaySignUpError() }
     }
 
     @Test
@@ -225,7 +225,7 @@ class SignUpPresenterTest {
         presenter.onAttach(null)
         presenter.signUp(correctUserName, correctEmail, correctPassword)
 
-        verify(exactly = 0) { view.displaySignUpError(errorMessage) }
+        verify(exactly = 0) { view.displaySignUpError() }
     }
 
     @Test
@@ -236,7 +236,7 @@ class SignUpPresenterTest {
         presenter.onDetach()
         presenter.signUp(correctUserName, correctEmail, correctPassword)
 
-        verify(exactly = 0) { view.displaySignUpError(errorMessage) }
+        verify(exactly = 0) { view.displaySignUpError() }
     }
 
     @After
