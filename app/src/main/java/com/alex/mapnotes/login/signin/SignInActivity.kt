@@ -40,7 +40,9 @@ class SignInActivity : AppCompatActivity(), SignInView {
     }
 
     override fun displaySignInError() {
-        Snackbar.make(signInRoot, R.string.error_user_cannot_be_authenticated, Snackbar.LENGTH_SHORT).show()
+        val snackbar = Snackbar.make(signInRoot, R.string.error_user_cannot_be_authenticated, Snackbar.LENGTH_INDEFINITE)
+        snackbar.setAction(R.string.ok_button) { snackbar.dismiss() }
+        snackbar.show()
     }
 
     override fun onStop() {
