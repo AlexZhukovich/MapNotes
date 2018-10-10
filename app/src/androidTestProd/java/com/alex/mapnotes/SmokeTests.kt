@@ -13,6 +13,7 @@ import org.junit.Test
 import org.junit.rules.RuleChain
 import org.junit.runner.RunWith
 import org.koin.standalone.StandAloneContext
+import java.util.Date
 
 @RunWith(AndroidJUnit4::class)
 class SmokeTests {
@@ -64,6 +65,35 @@ class SmokeTests {
             enterPassword(password)
             pressSignIn()
             matchSignInErrorMessage()
+        }
+    }
+
+    @Test
+    fun shouldVerifyAddingAndSearchNote() {
+        val email = "test@test.com"
+        val password = "test123"
+        val noteText = "test note ${Date().time}"
+
+        loginScreen {
+            pressSignIn()
+        }
+        signInScreen {
+            enterEmail(email)
+            enterPassword(password)
+            pressSignIn()
+        }
+        homeScreen {
+            matchMap()
+            openAddNoteFragment()
+            matchAddNoteFragment()
+            enterNote(noteText)
+            matchDetectedLocation()
+            addNote()
+            openSearchFragment()
+            matchSearchFragment()
+            searchNoteByText(noteText)
+            matchSearchResults(noteText)
+            signOut()
         }
     }
 }
