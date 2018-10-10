@@ -15,7 +15,7 @@ import org.junit.runner.RunWith
 import org.koin.standalone.StandAloneContext
 
 @RunWith(AndroidJUnit4::class)
-class LoginE2ETest {
+class SmokeTests {
 
     private val permissionRule = GrantPermissionRule.grant(android.Manifest.permission.ACCESS_FINE_LOCATION)
 
