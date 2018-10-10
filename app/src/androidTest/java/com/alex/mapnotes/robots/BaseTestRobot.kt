@@ -13,6 +13,7 @@ import androidx.test.espresso.matcher.ViewMatchers.withText
 import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
 import androidx.test.runner.lifecycle.ActivityLifecycleMonitorRegistry
 import androidx.test.runner.lifecycle.Stage
+import com.alex.mapnotes.matchers.RecyclerViewMatchers
 
 open class BaseTestRobot {
 
@@ -31,6 +32,10 @@ open class BaseTestRobot {
     fun matchDisplayedView(viewId: Int): ViewInteraction =
         onView(withId(viewId))
                 .check(ViewAssertions.matches(isDisplayed()))
+
+    fun matchRecyclerViewItemWithText(viewId: Int, text: String): ViewInteraction =
+        onView(withId(viewId))
+            .check(ViewAssertions.matches(RecyclerViewMatchers.withItemText(text)))
 
     protected fun getActivityInstance(): Activity {
         var currentActivity: Activity? = null
