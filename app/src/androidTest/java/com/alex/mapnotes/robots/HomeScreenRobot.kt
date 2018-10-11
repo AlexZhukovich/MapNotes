@@ -26,7 +26,10 @@ class HomeScreenRobot : BaseTestRobot() {
         IdlingRegistry.getInstance().unregister(mapVisibilityIdlingResource)
     }
 
-    fun openAddNoteFragment() = clickButton(R.id.navigation_add_note)
+    fun openAddNoteFragment() {
+        matchDisplayedView(R.id.navigation_add_note)
+        clickButton(R.id.navigation_add_note)
+    }
 
     fun matchAddNoteFragment() =
             matchDisplayedView(R.id.bottomSheetContainer)
