@@ -29,7 +29,7 @@ import com.alex.mapnotes.model.Note
 import com.alex.mapnotes.nopermissions.NoLocationPermissionFragment
 import com.alex.mapnotes.search.SearchNotesFragment
 import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.button_sheet.*
+import kotlinx.android.synthetic.main.bottom_sheet.*
 import org.koin.android.ext.android.inject
 
 const val DISPLAY_LOCATION = "display_location"
