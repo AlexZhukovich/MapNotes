@@ -60,9 +60,9 @@ class AddressLocationProvider(
     private fun useLastLocation() {
         fusedLocationProviderClient.lastLocation.addOnCompleteListener {
             if (it.isSuccessful && it.result != null) {
-                updatableListener?.invoke(Location(it.result.latitude, it.result.longitude))
+                updatableListener?.invoke(Location(it.result!!.latitude, it.result!!.longitude))
                 if (singleListener != null) {
-                    singleListener?.invoke(Location(it.result.latitude, it.result.longitude))
+                    singleListener?.invoke(Location(it.result!!.latitude, it.result!!.longitude))
                     singleListener = null
                 }
             }
