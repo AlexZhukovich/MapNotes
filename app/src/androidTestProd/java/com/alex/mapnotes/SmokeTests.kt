@@ -30,8 +30,8 @@ class SmokeTests {
     @Rule
     @JvmField
     val chain: RuleChain = RuleChain
-            .outerRule(activityRule)
-            .around(permissionRule)
+            .outerRule(permissionRule)
+            .around(activityRule)
 
     @Test
     fun shouldVerifySuccessfulLogin() {
