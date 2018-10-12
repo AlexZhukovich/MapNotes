@@ -23,7 +23,7 @@ class FirebaseUserRepository(private val appExecutors: AppExecutors) : UserRepos
         suspendCoroutine<Result<AuthUser>> {
             auth.signInWithEmailAndPassword(email, password).addOnCompleteListener { authResultTask ->
                 if (authResultTask.isSuccessful) {
-                    it.resume(Result.Success(AuthUser(authResultTask.result.user.uid)))
+                    it.resume(Result.Success(AuthUser(authResultTask.result?.user?.uid!!)))
                 } else {
                     it.resume(Result.Error(UserNotAuthenticatedException()))
                 }
@@ -35,7 +35,7 @@ class FirebaseUserRepository(private val appExecutors: AppExecutors) : UserRepos
         suspendCoroutine<Result<AuthUser>> {
             auth.createUserWithEmailAndPassword(email, password).addOnCompleteListener { authResultTask ->
                 if (authResultTask.isSuccessful) {
-                    it.resume(Result.Success(AuthUser(authResultTask.result.user.uid)))
+                    it.resume(Result.Success(AuthUser(authResultTask.result?.user?.uid!!)))
                 } else {
                     it.resume(Result.Error(AccountNotCreatedException()))
                 }
