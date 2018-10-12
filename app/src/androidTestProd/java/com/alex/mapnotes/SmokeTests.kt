@@ -87,7 +87,7 @@ class SmokeTests {
             openAddNoteFragment()
             matchAddNoteFragment()
             enterNote(noteText)
-            matchDetectedLocation()
+//            matchDetectedLocation()
             addNote()
             openSearchFragment()
             matchSearchFragment()
