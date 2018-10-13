@@ -8,11 +8,11 @@ fun signInScreen(func: SignInRobot.() -> Unit) = SignInRobot().apply { func() }
 
 class SignInRobot : BaseTestRobot() {
 
-    fun enterEmail(email: String) = enterText(R.id.email, email)
-
-    fun enterPassword(password: String) = enterText(R.id.password, password)
-
-    fun pressSignIn() = clickButton(R.id.signIn)
+    fun signIn(email: String, password: String) {
+        enterText(R.id.email, email)
+        enterText(R.id.password, password)
+        clickButton(R.id.signIn)
+    }
 
     fun matchSignInErrorMessage() {
         val snackbarErrorTextIdlingResource = ViewTextIdlingResource(
