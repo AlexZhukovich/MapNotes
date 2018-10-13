@@ -4,7 +4,6 @@ import android.view.View
 import androidx.test.espresso.Espresso.openActionBarOverflowOrOptionsMenu
 import androidx.test.espresso.IdlingRegistry
 import com.alex.mapnotes.R
-import com.alex.mapnotes.idlingresources.NonEmptyTextIdlingResource
 import com.alex.mapnotes.idlingresources.RecyclerViewSizeIdlingResources
 import com.alex.mapnotes.idlingresources.ViewVisibilityIdlingResource
 
@@ -16,7 +15,7 @@ class HomeScreenRobot : BaseTestRobot() {
         openActionBarOverflowOrOptionsMenu(getActivityInstance())
     }
 
-    fun matchMap() {
+    fun verifyMap() {
         val mapVisibilityIdlingResource =
             ViewVisibilityIdlingResource(R.id.mapContainer, View.VISIBLE)
         IdlingRegistry.getInstance().register(mapVisibilityIdlingResource)
@@ -29,32 +28,28 @@ class HomeScreenRobot : BaseTestRobot() {
     fun openAddNoteFragment() {
         matchDisplayedView(R.id.navigation_add_note)
         clickButton(R.id.navigation_add_note)
+
+        matchDisplayedView(R.id.bottomSheetContainer)
     }
 
-    fun matchAddNoteFragment() =
-            matchDisplayedView(R.id.bottomSheetContainer)
+    fun addNote(text: String) {
+        enterText(R.id.note, text)
 
-    fun enterNote(text: String) = enterText(R.id.note, text)
-
-    fun matchDetectedLocation() {
-        val nonEmptyIdlingResource = NonEmptyTextIdlingResource(R.id.currentLocation)
-        IdlingRegistry.getInstance().register(nonEmptyIdlingResource)
-        matchDisplayedView(R.id.currentLocation)
-        IdlingRegistry.getInstance().unregister(nonEmptyIdlingResource)
+        clickButton(R.id.add)
     }
 
-    fun addNote() = clickButton(R.id.add)
+    fun openSearchFragment() {
+        clickButton(R.id.navigation_search_notes)
 
-    fun openSearchFragment() = clickButton(R.id.navigation_search_notes)
-
-    fun matchSearchFragment() = matchDisplayedView(R.id.searchText)
+        matchDisplayedView(R.id.searchText)
+    }
 
     fun searchNoteByText(text: String) {
         enterText(R.id.searchText, text)
         clickButton(R.id.searchButton)
     }
 
-    fun matchSearchResults(noteText: String) {
+    fun verifySearchResults(noteText: String) {
         val recyclerViewIdlingResource = RecyclerViewSizeIdlingResources(R.id.recyclerView)
         IdlingRegistry.getInstance().register(recyclerViewIdlingResource)
         matchRecyclerViewItemWithText(R.id.recyclerView, noteText)

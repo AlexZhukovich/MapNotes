@@ -17,6 +17,9 @@ import java.util.Date
 
 @RunWith(AndroidJUnit4::class)
 class SmokeTests {
+    private val correctEmail = "test@test.com"
+    private val correctPassword = "test123"
+    private val incorrectPassword = "test-password"
 
     private val permissionRule = GrantPermissionRule.grant(android.Manifest.permission.ACCESS_FINE_LOCATION)
 
@@ -35,64 +38,46 @@ class SmokeTests {
 
     @Test
     fun shouldVerifySuccessfulLogin() {
-        val email = "test@test.com"
-        val password = "test123"
-
         loginScreen {
             pressSignIn()
         }
         signInScreen {
-            enterEmail(email)
-            enterPassword(password)
-            pressSignIn()
+            signIn(correctEmail, correctPassword)
         }
         homeScreen {
-            matchMap()
+            verifyMap()
             signOut()
         }
     }
 
     @Test
     fun shouldVerifyFailureLogin() {
-        val email = "test@test.com"
-        val password = "test-password"
-
         loginScreen {
             pressSignIn()
         }
         signInScreen {
-            enterEmail(email)
-            enterPassword(password)
-            pressSignIn()
+            signIn(correctEmail, incorrectPassword)
             matchSignInErrorMessage()
         }
     }
 
     @Test
     fun shouldVerifyAddingAndSearchNote() {
-        val email = "test@test.com"
-        val password = "test123"
         val noteText = "test note ${Date().time}"
 
         loginScreen {
             pressSignIn()
         }
         signInScreen {
-            enterEmail(email)
-            enterPassword(password)
-            pressSignIn()
+            signIn(correctEmail, correctPassword)
         }
         homeScreen {
-            matchMap()
+            verifyMap()
             openAddNoteFragment()
-            matchAddNoteFragment()
-            enterNote(noteText)
-//            matchDetectedLocation()
-            addNote()
+            addNote(noteText)
             openSearchFragment()
-            matchSearchFragment()
             searchNoteByText(noteText)
-            matchSearchResults(noteText)
+            verifySearchResults(noteText)
             signOut()
         }
     }
