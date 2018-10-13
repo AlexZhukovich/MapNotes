@@ -1,24 +1,27 @@
-package com.alex.mapnotes.matchers
+package com.alex.mapnotes.idlingresources
 
 import android.app.Activity
-import android.widget.TextView
+import android.view.View
 import androidx.annotation.IdRes
 import androidx.test.espresso.IdlingResource
 import androidx.test.runner.lifecycle.ActivityLifecycleMonitorRegistry
 import androidx.test.runner.lifecycle.Stage
 
-class NonEmptyTextIdlingResource(@IdRes private val expectedViewId: Int) : IdlingResource {
+class ViewVisibilityIdlingResource(
+    @IdRes private val expectedViewId: Int,
+    private val expectedViewVisibility: Int
+) : IdlingResource {
 
     private var resourceCallback: IdlingResource.ResourceCallback? = null
 
     override fun getName(): String {
-        return NonEmptyTextIdlingResource::class.java.simpleName
+        return ViewVisibilityIdlingResource::class.java.simpleName
     }
 
     override fun isIdleNow(): Boolean {
-        val view: TextView? = getActivityInstance().findViewById(expectedViewId)
+        val view: View? = getActivityInstance().findViewById(expectedViewId)
         val isIdle = if (view != null) {
-            !view.text.toString().isEmpty() && !view.text.toString().isBlank()
+            view.visibility == expectedViewVisibility
         } else {
             false
         }

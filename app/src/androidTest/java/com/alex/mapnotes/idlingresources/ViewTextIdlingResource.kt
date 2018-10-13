@@ -1,4 +1,4 @@
-package com.alex.mapnotes.matchers
+package com.alex.mapnotes.idlingresources
 
 import android.app.Activity
 import android.widget.TextView
