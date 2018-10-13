@@ -2,7 +2,7 @@ package com.alex.mapnotes.robots
 
 import androidx.test.espresso.IdlingRegistry
 import com.alex.mapnotes.R
-import com.alex.mapnotes.matchers.ViewTextIdlingResource
+import com.alex.mapnotes.idlingresources.ViewTextIdlingResource
 
 fun signInScreen(func: SignInRobot.() -> Unit) = SignInRobot().apply { func() }
 
