@@ -4,9 +4,9 @@ import android.view.View
 import androidx.test.espresso.Espresso.openActionBarOverflowOrOptionsMenu
 import androidx.test.espresso.IdlingRegistry
 import com.alex.mapnotes.R
-import com.alex.mapnotes.matchers.NonEmptyTextIdlingResource
-import com.alex.mapnotes.matchers.RecyclerViewSizeIdlingResources
-import com.alex.mapnotes.matchers.ViewVisibilityIdlingResource
+import com.alex.mapnotes.idlingresources.NonEmptyTextIdlingResource
+import com.alex.mapnotes.idlingresources.RecyclerViewSizeIdlingResources
+import com.alex.mapnotes.idlingresources.ViewVisibilityIdlingResource
 
 fun homeScreen(func: HomeScreenRobot.() -> Unit) = HomeScreenRobot().apply { func() }
 
