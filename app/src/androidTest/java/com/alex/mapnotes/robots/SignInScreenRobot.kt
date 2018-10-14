@@ -4,9 +4,9 @@ import androidx.test.espresso.IdlingRegistry
 import com.alex.mapnotes.R
 import com.alex.mapnotes.idlingresources.ViewTextIdlingResource
 
-fun signInScreen(func: SignInRobot.() -> Unit) = SignInRobot().apply { func() }
+fun signInScreen(func: SignInScreenRobot.() -> Unit) = SignInScreenRobot().apply { func() }
 
-class SignInRobot : BaseTestRobot() {
+class SignInScreenRobot : BaseTestRobot() {
 
     fun signIn(email: String, password: String) {
         enterText(R.id.email, email)
@@ -14,7 +14,7 @@ class SignInRobot : BaseTestRobot() {
         clickButton(R.id.signIn)
     }
 
-    fun matchSignInErrorMessage() {
+    fun verifySignInErrorMessage() {
         val snackbarErrorTextIdlingResource = ViewTextIdlingResource(
                 com.google.android.material.R.id.snackbar_text,
                 R.string.error_user_cannot_be_authenticated)
