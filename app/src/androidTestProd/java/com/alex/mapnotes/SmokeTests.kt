@@ -33,7 +33,7 @@ class SmokeTests {
             display()
         }
         loginScreen {
-            pressSignIn()
+            openSignIn()
         }
         signInScreen {
             signIn(correctEmail, correctPassword)
@@ -50,11 +50,11 @@ class SmokeTests {
             display()
         }
         loginScreen {
-            pressSignIn()
+            openSignIn()
         }
         signInScreen {
             signIn(correctEmail, incorrectPassword)
-            matchSignInErrorMessage()
+            verifySignInErrorMessage()
         }
     }
 
@@ -65,7 +65,7 @@ class SmokeTests {
             display()
         }
         loginScreen {
-            pressSignIn()
+            openSignIn()
         }
         signInScreen {
             signIn(correctEmail, correctPassword)
