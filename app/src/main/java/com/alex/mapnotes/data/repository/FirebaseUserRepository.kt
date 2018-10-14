@@ -66,9 +66,7 @@ class FirebaseUserRepository(private val appExecutors: AppExecutors) : UserRepos
     override suspend fun getHumanReadableName(userId: String): Result<String> = withContext(appExecutors.networkContext) {
         suspendCoroutine<Result<String>> {
             database.getReference(usersPath).child(userId).addValueEventListener(object : ValueEventListener {
-                override fun onCancelled(databaseError: DatabaseError) {
-                    it.resume(Result.Error(databaseError.toException()))
-                }
+                override fun onCancelled(databaseError: DatabaseError) {}
 
                 override fun onDataChange(dataSnapshot: DataSnapshot) {
                     if (dataSnapshot.exists()) {
@@ -80,18 +78,16 @@ class FirebaseUserRepository(private val appExecutors: AppExecutors) : UserRepos
     }
 
     override suspend fun getUserIdFromHumanReadableName(userName: String): Result<String> = withContext(appExecutors.networkContext) {
-        suspendCoroutine<Result<String>> {
+        suspendCoroutine<Result<String>> { continuation ->
             database.getReference(usersPath)
                     .orderByChild(nameKey)
                     .equalTo(userName)
                     .addListenerForSingleValueEvent(object : ValueEventListener {
-                        override fun onCancelled(databaseError: DatabaseError) {
-                            it.resume(Result.Error(databaseError.toException()))
-                        }
+                        override fun onCancelled(p0: DatabaseError) {}
 
                         override fun onDataChange(dataSnapshot: DataSnapshot) {
                             if (dataSnapshot.exists()) {
-                                it.resume(Result.Success(dataSnapshot.children.first().key.toString()))
+                                continuation.resume(Result.Success(dataSnapshot.children.first().key.toString()))
                             }
                         }
                     })

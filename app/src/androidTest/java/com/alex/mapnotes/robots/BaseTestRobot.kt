@@ -7,7 +7,7 @@ import androidx.test.espresso.ViewInteraction
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.action.ViewActions.replaceText
 import androidx.test.espresso.action.ViewActions.closeSoftKeyboard
-import androidx.test.espresso.assertion.ViewAssertions
+import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.espresso.matcher.ViewMatchers.withText
 import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
@@ -25,17 +25,22 @@ open class BaseTestRobot {
         onView(withId(viewId))
                 .perform(click())
 
+    fun clickButtonWithText(textId: Int): ViewInteraction =
+            onView(withText(textId))
+                    .check(matches(isDisplayed()))
+                    .perform(click())
+
     fun matchDisplayedText(textId: Int): ViewInteraction =
         onView(withText(textId))
-                .check(ViewAssertions.matches(isDisplayed()))
+                .check(matches(isDisplayed()))
 
     fun matchDisplayedView(viewId: Int): ViewInteraction =
         onView(withId(viewId))
-                .check(ViewAssertions.matches(isDisplayed()))
+                .check(matches(isDisplayed()))
 
     fun matchRecyclerViewItemWithText(viewId: Int, text: String): ViewInteraction =
         onView(withId(viewId))
-            .check(ViewAssertions.matches(RecyclerViewMatchers.withItemText(text)))
+            .check(matches(RecyclerViewMatchers.withItemText(text)))
 
     protected fun getActivityInstance(): Activity {
         var currentActivity: Activity? = null

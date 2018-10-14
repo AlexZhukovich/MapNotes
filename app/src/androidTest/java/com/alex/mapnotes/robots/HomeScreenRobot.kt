@@ -13,6 +13,7 @@ class HomeScreenRobot : BaseTestRobot() {
 
     fun signOut() {
         openActionBarOverflowOrOptionsMenu(getActivityInstance())
+        clickButtonWithText(R.string.nav_sign_out_title)
     }
 
     fun verifyMap() {
