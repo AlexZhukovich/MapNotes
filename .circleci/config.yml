@@ -55,7 +55,6 @@ references:
       TERM: dumb
 
   ## Google Services
-
   export_gservices_key: &export_gservices_key
     run:
       name: Export Google Services key environment variable
@@ -205,12 +204,12 @@ workflows:
   version: 2
   workflow:
     jobs:
-      - buil_debug
+      - build_debug
       - test_unit
       - test_instrumentation:
           requires:
             - test_unit
-            - buil_debug
+            - build_debug
       - report_coverage:
           requires:
             - test_unit
