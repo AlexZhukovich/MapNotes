@@ -78,7 +78,7 @@ references:
 jobs:
 
   ## Build dev debug APK and instrumented test APK
-  build_dev_debug:
+  build_debug:
     <<: *android_config
     steps:
       - checkout
@@ -94,63 +94,14 @@ jobs:
       - *decode_gservices_key
       - run:
           name: Gradle build (debug)
-          command: ./gradlew :app:assembleDevDebug :app:assembleDevDebugAndroidTest
+          command: ./gradlew :app:assembleDebug :app:assembleDebugAndroidTest
       - *persist_debug_workspace
       - store_artifacts:
           path: app/build/outputs/apk/
           destination: /apk/
 
-  ## Build prod debug APK and instrumented test APK
-  build_prod_debug:
-    <<: *android_config
-    steps:
-    - checkout
-    - *restore_cache
-    - run:
-        name: chmod permissions
-        command: chmod +x ./gradlew
-    - run:
-        name: Download dependencies
-        command: ./gradlew androidDependencies
-    - *save_cache
-    - *export_gservices_key
-    - *decode_gservices_key
-    - run:
-        name: Gradle build (debug)
-        command: ./gradlew :app:assembleProdDebug :app:assembleProdDebugAndroidTest
-    - *persist_debug_workspace
-    - store_artifacts:
-        path: app/build/outputs/apk/
-        destination: /apk/
-
   ## Run unit tests
-  test_dev_unit:
-    <<: *android_config
-    steps:
-      - checkout
-      - *restore_cache
-      - run:
-          name: chmod permissions
-          command: chmod +x ./gradlew
-      - run:
-          name: Download dependencies
-          command: ./gradlew androidDependencies
-      - *save_cache
-      - *export_gservices_key
-      - *decode_gservices_key
-      - run:
-          name: Run unit tests
-          command: ./gradlew -PciBuild=true :app:testDevDebugUnitTest
-      - *persist_debug_workspace
-      - store_artifacts:
-          path: app/build/reports/
-          destination: /reports/
-      - store_test_results:
-          path: app/build/test-results/
-          destination: /test-results/
-
-  ## Run unit tests
-  test_prod_unit:
+  test_unit:
     <<: *android_config
     steps:
     - checkout
@@ -166,7 +117,7 @@ jobs:
     - *decode_gservices_key
     - run:
         name: Run unit tests
-        command: ./gradlew -PciBuild=true :app:testProdDebugUnitTest
+        command: ./gradlew -PciBuild=true :app:testDebugUnitTest
     - *persist_debug_workspace
     - store_artifacts:
         path: app/build/reports/
@@ -175,34 +126,8 @@ jobs:
         path: app/build/test-results/
         destination: /test-results/
 
-  ## Run dev instrumentation tests
-  test_dev_instrumented:
-    <<: *gcloud_config
-    steps:
-      - *attach_debug_workspace
-      - *export_gcloud_key
-      - *decode_gcloud_key
-      - run:
-          name: Set Google Cloud target project
-          command: gcloud config set project mapnotes-ea9d9
-      - run:
-          name: Authenticate with Google Cloud
-          command: >
-            gcloud auth activate-service-account firebase-adminsdk-ovtn6@mapnotes-ea9d9.iam.gserviceaccount.com \
-              --key-file ${HOME}/client-secret.json
-      - run:
-          name: Run instrumented test on Firebase Test Lab
-          command: >
-            gcloud firebase test android run \
-              --type instrumentation \
-              --app app/build/outputs/apk/dev/debug/app-dev-debug.apk \
-              --test app/build/outputs/apk/androidTest/dev/debug/app-dev-debug-androidTest.apk \
-              --device model=Pixel2,version=28,locale=en_US,orientation=portrait \
-              --timeout 20m \
-              --environment-variables coverage=true,coverageFile=/sdcard/dev-coverage.ec --directories-to-pull=/sdcard/
-
-  ## Run prod instrumentation tests
-  test_prod_instrumented:
+  ## Run instrumentation tests
+  test_instrumentation:
     <<: *gcloud_config
     steps:
     - *attach_debug_workspace
@@ -221,36 +146,17 @@ jobs:
         command: >
           gcloud firebase test android run \
             --type instrumentation \
-            --app app/build/outputs/apk/prod/debug/app-prod-debug.apk \
-            --test app/build/outputs/apk/androidTest/prod/debug/app-prod-debug-androidTest.apk \
+            --app app/build/outputs/apk/debug/app-debug.apk \
+            --test app/build/outputs/apk/androidTest/debug/app-debug-androidTest.apk \
             --device model=Pixel2,version=28,locale=en_US,orientation=portrait \
             --timeout 20m \
-            --environment-variables coverage=true,coverageFile=/sdcard/prod-coverage.ec --directories-to-pull=/sdcard/
-
-  ## Download coverage files from dev and prod instrumentation runs
-  download_coverage_from_test_lab:
-    <<: *gcloud_config
-    steps:
-    - *attach_debug_workspace
-    - *export_gcloud_key
-    - *decode_gcloud_key
-    - run:
-        name: Set Google Cloud target project
-        command: gcloud config set project mapnotes-ea9d9
-    - run:
-        name: Authenticate with Google Cloud
-        command: >
-          gcloud auth activate-service-account firebase-adminsdk-ovtn6@mapnotes-ea9d9.iam.gserviceaccount.com \
-            --key-file ${HOME}/client-secret.json
+            --environment-variables coverage=true,coverageFile=/sdcard/coverage.ec --directories-to-pull=/sdcard/
     - run:
         name: Create directory to store test results
         command: mkdir firebase
     - run:
         name: Download instrumented test results from Firebase Test Lab
-        command: gsutil -m cp -r -U "`gsutil ls gs://test-lab-481xmdq2w17is-h08zk45a575ds | tail -1`Pixel2-28-en_US-portrait/artifacts/sdcard/*.ec" /root/workspace/firebase/
-    - run:
-        name: Download instrumented test results from Firebase Test Lab
-        command: gsutil -m cp -r -U "`gsutil ls gs://test-lab-481xmdq2w17is-h08zk45a575ds | tail -2 | head -n1`Pixel2-28-en_US-portrait/artifacts/sdcard/*.ec" /root/workspace/firebase/
+        command: gsutil -m cp -r -U "`gsutil ls gs://test-lab-481xmdq2w17is-h08zk45a575ds | tail -1`*" /root/workspace/firebase/
     - *persist_firebase_workspace
     - store_artifacts:
         path: firebase/
@@ -260,66 +166,52 @@ jobs:
   report_coverage:
     <<: *android_config
     steps:
-      - checkout
-      - *restore_cache
-      - run:
-          name: chmod permissions
-          command: chmod +x ./gradlew
-      - run:
-          name: Download dependencies
-          command: ./gradlew androidDependencies
-      - *export_gservices_key
-      - *decode_gservices_key    
-      - *attach_debug_workspace
-      - *attach_firebase_workspace
-      - run:
-          name: Move Firebase dev coverage report
-          command: >
-            mkdir -p app/build/outputs/code_coverage/devDebugAndroidTest/connected && \
-              cp firebase/dev-coverage.ec app/build/outputs/code_coverage/devDebugAndroidTest/connected/dev-coverage.ec
-      - run:
-          name: Move Firebase prod coverage report
-          command: >
-            mkdir -p app/build/outputs/code_coverage/devDebugAndroidTest/connected && \
-              cp firebase/prod-coverage.ec app/build/outputs/code_coverage/devDebugAndroidTest/connected/prod-coverage.ec
-      - run:
-          name: Generate lint report
-          command: ./gradlew :app:lint
-      - run:
-          name: Generate ktlint report
-          command: ./gradlew :app:ktlint
-      - *export_gservices_key
-      - *decode_gservices_key
-      - run:
-          name: Generate JaCoCo report
-          command: ./gradlew -PciBuild=true :app:jacocoTestReport
-      - run:
-          name: Upload coverage report to CodeCov
-          command: bash <(curl -s https://codecov.io/bash)
-      - store_artifacts:
-          path: app/build/reports/
-          destination: /reports/
+    - checkout
+    - *restore_cache
+    - run:
+        name: chmod permissions
+        command: chmod +x ./gradlew
+    - run:
+        name: Download dependencies
+        command: ./gradlew androidDependencies
+    - *export_gservices_key
+    - *decode_gservices_key
+    - *attach_debug_workspace
+    - *attach_firebase_workspace
+    - run:
+        name: Move Firebase coverage report
+        command: >
+          mkdir -p app/build/outputs/code-coverage/connected && \
+            cp firebase/Pixel2-28-en_US-portrait/artifacts/sdcard/coverage.ec app/build/outputs/code-coverage/connected/coverage.ec
+    - run:
+        name: Generate lint report
+        command: ./gradlew :app:lint
+    - run:
+        name: Generate ktlint report
+        command: ./gradlew :app:ktlint
+    - *export_gservices_key
+    - *decode_gservices_key
+    - run:
+        name: Generate JaCoCo report
+        command: ./gradlew -PciBuild=true :app:jacocoTestReport
+    - run:
+        name: Upload coverage report to CodeCov
+        command: bash <(curl -s https://codecov.io/bash)
+    - store_artifacts:
+        path: app/build/reports/
+        destination: /reports/
 
 workflows:
   version: 2
   workflow:
     jobs:
-      - build_dev_debug
-      - build_prod_debug
-      - test_dev_unit
-      - test_prod_unit
-      - test_dev_instrumented:
+      - buil_debug
+      - test_unit
+      - test_instrumentation:
           requires:
-            - build_dev_debug
-      - test_prod_instrumented:
-          requires:
-            - build_prod_debug
-      - download_coverage_from_test_lab:
-          requires:
-            - test_dev_instrumented
-            - test_prod_instrumented
+            - test_unit
+            - buil_debug
       - report_coverage:
           requires:
-            - test_dev_unit
-            - test_prod_unit
-            - download_coverage_from_test_lab
+            - test_unit
+            - test_instrumentation

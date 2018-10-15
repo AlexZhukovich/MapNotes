@@ -14,9 +14,10 @@ import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
 import androidx.test.rule.ActivityTestRule
 import androidx.test.runner.AndroidJUnit4
 import com.alex.mapnotes.FragmentTestActivity
-import com.alex.mapnotes.MockMapNotesApp
 import com.alex.mapnotes.R
 import com.alex.mapnotes.data.Result
+import com.alex.mapnotes.data.repository.NotesRepository
+import com.alex.mapnotes.data.repository.UserRepository
 import com.alex.mapnotes.matchers.RecyclerViewMatchers.withItemCount
 import com.alex.mapnotes.model.Note
 import com.alex.mapnotes.testAppModule
@@ -31,13 +32,18 @@ import org.junit.Ignore
 import org.junit.runner.RunWith
 import org.koin.standalone.StandAloneContext.closeKoin
 import org.koin.standalone.StandAloneContext.loadKoinModules
+import org.koin.standalone.inject
+import org.koin.test.KoinTest
 
 @RunWith(AndroidJUnit4::class)
-class SearchNotesFragmentTest {
+class SearchNotesFragmentTest : KoinTest {
     private val searchInput = "text"
     private val emptySearchInput = ""
     private val searchUserCategoryPosition = 1
     private val testUID = "1111111"
+
+    private val userRepository: UserRepository by inject()
+    private val notesRepository: NotesRepository by inject()
 
     private val testNotes: List<Note> = listOf(
             Note(text = "test note 1_1", user = "11111111"),
@@ -56,7 +62,7 @@ class SearchNotesFragmentTest {
 
     @Test
     fun shouldVerifyLayout() {
-        coEvery { MockMapNotesApp.mockedNotesRepository.getNotes(any()) } returns Result.Success(listOf())
+        coEvery { notesRepository.getNotes(any()) } returns Result.Success(listOf())
         activityRule.activity.setFragment(SearchNotesFragment())
 
         onView(withId(R.id.recyclerView))
@@ -78,7 +84,7 @@ class SearchNotesFragmentTest {
     @Test
     fun shouldDisplayNotes() {
         val expectedItemCount = testNotes.size
-        coEvery { MockMapNotesApp.mockedNotesRepository.getNotes(any()) } returns Result.Success(testNotes)
+        coEvery { notesRepository.getNotes(any()) } returns Result.Success(testNotes)
         activityRule.activity.setFragment(SearchNotesFragment())
 
         onView(withId(R.id.recyclerView))
@@ -87,7 +93,7 @@ class SearchNotesFragmentTest {
 
     @Test @Ignore
     fun shouldDisplayLoadingNotesError() {
-        coEvery { MockMapNotesApp.mockedNotesRepository.getNotes(any()) } returns Result.Error(RuntimeException())
+        coEvery { notesRepository.getNotes(any()) } returns Result.Error(RuntimeException())
         activityRule.activity.setFragment(SearchNotesFragment())
 
         onView(withId(R.id.recyclerView))
@@ -111,8 +117,8 @@ class SearchNotesFragmentTest {
 
     @Test
     fun shouldDisplayUnknownUserUser() {
-        coEvery { MockMapNotesApp.mockedNotesRepository.getNotes(any()) } returns Result.Success(listOf())
-        coEvery { MockMapNotesApp.mockedUserRepository.getUserIdFromHumanReadableName(any()) } returns Result.Error(RuntimeException())
+        coEvery { notesRepository.getNotes(any()) } returns Result.Success(listOf())
+        coEvery { userRepository.getUserIdFromHumanReadableName(any()) } returns Result.Error(RuntimeException())
         activityRule.activity.setFragment(SearchNotesFragment())
 
         onView(withId(R.id.recyclerView))
@@ -139,9 +145,9 @@ class SearchNotesFragmentTest {
     @Test
     fun shouldSearchByUserAndDisplayResults() {
         val expectedItemCount = testNotes.size
-        coEvery { MockMapNotesApp.mockedNotesRepository.getNotes(any()) } returns Result.Success(listOf())
-        coEvery { MockMapNotesApp.mockedUserRepository.getUserIdFromHumanReadableName(any()) } returns Result.Success(testUID)
-        coEvery { MockMapNotesApp.mockedNotesRepository.getNotesByUser(any(), any()) } returns Result.Success(testNotes)
+        coEvery { notesRepository.getNotes(any()) } returns Result.Success(listOf())
+        coEvery { userRepository.getUserIdFromHumanReadableName(any()) } returns Result.Success(testUID)
+        coEvery { notesRepository.getNotesByUser(any(), any()) } returns Result.Success(testNotes)
         activityRule.activity.setFragment(SearchNotesFragment())
 
         onView(withId(R.id.searchText))
@@ -165,8 +171,8 @@ class SearchNotesFragmentTest {
     @Test
     fun shouldSearchByNotesAndDisplayResult() {
         val expectedItemCount = testNotes.size
-        coEvery { MockMapNotesApp.mockedNotesRepository.getNotes(any()) } returns Result.Success(listOf())
-        coEvery { MockMapNotesApp.mockedNotesRepository.getNotesByNoteText(any(), any()) } returns Result.Success(testNotes)
+        coEvery { notesRepository.getNotes(any()) } returns Result.Success(listOf())
+        coEvery { notesRepository.getNotesByNoteText(any(), any()) } returns Result.Success(testNotes)
         activityRule.activity.setFragment(SearchNotesFragment())
 
         onView(withId(R.id.searchText))
@@ -182,9 +188,9 @@ class SearchNotesFragmentTest {
     @Test
     fun shouldSearchIncorrectDataAndDisplayCorrectDataAfterClearRequest() {
         val expectedItemCount = testNotes.size
-        coEvery { MockMapNotesApp.mockedNotesRepository.getNotes(any()) } returns Result.Success(listOf())
-        coEvery { MockMapNotesApp.mockedNotesRepository.getNotesByNoteText(any(), any()) } returns Result.Error(RuntimeException())
-        coEvery { MockMapNotesApp.mockedNotesRepository.getNotes(any()) } returns Result.Success(testNotes)
+        coEvery { notesRepository.getNotes(any()) } returns Result.Success(listOf())
+        coEvery { notesRepository.getNotesByNoteText(any(), any()) } returns Result.Error(RuntimeException())
+        coEvery { notesRepository.getNotes(any()) } returns Result.Success(testNotes)
         activityRule.activity.setFragment(SearchNotesFragment())
 
         onView(withId(R.id.searchText))

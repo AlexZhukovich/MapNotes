@@ -40,19 +40,6 @@ android {
         versionName "1.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
-    flavorDimensions "server"
-    productFlavors {
-        prod {
-            dimension "server"
-            versionNameSuffix "-prod"
-            testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
-        }
-        dev {
-            dimension "server"
-            versionNameSuffix "-dev"
-            testInstrumentationRunner "com.alex.mapnotes.MockTestRunner"
-        }
-    }
     buildTypes {
         release {
             minifyEnabled false
@@ -88,7 +75,7 @@ android {
     }
 }
 
-task jacocoTestReport(type : JacocoReport, dependsOn : 'testDevDebugUnitTest') {
+task jacocoTestReport(type : JacocoReport, dependsOn : 'testDebugUnitTest') {
     group = "Reporting"
     description = "Generate Jacoco coverage reports for Debug build"
 
@@ -115,7 +102,7 @@ task jacocoTestReport(type : JacocoReport, dependsOn : 'testDevDebugUnitTest') {
     def localTestsFiles = fileTree("${buildDir}/jacoco/")
             .filter { it.name.endsWith(".exec") }
             .filter { it.isFile() }
-    def instrumentationTestsFiles = fileTree("${buildDir}/outputs/code_coverage/devDebugAndroidTest/connected/")
+    def instrumentationTestsFiles = fileTree("${buildDir}/outputs/code_coverage/debugAndroidTest/connected/")
             .filter { it.name.endsWith(".ec") }
             .filter { it.isFile() }
 

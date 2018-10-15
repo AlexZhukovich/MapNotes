@@ -1,14 +1,13 @@
 package com.alex.mapnotes.splash
 
-import android.content.Intent
-import androidx.test.InstrumentationRegistry
 import androidx.test.espresso.intent.Intents
 import androidx.test.espresso.intent.matcher.IntentMatchers
 import androidx.test.rule.ActivityTestRule
 import androidx.test.rule.GrantPermissionRule
 import androidx.test.runner.AndroidJUnit4
-import com.alex.mapnotes.MockMapNotesApp
 import com.alex.mapnotes.data.Result
+import com.alex.mapnotes.data.provider.LocationProvider
+import com.alex.mapnotes.data.repository.UserRepository
 import com.alex.mapnotes.home.HomeActivity
 import com.alex.mapnotes.login.LoginActivity
 import com.alex.mapnotes.model.AuthUser
@@ -23,9 +22,14 @@ import org.junit.Ignore
 import org.junit.runner.RunWith
 import org.koin.standalone.StandAloneContext.closeKoin
 import org.koin.standalone.StandAloneContext.loadKoinModules
+import org.koin.standalone.inject
+import org.koin.test.KoinTest
 
 @RunWith(AndroidJUnit4::class)
-class SplashActivityTest {
+class SplashActivityTest : KoinTest {
+
+    private val userRepository: UserRepository by inject()
+    private val locationProvider: LocationProvider by inject()
 
     @Rule @JvmField
     val permissionRule: GrantPermissionRule = GrantPermissionRule.grant(android.Manifest.permission.ACCESS_FINE_LOCATION)
@@ -41,11 +45,11 @@ class SplashActivityTest {
 
     @Test @Ignore
     fun shouldOpenHomeActivityWhenUserIsAuthenticated() {
-        every { MockMapNotesApp.mockedLocationProvider.startLocationUpdates() } answers { nothing }
-        every { MockMapNotesApp.mockedLocationProvider.stopLocationUpdates() } answers { nothing }
-        every { MockMapNotesApp.mockedLocationProvider.addUpdatableLocationListener(any()) } answers { nothing }
-        every { MockMapNotesApp.mockedLocationProvider.isLocationAvailable() } returns false
-        coEvery { MockMapNotesApp.mockedUserRepository.getCurrentUser() } returns Result.Success(AuthUser("11111"))
+        every { locationProvider.startLocationUpdates() } answers { nothing }
+        every { locationProvider.stopLocationUpdates() } answers { nothing }
+        every { locationProvider.addUpdatableLocationListener(any()) } answers { nothing }
+        every { locationProvider.isLocationAvailable() } returns false
+        coEvery { userRepository.getCurrentUser() } returns Result.Success(AuthUser("11111"))
         launchActivity()
 
         Intents.intended(IntentMatchers.hasComponent(HomeActivity::class.java.name))
@@ -53,7 +57,7 @@ class SplashActivityTest {
 
     @Test
     fun shouldOpenLoginActivityWhenUserIsNotAuthenticated() {
-        coEvery { MockMapNotesApp.mockedUserRepository.getCurrentUser() } returns Result.Error(RuntimeException())
+        coEvery { userRepository.getCurrentUser() } returns Result.Error(RuntimeException())
         launchActivity()
 
         Intents.intended(IntentMatchers.hasComponent(LoginActivity::class.java.name))
@@ -66,6 +70,6 @@ class SplashActivityTest {
     }
 
     private fun launchActivity() {
-        activityRule.launchActivity(Intent(InstrumentationRegistry.getInstrumentation().targetContext, SplashActivity::class.java))
+        activityRule.launchActivity(null)
     }
 }
