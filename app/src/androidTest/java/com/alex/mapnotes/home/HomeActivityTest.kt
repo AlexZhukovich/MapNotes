@@ -14,9 +14,11 @@ import androidx.test.espresso.matcher.ViewMatchers.isEnabled
 import androidx.test.rule.ActivityTestRule
 import androidx.test.rule.GrantPermissionRule
 import androidx.test.runner.AndroidJUnit4
-import com.alex.mapnotes.MockMapNotesApp
 import com.alex.mapnotes.R
 import com.alex.mapnotes.data.Result
+import com.alex.mapnotes.data.provider.LocationProvider
+import com.alex.mapnotes.data.repository.NotesRepository
+import com.alex.mapnotes.data.repository.UserRepository
 import com.alex.mapnotes.login.LoginActivity
 import com.alex.mapnotes.matchers.BottomNavigationViewMatchers.hasItemTitle
 import com.alex.mapnotes.matchers.BottomNavigationViewMatchers.withItemCount
@@ -33,9 +35,15 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.koin.standalone.StandAloneContext.closeKoin
 import org.koin.standalone.StandAloneContext.loadKoinModules
+import org.koin.standalone.inject
+import org.koin.test.KoinTest
 
 @RunWith(AndroidJUnit4::class)
-class HomeActivityTest {
+class HomeActivityTest : KoinTest {
+
+    private val locationProvider: LocationProvider by inject()
+    private val userRepository: UserRepository by inject()
+    private val notesRepository: NotesRepository by inject()
 
     @Rule @JvmField
     val activityRule = ActivityTestRule<HomeActivity>(HomeActivity::class.java, true, false)
@@ -46,11 +54,11 @@ class HomeActivityTest {
     @Before
     fun setUp() {
         loadKoinModules(listOf(testAppModule))
-        every { MockMapNotesApp.mockedLocationProvider.startLocationUpdates() } answers { nothing }
-        every { MockMapNotesApp.mockedLocationProvider.stopLocationUpdates() } answers { nothing }
-        every { MockMapNotesApp.mockedLocationProvider.addUpdatableLocationListener(any()) } answers { nothing }
-        every { MockMapNotesApp.mockedLocationProvider.isLocationAvailable() } returns true
-        coEvery { MockMapNotesApp.mockedUserRepository.getCurrentUser() } returns Result.Success(AuthUser("1111111"))
+        every { locationProvider.startLocationUpdates() } answers { nothing }
+        every { locationProvider.stopLocationUpdates() } answers { nothing }
+        every { locationProvider.addUpdatableLocationListener(any()) } answers { nothing }
+        every { locationProvider.isLocationAvailable() } returns true
+        coEvery { userRepository.getCurrentUser() } returns Result.Success(AuthUser("1111111"))
 
         activityRule.launchActivity(null)
     }
@@ -84,7 +92,7 @@ class HomeActivityTest {
 
     @Test
     fun shouldVerifySearchNoteFragment() {
-        coEvery { MockMapNotesApp.mockedNotesRepository.getNotes(any()) } returns Result.Success(listOf())
+        coEvery { notesRepository.getNotes(any()) } returns Result.Success(listOf())
 
         onView(withId(R.id.navigation_search_notes))
                 .perform(click())
@@ -110,7 +118,7 @@ class HomeActivityTest {
 
     @Test
     fun shouldVerifySignOut() {
-        coEvery { MockMapNotesApp.mockedUserRepository.signOut() } answers { nothing }
+        coEvery { userRepository.signOut() } answers { nothing }
 
         Intents.init()
         openActionBarOverflowOrOptionsMenu(activityRule.activity)
