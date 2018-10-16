@@ -26,6 +26,8 @@ class HomeScreenRobot : BaseTestRobot() {
         IdlingRegistry.getInstance().unregister(mapVisibilityIdlingResource)
     }
 
+    fun verifyNoteHint(textId: Int) = matchHint(R.id.note, textId)
+
     fun openAddNoteFragment() {
         matchDisplayedView(R.id.navigation_add_note)
         clickButton(R.id.navigation_add_note)
@@ -33,9 +35,14 @@ class HomeScreenRobot : BaseTestRobot() {
         matchDisplayedView(R.id.bottomSheetContainer)
     }
 
-    fun addNote(text: String) {
+    fun enterNoteText(text: String) {
         enterText(R.id.note, text)
+    }
 
+    fun pressAddButton() = clickButton(R.id.add)
+
+    fun addNote(text: String) {
+        enterNoteText(text)
         clickButton(R.id.add)
     }
 
@@ -56,4 +63,9 @@ class HomeScreenRobot : BaseTestRobot() {
         matchRecyclerViewItemWithText(R.id.recyclerView, noteText)
         IdlingRegistry.getInstance().unregister(recyclerViewIdlingResource)
     }
+
+    fun verifyAddButtonIsEnabled() = matchViewInEnabled(R.id.add)
+
+    fun verifyAddButtonIsDisabled() = matchViewIsDisabled(R.id.add)
+    fun verifyNoteText(text: String) = matchText(R.id.note, text)
 }

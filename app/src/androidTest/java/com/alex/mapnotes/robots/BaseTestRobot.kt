@@ -10,10 +10,13 @@ import androidx.test.espresso.action.ViewActions.closeSoftKeyboard
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.espresso.matcher.ViewMatchers.withText
+import androidx.test.espresso.matcher.ViewMatchers.withHint
 import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
+import androidx.test.espresso.matcher.ViewMatchers.isEnabled
 import androidx.test.runner.lifecycle.ActivityLifecycleMonitorRegistry
 import androidx.test.runner.lifecycle.Stage
 import com.alex.mapnotes.matchers.RecyclerViewMatchers
+import org.hamcrest.CoreMatchers.not
 
 open class BaseTestRobot {
 
@@ -33,6 +36,26 @@ open class BaseTestRobot {
     fun matchDisplayedText(textId: Int): ViewInteraction =
         onView(withText(textId))
                 .check(matches(isDisplayed()))
+
+    fun matchText(viewId: Int, text: String) {
+        onView(withId(viewId))
+                .check(matches(withText(text)))
+    }
+
+    fun matchHint(viewId: Int, textId: Int) {
+        onView(withId(viewId))
+                .check(matches(withHint(textId)))
+    }
+
+    fun matchViewIsDisabled(viewId: Int) {
+        onView(withId(viewId))
+                .check(matches(not(isEnabled())))
+    }
+
+    fun matchViewInEnabled(viewId: Int) {
+        onView(withId(viewId))
+                .check(matches(isEnabled()))
+    }
 
     fun matchDisplayedView(viewId: Int): ViewInteraction =
         onView(withId(viewId))
