@@ -3,7 +3,10 @@ package com.alex.mapnotes.robots
 import android.view.View
 import androidx.test.espresso.Espresso.openActionBarOverflowOrOptionsMenu
 import androidx.test.espresso.IdlingRegistry
+import androidx.test.espresso.intent.Intents
+import androidx.test.espresso.intent.matcher.IntentMatchers
 import com.alex.mapnotes.R
+import com.alex.mapnotes.home.HomeActivity
 import com.alex.mapnotes.idlingresources.RecyclerViewSizeIdlingResources
 import com.alex.mapnotes.idlingresources.ViewVisibilityIdlingResource
 
@@ -68,4 +71,8 @@ class HomeScreenRobot : BaseTestRobot() {
 
     fun verifyAddButtonIsDisabled() = matchViewIsDisabled(R.id.add)
     fun verifyNoteText(text: String) = matchText(R.id.note, text)
+
+    fun isSuccessfullyLoaded() {
+        Intents.intended(IntentMatchers.hasComponent(HomeActivity::class.java.name))
+    }
 }
