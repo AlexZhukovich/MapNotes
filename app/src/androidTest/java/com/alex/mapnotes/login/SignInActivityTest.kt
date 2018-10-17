@@ -6,8 +6,7 @@ import androidx.test.espresso.intent.Intents
 import androidx.test.rule.ActivityTestRule
 import androidx.test.rule.GrantPermissionRule
 import androidx.test.runner.AndroidJUnit4
-import com.alex.mapnotes.data.provider.LocationProvider
-import com.alex.mapnotes.data.repository.UserRepository
+import com.alex.mapnotes.MockTest
 import com.alex.mapnotes.login.signin.SignInActivity
 import com.alex.mapnotes.robots.homeScreen
 import com.alex.mapnotes.robots.prepare
@@ -19,21 +18,17 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.RuleChain
 import org.junit.runner.RunWith
-import org.koin.test.KoinTest
 import org.koin.standalone.StandAloneContext.closeKoin
 import org.koin.standalone.StandAloneContext.loadKoinModules
-import org.koin.standalone.inject
 
 @RunWith(AndroidJUnit4::class)
-class SignInActivityTest : KoinTest {
+class SignInActivityTest : MockTest() {
     private val emptyEmail = ""
     private val correctEmail = "test@test.com"
     private val incorrectEmail = "test"
     private val password = "password"
     private val emptyPassword = ""
-
-    private val userRepository: UserRepository by inject()
-    private val locationProvider: LocationProvider by inject()
+    private val signInActivityScope = this
 
     private val permissionRule: GrantPermissionRule = GrantPermissionRule.grant(android.Manifest.permission.ACCESS_FINE_LOCATION)
 
@@ -46,7 +41,8 @@ class SignInActivityTest : KoinTest {
             .around(activityRule)
 
     @Before
-    fun setUp() {
+    override fun setUp() {
+        super.setUp()
         loadKoinModules(listOf(testAppModule))
         activityRule.launchActivity(Intent(InstrumentationRegistry.getInstrumentation().targetContext, SignInActivity::class.java))
         Intents.init()
@@ -78,8 +74,8 @@ class SignInActivityTest : KoinTest {
 
     @Test
     fun shouldDisplaySignInErrorAfterSignInError() {
-        prepare {
-            mockUnsuccessfulSignInWithException(userRepository)
+        prepare(signInActivityScope) {
+            mockUnsuccessfulSignInWithException()
         }
         signInScreen {
             signIn(correctEmail, password)
@@ -89,9 +85,9 @@ class SignInActivityTest : KoinTest {
 
     @Test
     fun shouldOpenMapScreenAfterSuccessfulSignIn() {
-        prepare {
-            mockLocationProvider(locationProvider)
-            mockSuccessfulSignIn(userRepository, correctEmail, password)
+        prepare(signInActivityScope) {
+            mockLocationProvider()
+            mockSuccessfulSignIn(correctEmail, password)
         }
         signInScreen {
             signIn(correctEmail, password)
@@ -102,7 +98,8 @@ class SignInActivityTest : KoinTest {
     }
 
     @After
-    fun tearDown() {
+    override fun tearDown() {
+        super.tearDown()
         Intents.release()
         closeKoin()
     }
