@@ -8,6 +8,7 @@ import com.alex.mapnotes.search.adapter.NoteViewHolder
 import org.hamcrest.Description
 import org.hamcrest.Matcher
 import org.hamcrest.TypeSafeMatcher
+import androidx.test.espresso.matcher.BoundedMatcher
 
 object RecyclerViewMatchers {
     fun withItemCount(count: Int): Matcher<View> {
@@ -20,6 +21,22 @@ object RecyclerViewMatchers {
 
             override fun describeTo(description: Description) {
                 description.appendText("RecyclerView should have $count items")
+            }
+        }
+    }
+
+    fun atPosition(position: Int, itemMatcher: Matcher<View>): Matcher<View> {
+        checkNotNull(itemMatcher)
+        return object : BoundedMatcher<View, RecyclerView>(RecyclerView::class.java) {
+            override fun describeTo(description: Description) {
+                description.appendText("has item at position $position: ")
+                itemMatcher.describeTo(description)
+            }
+
+            override fun matchesSafely(view: RecyclerView): Boolean {
+                val viewHolder = view.findViewHolderForAdapterPosition(position)
+                        ?: return false
+                return itemMatcher.matches(viewHolder.itemView)
             }
         }
     }
