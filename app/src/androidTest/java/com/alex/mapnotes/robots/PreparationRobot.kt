@@ -3,6 +3,7 @@ package com.alex.mapnotes.robots
 import com.alex.mapnotes.MockTest
 import com.alex.mapnotes.data.Result
 import com.alex.mapnotes.model.AuthUser
+import com.alex.mapnotes.model.Note
 import io.mockk.coEvery
 import io.mockk.every
 import java.lang.Exception
@@ -29,5 +30,40 @@ class PreparationRobot(private val scope: MockTest) {
     fun mockUnsuccessfulSignInWithException() {
         val userRepository = scope.userRepository
         coEvery { userRepository.signIn(any(), any()) } returns Result.Error(Exception("SignIn error"))
+    }
+
+    fun mockSearchUserId(userId: String) {
+        val userRepository = scope.userRepository
+        coEvery { userRepository.getUserIdFromHumanReadableName(any()) } returns Result.Success(userId)
+    }
+
+    fun mockErrorDuringLoadingUserNames() {
+        val userRepository = scope.userRepository
+        coEvery { userRepository.getUserIdFromHumanReadableName(any()) } returns Result.Error(RuntimeException())
+    }
+
+    fun mockLoadingEmptyListOfNotes() {
+        val notesRepository = scope.notesRepository
+        coEvery { notesRepository.getNotes(any()) } returns Result.Success(listOf())
+    }
+
+    fun mockLoadingEmptyListOfNotesByNoteText() {
+        val notesRepository = scope.notesRepository
+        coEvery { notesRepository.getNotesByNoteText(any(), any()) } returns Result.Error(RuntimeException())
+    }
+
+    fun mockLoadingListOfNotes(notes: List<Note>) {
+        val notesRepository = scope.notesRepository
+        coEvery { notesRepository.getNotes(any()) } returns Result.Success(notes)
+    }
+
+    fun mockSearchNoteByAnyText(notes: List<Note>) {
+        val notesRepository = scope.notesRepository
+        coEvery { notesRepository.getNotesByNoteText(any(), any()) } returns Result.Success(notes)
+    }
+
+    fun mockSearchNoteByAnyUser(notes: List<Note>) {
+        val notesRepository = scope.notesRepository
+        coEvery { notesRepository.getNotesByUser(any(), any()) } returns Result.Success(notes)
     }
 }
