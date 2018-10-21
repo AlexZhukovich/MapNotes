@@ -67,7 +67,7 @@ class SearchNotesFragmentTest : MockTest() {
         attachToTestActivity()
         homeScreen {
             verifySearchResultsByItemCount(expectedItemCount)
-            verifySearchResults(testNotes)
+            isNotesInSearchResult(testNotes)
         }
     }
 
@@ -121,7 +121,7 @@ class SearchNotesFragmentTest : MockTest() {
         homeScreen {
             searchNoteByUser(searchInput)
             verifySearchResultsByItemCount(expectedItemCount)
-            verifySearchResults(testNotes)
+            isNotesInSearchResult(testNotes)
         }
     }
 
@@ -137,7 +137,7 @@ class SearchNotesFragmentTest : MockTest() {
         homeScreen {
             searchNoteByText(searchInput)
             verifySearchResultsByItemCount(expectedItemCount)
-            verifySearchResults(testNotes)
+            isNotesInSearchResult(testNotes)
         }
     }
 
@@ -155,7 +155,7 @@ class SearchNotesFragmentTest : MockTest() {
             searchNoteByText(searchInput)
             searchNoteByText(emptySearchInput)
             verifySearchResultsByItemCount(expectedItemCount)
-            verifySearchResults(testNotes)
+            isNotesInSearchResult(testNotes)
         }
     }
 

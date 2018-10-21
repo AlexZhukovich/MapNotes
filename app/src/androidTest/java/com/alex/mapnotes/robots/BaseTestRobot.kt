@@ -28,7 +28,7 @@ open class BaseTestRobot {
         onView(withId(viewId))
                 .perform(replaceText(text), closeSoftKeyboard())
 
-    fun clickButton(viewId: Int): ViewInteraction =
+    fun clickView(viewId: Int): ViewInteraction =
         onView(withId(viewId))
                 .perform(click())
 

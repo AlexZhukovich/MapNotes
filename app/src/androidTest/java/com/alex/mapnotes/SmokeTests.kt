@@ -39,7 +39,7 @@ class SmokeTests {
             signIn(correctEmail, correctPassword)
         }
         homeScreen {
-            verifyMap()
+            isMapDisplayed()
             signOut()
         }
     }
@@ -71,12 +71,12 @@ class SmokeTests {
             signIn(correctEmail, correctPassword)
         }
         homeScreen {
-            verifyMap()
+            isMapDisplayed()
             openAddNoteFragment()
             addNote(noteText)
             openSearchFragment()
             searchNoteByText(noteText)
-            verifySearchResults(noteText)
+            isNoteInSearchResult(noteText)
             signOut()
         }
     }
