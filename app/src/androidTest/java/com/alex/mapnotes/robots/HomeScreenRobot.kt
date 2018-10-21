@@ -27,7 +27,7 @@ class HomeScreenRobot : BaseTestRobot() {
         clickButtonWithText(R.string.nav_sign_out_title)
     }
 
-    fun verifyMap() {
+    fun isMapDisplayed() {
         val mapVisibilityIdlingResource =
             ViewVisibilityIdlingResource(R.id.mapContainer, View.VISIBLE)
         IdlingRegistry.getInstance().register(mapVisibilityIdlingResource)
@@ -41,7 +41,7 @@ class HomeScreenRobot : BaseTestRobot() {
 
     fun openAddNoteFragment() {
         matchDisplayedView(R.id.navigation_add_note)
-        clickButton(R.id.navigation_add_note)
+        clickView(R.id.navigation_add_note)
 
         matchDisplayedView(R.id.bottomSheetContainer)
     }
@@ -50,32 +50,32 @@ class HomeScreenRobot : BaseTestRobot() {
         enterText(R.id.note, text)
     }
 
-    fun pressAddButton() = clickButton(R.id.add)
+    fun pressAddButton() = clickView(R.id.add)
 
     fun addNote(text: String) {
         enterNoteText(text)
-        clickButton(R.id.add)
+        clickView(R.id.add)
     }
 
     fun openSearchFragment() {
-        clickButton(R.id.navigation_search_notes)
+        clickView(R.id.navigation_search_notes)
 
         matchDisplayedView(R.id.searchText)
     }
 
     fun searchNoteByText(text: String) {
         enterText(R.id.searchText, text)
-        clickButton(R.id.searchButton)
+        clickView(R.id.searchButton)
     }
 
     fun searchNoteByUser(text: String) {
         enterText(R.id.searchText, text)
-        clickButton(R.id.searchOptions)
+        clickView(R.id.searchOptions)
         changeSpinnerSelectedItemPosition(searchUserCategoryPosition)
-        clickButton(R.id.searchButton)
+        clickView(R.id.searchButton)
     }
 
-    fun verifySearchResults(noteText: String) {
+    fun isNoteInSearchResult(noteText: String) {
         val recyclerViewIdlingResource = RecyclerViewSizeIdlingResources(R.id.recyclerView)
         IdlingRegistry.getInstance().register(recyclerViewIdlingResource)
         matchRecyclerViewItemWithText(R.id.recyclerView, noteText)
@@ -85,7 +85,7 @@ class HomeScreenRobot : BaseTestRobot() {
     fun verifyUnknownUserError() =
             matchDisplayedText(R.string.unknown_user_error)
 
-    fun verifySearchResults(notes: List<Note>) {
+    fun isNotesInSearchResult(notes: List<Note>) {
         val recyclerViewIdlingResource = RecyclerViewSizeIdlingResources(R.id.recyclerView)
         IdlingRegistry.getInstance().register(recyclerViewIdlingResource)
         for (index in 0 until notes.size - 1) {
