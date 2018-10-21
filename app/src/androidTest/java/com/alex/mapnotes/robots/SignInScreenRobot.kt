@@ -11,7 +11,7 @@ class SignInScreenRobot : BaseTestRobot() {
     fun signIn(email: String, password: String) {
         enterText(R.id.email, email)
         enterText(R.id.password, password)
-        clickButton(R.id.signIn)
+        clickView(R.id.signIn)
     }
 
     fun verifySignInErrorMessage() {
