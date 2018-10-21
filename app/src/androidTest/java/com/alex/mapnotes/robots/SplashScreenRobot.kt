@@ -14,8 +14,14 @@ val splashActivityE2ETestRule = object : ActivityTestRule<SplashActivity>(Splash
     }
 }
 
+val splashActivityMockTestRule = ActivityTestRule<SplashActivity>(SplashActivity::class.java, true, false)
+
 class SplashScreenRobot : BaseTestRobot() {
     fun display() {
         splashActivityE2ETestRule.launchActivity(null)
+    }
+
+    fun displayMock() {
+        splashActivityMockTestRule.launchActivity(null)
     }
 }

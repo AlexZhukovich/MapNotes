@@ -20,6 +20,17 @@ class PreparationRobot(private val scope: MockTest) {
         every { provider.isLocationAvailable() } returns false
     }
 
+    fun mockNoAuthorizedUser() {
+        val userRepository = scope.userRepository
+        coEvery { userRepository.getCurrentUser() } returns Result.Error(RuntimeException())
+    }
+
+    fun mockAuthorizedUser() {
+        val userRepository = scope.userRepository
+        val authUser = AuthUser("111111")
+        coEvery { userRepository.getCurrentUser() } returns Result.Success(authUser)
+    }
+
     fun mockSuccessfulSignIn(email: String, password: String) {
         val userRepository = scope.userRepository
         val authUser = AuthUser("111111")
