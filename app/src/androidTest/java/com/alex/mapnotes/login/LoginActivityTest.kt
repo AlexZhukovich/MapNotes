@@ -1,17 +1,12 @@
 package com.alex.mapnotes.login
 
-import androidx.test.espresso.Espresso.onView
-import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.intent.Intents
-import androidx.test.espresso.intent.Intents.intended
-import androidx.test.espresso.intent.matcher.IntentMatchers.hasComponent
-import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.rule.ActivityTestRule
 import androidx.test.runner.AndroidJUnit4
 import com.alex.mapnotes.di.appModule
-import com.alex.mapnotes.login.signin.SignInActivity
-import com.alex.mapnotes.login.signup.SignUpActivity
-import com.alex.mapnotes.R
+import com.alex.mapnotes.robots.loginScreen
+import com.alex.mapnotes.robots.signInScreen
+import com.alex.mapnotes.robots.signUpScreen
 import org.junit.After
 import org.junit.Before
 import org.junit.Rule
@@ -35,18 +30,22 @@ class LoginActivityTest {
 
     @Test
     fun shouldLaunchSignInActivityAfterClickToSignInButton() {
-        onView(withId(R.id.signIn))
-                .perform(click())
-
-        intended(hasComponent(SignInActivity::class.java.name))
+        loginScreen {
+            openSignIn()
+        }
+        signInScreen {
+            isSuccessfullyLoaded()
+        }
     }
 
     @Test
     fun shouldLaunchSignUpActivityAfterClickToSignUpButton() {
-        onView(withId(R.id.signUp))
-                .perform(click())
-
-        intended(hasComponent(SignUpActivity::class.java.name))
+        loginScreen {
+            openSignUp()
+        }
+        signUpScreen {
+            isSuccessfullyLoaded()
+        }
     }
 
     @After

@@ -1,8 +1,11 @@
 package com.alex.mapnotes.robots
 
 import androidx.test.espresso.IdlingRegistry
+import androidx.test.espresso.intent.Intents
+import androidx.test.espresso.intent.matcher.IntentMatchers
 import com.alex.mapnotes.R
 import com.alex.mapnotes.idlingresources.ViewTextIdlingResource
+import com.alex.mapnotes.login.signin.SignInActivity
 
 fun signInScreen(func: SignInScreenRobot.() -> Unit) = SignInScreenRobot().apply { func() }
 
@@ -45,5 +48,9 @@ class SignInScreenRobot : BaseTestRobot() {
         matchDisplayedText(R.string.error_email_should_be_valid)
 
         IdlingRegistry.getInstance().unregister(snackbarErrorTextIdlingResource)
+    }
+
+    fun isSuccessfullyLoaded() {
+        Intents.intended(IntentMatchers.hasComponent(SignInActivity::class.java.name))
     }
 }

@@ -7,4 +7,6 @@ fun loginScreen(func: LoginScreenRobot.() -> Unit) = LoginScreenRobot().apply { 
 class LoginScreenRobot : BaseTestRobot() {
 
     fun openSignIn() = clickView(R.id.signIn)
+
+    fun openSignUp() = clickView(R.id.signUp)
 }
