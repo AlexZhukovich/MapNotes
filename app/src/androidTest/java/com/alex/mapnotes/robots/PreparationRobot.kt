@@ -12,12 +12,12 @@ fun prepare(scope: MockTest, func: PreparationRobot.() -> Unit) = PreparationRob
 
 class PreparationRobot(private val scope: MockTest) {
 
-    fun mockLocationProvider() {
+    fun mockLocationProvider(isLocationAvailable: Boolean = false) {
         val provider = scope.locationProvider
         every { provider.startLocationUpdates() } answers { nothing }
         every { provider.stopLocationUpdates() } answers { nothing }
         every { provider.addUpdatableLocationListener(any()) } answers { nothing }
-        every { provider.isLocationAvailable() } returns false
+        every { provider.isLocationAvailable() } returns isLocationAvailable
     }
 
     fun mockNoAuthorizedUser() {
@@ -29,6 +29,11 @@ class PreparationRobot(private val scope: MockTest) {
         val userRepository = scope.userRepository
         val authUser = AuthUser("111111")
         coEvery { userRepository.getCurrentUser() } returns Result.Success(authUser)
+    }
+
+    fun mockUserSignOut() {
+        val userRepository = scope.userRepository
+        coEvery { userRepository.signOut() } answers { nothing }
     }
 
     fun mockSuccessfulSignIn(email: String, password: String) {

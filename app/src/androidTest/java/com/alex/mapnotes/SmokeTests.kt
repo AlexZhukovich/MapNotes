@@ -74,7 +74,7 @@ class SmokeTests {
             isMapDisplayed()
             openAddNoteFragment()
             addNote(noteText)
-            openSearchFragment()
+            openSearch()
             searchNoteByText(noteText)
             isNoteInSearchResult(noteText)
             signOut()
