@@ -10,6 +10,7 @@ import androidx.test.espresso.intent.matcher.IntentMatchers
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.espresso.matcher.ViewMatchers.withText
 import androidx.test.espresso.matcher.ViewMatchers.hasDescendant
+import androidx.test.rule.ActivityTestRule
 import com.alex.mapnotes.R
 import com.alex.mapnotes.home.HomeActivity
 import com.alex.mapnotes.idlingresources.RecyclerViewSizeIdlingResources
@@ -19,8 +20,14 @@ import com.alex.mapnotes.model.Note
 
 fun homeScreen(func: HomeScreenRobot.() -> Unit) = HomeScreenRobot().apply { func() }
 
+val homeScreenMockActivityRule = ActivityTestRule<HomeActivity>(HomeActivity::class.java, true, false)
+
 class HomeScreenRobot : BaseTestRobot() {
     private val searchUserCategoryPosition = 1
+
+    fun display() {
+        homeScreenMockActivityRule.launchActivity(null)
+    }
 
     fun signOut() {
         openActionBarOverflowOrOptionsMenu(getActivityInstance())
@@ -57,10 +64,10 @@ class HomeScreenRobot : BaseTestRobot() {
         clickView(R.id.add)
     }
 
-    fun openSearchFragment() {
+    fun openSearch() {
         clickView(R.id.navigation_search_notes)
 
-        matchDisplayedView(R.id.searchText)
+        matchNavigationHasCheckedItemId(R.id.navigation, R.id.navigation_search_notes)
     }
 
     fun searchNoteByText(text: String) {
@@ -106,10 +113,39 @@ class HomeScreenRobot : BaseTestRobot() {
         matchText(R.id.searchButton, R.string.search_button_text)
     }
 
-    fun verifyAddButtonIsEnabled() = matchViewInEnabled(R.id.add)
+    fun verifyAddButtonIsEnabled() = matchViewIsEnabled(R.id.add)
 
     fun verifyAddButtonIsDisabled() = matchViewIsDisabled(R.id.add)
     fun verifyNoteText(text: String) = matchText(R.id.note, text)
+
+    fun isSuccessfullyDisplayed() {
+        matchNavigationItemCount(R.id.navigation, 3)
+        matchNavigationHasItemTitle(R.id.navigation, getActivityInstance().getString(R.string.nav_add_note_title))
+        matchNavigationHasItemTitle(R.id.navigation, getActivityInstance().getString(R.string.nav_map_title))
+        matchNavigationHasItemTitle(R.id.navigation, getActivityInstance().getString(R.string.nav_search_notes_title))
+        matchNavigationHasCheckedItemId(R.id.navigation, R.id.navigation_map)
+    }
+
+    fun openAddNote() {
+        clickView(R.id.navigation_add_note)
+        matchNavigationHasCheckedItemId(R.id.navigation, R.id.navigation_add_note)
+    }
+
+    fun openMap() {
+        clickView(R.id.navigation_map)
+        matchNavigationHasCheckedItemId(R.id.navigation, R.id.navigation_map)
+    }
+
+    fun isSuccessfullyDisplayedAddNote() {
+        matchHint(R.id.note, R.string.add_note_hint)
+        matchViewIsDisabled(R.id.add)
+    }
+
+    fun isSuccessfullyDisplayedSearch() {
+        matchHint(R.id.searchText, R.string.search_hint)
+        matchDisplayedView(R.id.searchButton)
+//        matchDisplayedView(R.id.searchOptions)
+    }
 
     fun isSuccessfullyLoaded() {
         Intents.intended(IntentMatchers.hasComponent(HomeActivity::class.java.name))
