@@ -18,6 +18,9 @@ import androidx.test.espresso.matcher.ViewMatchers.isEnabled
 import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
 import androidx.test.runner.lifecycle.ActivityLifecycleMonitorRegistry
 import androidx.test.runner.lifecycle.Stage
+import com.alex.mapnotes.matchers.BottomNavigationViewMatchers.withItemCount
+import com.alex.mapnotes.matchers.BottomNavigationViewMatchers.hasItemTitle
+import com.alex.mapnotes.matchers.BottomNavigationViewMatchers.hasCheckedItem
 import com.alex.mapnotes.matchers.RecyclerViewMatchers
 import org.hamcrest.CoreMatchers.not
 import org.hamcrest.Matchers
@@ -77,7 +80,7 @@ open class BaseTestRobot {
                 .check(matches(not(isEnabled())))
     }
 
-    fun matchViewInEnabled(viewId: Int) {
+    fun matchViewIsEnabled(viewId: Int) {
         onView(withId(viewId))
                 .check(matches(isEnabled()))
     }
@@ -89,6 +92,22 @@ open class BaseTestRobot {
     fun matchRecyclerItemCount(viewId: Int, itemCount: Int) {
         onView(withId(viewId))
                 .check(matches(RecyclerViewMatchers.withItemCount(itemCount)))
+    }
+
+    // Navigation
+    fun matchNavigationItemCount(viewId: Int, itemsCount: Int) {
+        onView(withId(viewId))
+                .check(matches(withItemCount(itemsCount)))
+    }
+
+    fun matchNavigationHasItemTitle(viewId: Int, title: String) {
+        onView(withId(viewId))
+                .check(matches(hasItemTitle(title)))
+    }
+
+    fun matchNavigationHasCheckedItemId(navigationViewId: Int, itemViewId: Int) {
+        onView(withId(navigationViewId))
+                .check(matches(hasCheckedItem(itemViewId)))
     }
 
     protected fun getActivityInstance(): Activity {
