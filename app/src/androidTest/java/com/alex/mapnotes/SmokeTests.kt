@@ -30,7 +30,7 @@ class SmokeTests {
     @Test
     fun shouldVerifySuccessfulLogin() {
         splashScreen {
-            display()
+            displayAsEntryPoint()
         }
         loginScreen {
             openSignIn()
@@ -47,7 +47,7 @@ class SmokeTests {
     @Test
     fun shouldVerifyFailureLogin() {
         splashScreen {
-            display()
+            displayAsEntryPoint()
         }
         loginScreen {
             openSignIn()
@@ -62,7 +62,7 @@ class SmokeTests {
     fun shouldVerifyAddingAndSearchNote() {
         val noteText = "test note ${Date().time}"
         splashScreen {
-            display()
+            displayAsEntryPoint()
         }
         loginScreen {
             openSignIn()

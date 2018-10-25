@@ -37,7 +37,7 @@ class SplashActivityTest : MockTest() {
             mockAuthorizedUser()
         }
         splashScreen {
-            displayMock()
+            displayMockAsEntryPoint()
         }
         homeScreen {
             isSuccessfullyLoaded()
@@ -50,7 +50,7 @@ class SplashActivityTest : MockTest() {
             mockNoAuthorizedUser()
         }
         splashScreen {
-            display()
+            displayAsEntryPoint()
         }
         loginScreen {
             isSuccessfullyLoaded()

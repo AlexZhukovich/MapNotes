@@ -25,7 +25,7 @@ val homeScreenMockActivityRule = ActivityTestRule<HomeActivity>(HomeActivity::cl
 class HomeScreenRobot : BaseTestRobot() {
     private val searchUserCategoryPosition = 1
 
-    fun display() {
+    fun displayAsEntryPoint() {
         homeScreenMockActivityRule.launchActivity(null)
     }
 
