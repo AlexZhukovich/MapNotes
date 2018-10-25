@@ -40,7 +40,7 @@ class HomeActivityTest : MockTest() {
     @Test
     fun shouldVerifyAllTabs() {
         homeScreen {
-            display()
+            displayAsEntryPoint()
             isSuccessfullyDisplayed()
         }
     }
@@ -48,7 +48,7 @@ class HomeActivityTest : MockTest() {
     @Test
     fun shouldVerifyAddNoteFragment() {
         homeScreen {
-            display()
+            displayAsEntryPoint()
             openAddNote()
             isSuccessfullyDisplayedAddNote()
         }
@@ -61,7 +61,7 @@ class HomeActivityTest : MockTest() {
             mockLoadingListOfNotes(notes)
         }
         homeScreen {
-            display()
+            displayAsEntryPoint()
             isSuccessfullyDisplayed()
             openSearch()
             isSuccessfullyDisplayedSearch()
@@ -71,7 +71,7 @@ class HomeActivityTest : MockTest() {
     @Test
     fun shouldVerifyMapFragmentAfterMovingFromAddTab() {
         homeScreen {
-            display()
+            displayAsEntryPoint()
             openAddNote()
             openMap()
         }
@@ -84,7 +84,7 @@ class HomeActivityTest : MockTest() {
             mockUserSignOut()
         }
         homeScreen {
-            display()
+            displayAsEntryPoint()
             signOut()
         }
         loginScreen {

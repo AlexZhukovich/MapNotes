@@ -12,7 +12,7 @@ val signUpActivity = ActivityTestRule<SignUpActivity>(SignUpActivity::class.java
 
 class SignUpScreenRobot : BaseTestRobot() {
 
-    fun display() {
+    fun displayAsEntryPoint() {
         signUpActivity.launchActivity(null)
     }
 

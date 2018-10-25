@@ -38,7 +38,7 @@ class SignUpActivityTest : MockTest() {
     @Test
     fun shouldDisplayEmailErrorWhenEmailIsEmpty() {
         signUpScreen {
-            display()
+            displayAsEntryPoint()
             signUp(emptyUsername, emptyEmail, emptyPassword)
             isEmailShouldBeValidErrorDisplayed()
         }
@@ -47,7 +47,7 @@ class SignUpActivityTest : MockTest() {
     @Test
     fun shouldDisplayEmailErrorWhenEmailIsNotCorrect() {
         signUpScreen {
-            display()
+            displayAsEntryPoint()
             signUp(emptyUsername, incorrectEmail, emptyPassword)
             isEmailShouldBeValidErrorDisplayed()
         }
@@ -56,7 +56,7 @@ class SignUpActivityTest : MockTest() {
     @Test
     fun shouldDisplayPasswordErrorWhenPasswordIsEmpty() {
         signUpScreen {
-            display()
+            displayAsEntryPoint()
             signUp(emptyUsername, correctEmail, emptyPassword)
             isPasswordShouldNotBeEmptyErrorDisplayed()
         }
@@ -65,7 +65,7 @@ class SignUpActivityTest : MockTest() {
     @Test
     fun shouldDisplayNameErrorWhenNameIsEmpty() {
         signUpScreen {
-            display()
+            displayAsEntryPoint()
             signUp(emptyUsername, correctEmail, password)
             isNameShouldNotBeEmptyErrorDisplayed()
         }
@@ -77,7 +77,7 @@ class SignUpActivityTest : MockTest() {
             mockSignUpError()
         }
         signUpScreen {
-            display()
+            displayAsEntryPoint()
             signUp(username, correctEmail, password)
             isAccountCannotBeCreatedErrorDisplayed()
         }
@@ -93,7 +93,7 @@ class SignUpActivityTest : MockTest() {
             mockAuthorizedUser()
         }
         signUpScreen {
-            display()
+            displayAsEntryPoint()
             signUp(username, correctEmail, password)
         }
         homeScreen {
