@@ -36,12 +36,11 @@ open class BaseTestRobot {
                     .check(matches(isDisplayed()))
                     .perform(click())
 
-    fun changeSelectedSpinnerItemPosition(position: Int) {
-        onData(Matchers.anything())
-                .atPosition(position)
-                .inRoot(RootMatchers.isPlatformPopup())
-                .perform(click())
-    }
+    fun changeSelectedSpinnerItemPosition(position: Int): ViewInteraction =
+            onData(Matchers.anything())
+                    .atPosition(position)
+                    .inRoot(RootMatchers.isPlatformPopup())
+                    .perform(click())
 
     fun isTextDisplayed(textId: Int): ViewInteraction =
             onView(withText(textId))
@@ -51,58 +50,47 @@ open class BaseTestRobot {
             onView(withId(viewId))
                     .check(matches(isDisplayed()))
 
-    fun isViewWithTextDisplayed(viewId: Int, text: String) {
-        onView(withId(viewId))
-                .check(matches(withText(text)))
-    }
+    fun isViewWithTextDisplayed(viewId: Int, text: String): ViewInteraction =
+            onView(withId(viewId))
+                    .check(matches(withText(text)))
 
-    fun isViewWithTextDisplayed(viewId: Int, textId: Int) {
-        onView(withId(viewId))
-                .check(matches(withText(textId)))
-    }
+    fun isViewWithTextDisplayed(viewId: Int, textId: Int): ViewInteraction =
+            onView(withId(viewId))
+                    .check(matches(withText(textId)))
 
-    fun isViewHintDisplayed(viewId: Int, textId: Int) {
-        onView(withId(viewId))
-                .check(matches(withHint(textId)))
-    }
+    fun isViewHintDisplayed(viewId: Int, textId: Int): ViewInteraction =
+            onView(withId(viewId))
+                    .check(matches(withHint(textId)))
 
-    fun isSpinnerHasText(viewId: Int, textId: Int) {
-        onView(withId(viewId))
-                .check(matches(withSpinnerText(textId)))
-    }
+    fun isSpinnerHasText(viewId: Int, textId: Int): ViewInteraction =
+            onView(withId(viewId))
+                    .check(matches(withSpinnerText(textId)))
 
-    fun isViewEnabled(viewId: Int) {
-        onView(withId(viewId))
-                .check(matches(isEnabled()))
-    }
+    fun isViewEnabled(viewId: Int): ViewInteraction =
+            onView(withId(viewId))
+                    .check(matches(isEnabled()))
 
-    fun isViewDisabled(viewId: Int) {
-        onView(withId(viewId))
-                .check(matches(not(isEnabled())))
-    }
+    fun isViewDisabled(viewId: Int): ViewInteraction =
+            onView(withId(viewId))
+                    .check(matches(not(isEnabled())))
 
     fun isRecyclerViewHasItemWithText(viewId: Int, text: String): ViewInteraction =
             onView(withId(viewId))
                     .check(matches(RecyclerViewMatchers.withItemText(text)))
 
-    fun isRecyclerViewItemCount(viewId: Int, itemCount: Int) {
-        onView(withId(viewId))
-                .check(matches(RecyclerViewMatchers.withItemCount(itemCount)))
-    }
+    fun isRecyclerViewItemCount(viewId: Int, itemCount: Int): ViewInteraction =
+            onView(withId(viewId))
+                    .check(matches(RecyclerViewMatchers.withItemCount(itemCount)))
 
-    // Bottom Navigation
-    fun isBottomNavigationItemCount(viewId: Int, itemsCount: Int) {
-        onView(withId(viewId))
-                .check(matches(withItemCount(itemsCount)))
-    }
+    fun isBottomNavigationItemCount(viewId: Int, itemsCount: Int): ViewInteraction =
+            onView(withId(viewId))
+                    .check(matches(withItemCount(itemsCount)))
 
-    fun isBottomNavigationHasItemTitle(viewId: Int, title: String) {
-        onView(withId(viewId))
-                .check(matches(hasItemTitle(title)))
-    }
+    fun isBottomNavigationHasItemTitle(viewId: Int, title: String): ViewInteraction =
+            onView(withId(viewId))
+                    .check(matches(hasItemTitle(title)))
 
-    fun isBottomNavigationHasCheckedItemId(navigationViewId: Int, itemViewId: Int) {
-        onView(withId(navigationViewId))
-                .check(matches(hasCheckedItem(itemViewId)))
-    }
+    fun isBottomNavigationHasCheckedItemId(navigationViewId: Int, itemViewId: Int): ViewInteraction =
+            onView(withId(navigationViewId))
+                    .check(matches(hasCheckedItem(itemViewId)))
 }
