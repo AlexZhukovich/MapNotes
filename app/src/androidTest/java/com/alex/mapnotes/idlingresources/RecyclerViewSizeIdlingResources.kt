@@ -1,11 +1,9 @@
 package com.alex.mapnotes.idlingresources
 
-import android.app.Activity
 import androidx.annotation.IdRes
 import androidx.recyclerview.widget.RecyclerView
 import androidx.test.espresso.IdlingResource
-import androidx.test.runner.lifecycle.ActivityLifecycleMonitorRegistry
-import androidx.test.runner.lifecycle.Stage
+import com.alex.mapnotes.getIdlingResourceActivityInstance
 
 class RecyclerViewSizeIdlingResources(@IdRes private val expectedViewId: Int) : IdlingResource {
 
@@ -16,7 +14,7 @@ class RecyclerViewSizeIdlingResources(@IdRes private val expectedViewId: Int) : 
     }
 
     override fun isIdleNow(): Boolean {
-        val view: RecyclerView? = getActivityInstance().findViewById(expectedViewId)
+        val view: RecyclerView? = getIdlingResourceActivityInstance().findViewById(expectedViewId)
         val isIdle = if (view != null) {
             view.adapter?.itemCount!! > 0
         } else {
@@ -31,14 +29,5 @@ class RecyclerViewSizeIdlingResources(@IdRes private val expectedViewId: Int) : 
 
     override fun registerIdleTransitionCallback(callback: IdlingResource.ResourceCallback?) {
         resourceCallback = callback
-    }
-
-    private fun getActivityInstance(): Activity {
-        var currentActivity: Activity? = null
-        val resumedActivities = ActivityLifecycleMonitorRegistry.getInstance().getActivitiesInStage(Stage.RESUMED)
-        if (resumedActivities.iterator().hasNext()) {
-            currentActivity = resumedActivities.iterator().next()
-        }
-        return currentActivity!!
     }
 }
