@@ -1,8 +1,8 @@
 package com.alex.mapnotes.login
 
 import androidx.test.espresso.intent.Intents
+import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.rule.ActivityTestRule
-import androidx.test.runner.AndroidJUnit4
 import com.alex.mapnotes.di.appModule
 import com.alex.mapnotes.robots.loginScreen
 import com.alex.mapnotes.robots.signInScreen
