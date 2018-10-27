@@ -9,9 +9,9 @@ fun loginScreen(func: LoginScreenRobot.() -> Unit) = LoginScreenRobot().apply { 
 
 class LoginScreenRobot : BaseTestRobot() {
 
-    fun openSignIn() = clickView(R.id.signIn)
+    fun openSignIn() = clickOnView(R.id.signIn)
 
-    fun openSignUp() = clickView(R.id.signUp)
+    fun openSignUp() = clickOnView(R.id.signUp)
 
     fun isSuccessfullyLoaded() {
         Intents.intended(IntentMatchers.hasComponent(LoginActivity::class.java.name))
