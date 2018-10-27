@@ -5,7 +5,6 @@ import androidx.test.espresso.intent.Intents
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.rule.ActivityTestRule
-import androidx.test.rule.GrantPermissionRule
 import com.alex.mapnotes.MockTest
 import com.alex.mapnotes.login.signin.SignInActivity
 import com.alex.mapnotes.robots.homeScreen
@@ -29,8 +28,6 @@ class SignInActivityTest : MockTest() {
     private val password = "password"
     private val emptyPassword = ""
     private val signInActivityScope = this
-
-    private val permissionRule: GrantPermissionRule = GrantPermissionRule.grant(android.Manifest.permission.ACCESS_FINE_LOCATION)
 
     private val activityRule = ActivityTestRule<SignInActivity>(SignInActivity::class.java, true, false)
 

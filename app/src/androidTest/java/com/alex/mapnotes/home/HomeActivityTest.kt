@@ -2,7 +2,6 @@ package com.alex.mapnotes.home
 
 import androidx.test.espresso.intent.Intents
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import androidx.test.rule.GrantPermissionRule
 import com.alex.mapnotes.MockTest
 import com.alex.mapnotes.model.Note
 import com.alex.mapnotes.robots.homeScreen
@@ -19,14 +18,11 @@ import org.junit.runner.RunWith
 @RunWith(AndroidJUnit4::class)
 class HomeActivityTest : MockTest() {
 
-    private val activityRule = homeScreenMockActivityRule
-    private val permissionRule: GrantPermissionRule = GrantPermissionRule.grant(android.Manifest.permission.ACCESS_FINE_LOCATION)
-
     @Rule
     @JvmField
     val chain: RuleChain = RuleChain
             .outerRule(permissionRule)
-            .around(activityRule)
+            .around(homeScreenMockActivityRule)
 
     @Before
     override fun setUp() {
