@@ -1,8 +1,8 @@
 package com.alex.mapnotes.home
 
 import androidx.test.espresso.intent.Intents
+import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.rule.GrantPermissionRule
-import androidx.test.runner.AndroidJUnit4
 import com.alex.mapnotes.MockTest
 import com.alex.mapnotes.model.Note
 import com.alex.mapnotes.robots.homeScreen

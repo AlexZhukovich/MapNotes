@@ -1,7 +1,7 @@
 package com.alex.mapnotes.add
 
+import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.rule.ActivityTestRule
-import androidx.test.runner.AndroidJUnit4
 import com.alex.mapnotes.FragmentTestActivity
 import com.alex.mapnotes.R
 import com.alex.mapnotes.di.appModule

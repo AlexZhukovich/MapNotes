@@ -1,7 +1,7 @@
 package com.alex.mapnotes
 
+import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.rule.GrantPermissionRule
-import androidx.test.runner.AndroidJUnit4
 import com.alex.mapnotes.robots.homeScreen
 import com.alex.mapnotes.robots.loginScreen
 import com.alex.mapnotes.robots.signInScreen
