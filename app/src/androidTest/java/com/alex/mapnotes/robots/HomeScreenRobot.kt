@@ -12,6 +12,7 @@ import androidx.test.espresso.matcher.ViewMatchers.withText
 import androidx.test.espresso.matcher.ViewMatchers.hasDescendant
 import androidx.test.rule.ActivityTestRule
 import com.alex.mapnotes.R
+import com.alex.mapnotes.getActivityInstance
 import com.alex.mapnotes.home.HomeActivity
 import com.alex.mapnotes.idlingresources.RecyclerViewSizeIdlingResources
 import com.alex.mapnotes.idlingresources.ViewVisibilityIdlingResource

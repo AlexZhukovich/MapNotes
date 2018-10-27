@@ -1,11 +1,9 @@
 package com.alex.mapnotes.idlingresources
 
-import android.app.Activity
 import android.view.View
 import androidx.annotation.IdRes
 import androidx.test.espresso.IdlingResource
-import androidx.test.runner.lifecycle.ActivityLifecycleMonitorRegistry
-import androidx.test.runner.lifecycle.Stage
+import com.alex.mapnotes.getIdlingResourceActivityInstance
 
 class ViewVisibilityIdlingResource(
     @IdRes private val expectedViewId: Int,
@@ -19,7 +17,7 @@ class ViewVisibilityIdlingResource(
     }
 
     override fun isIdleNow(): Boolean {
-        val view: View? = getActivityInstance().findViewById(expectedViewId)
+        val view: View? = getIdlingResourceActivityInstance().findViewById(expectedViewId)
         val isIdle = if (view != null) {
             view.visibility == expectedViewVisibility
         } else {
@@ -34,14 +32,5 @@ class ViewVisibilityIdlingResource(
 
     override fun registerIdleTransitionCallback(callback: IdlingResource.ResourceCallback?) {
         resourceCallback = callback
-    }
-
-    private fun getActivityInstance(): Activity {
-        var currentActivity: Activity? = null
-        val resumedActivities = ActivityLifecycleMonitorRegistry.getInstance().getActivitiesInStage(Stage.RESUMED)
-        if (resumedActivities.iterator().hasNext()) {
-            currentActivity = resumedActivities.iterator().next()
-        }
-        return currentActivity!!
     }
 }

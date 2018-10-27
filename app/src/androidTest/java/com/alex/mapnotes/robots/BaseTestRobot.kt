@@ -1,7 +1,5 @@
 package com.alex.mapnotes.robots
 
-import android.app.Activity
-import androidx.test.InstrumentationRegistry
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.Espresso.onData
 import androidx.test.espresso.ViewInteraction
@@ -16,8 +14,6 @@ import androidx.test.espresso.matcher.ViewMatchers.withHint
 import androidx.test.espresso.matcher.ViewMatchers.withSpinnerText
 import androidx.test.espresso.matcher.ViewMatchers.isEnabled
 import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
-import androidx.test.runner.lifecycle.ActivityLifecycleMonitorRegistry
-import androidx.test.runner.lifecycle.Stage
 import com.alex.mapnotes.matchers.BottomNavigationViewMatchers.withItemCount
 import com.alex.mapnotes.matchers.BottomNavigationViewMatchers.hasItemTitle
 import com.alex.mapnotes.matchers.BottomNavigationViewMatchers.hasCheckedItem
@@ -108,16 +104,5 @@ open class BaseTestRobot {
     fun isBottomNavigationHasCheckedItemId(navigationViewId: Int, itemViewId: Int) {
         onView(withId(navigationViewId))
                 .check(matches(hasCheckedItem(itemViewId)))
-    }
-
-    protected fun getActivityInstance(): Activity {
-        var currentActivity: Activity? = null
-        InstrumentationRegistry.getInstrumentation().runOnMainSync {
-            val resumedActivities = ActivityLifecycleMonitorRegistry.getInstance().getActivitiesInStage(Stage.RESUMED)
-            if (resumedActivities.iterator().hasNext()) {
-                currentActivity = resumedActivities.iterator().next()
-            }
-        }
-        return currentActivity!!
     }
 }
