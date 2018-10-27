@@ -1,11 +1,9 @@
 package com.alex.mapnotes.idlingresources
 
-import android.app.Activity
 import android.widget.TextView
 import androidx.annotation.IdRes
 import androidx.test.espresso.IdlingResource
-import androidx.test.runner.lifecycle.ActivityLifecycleMonitorRegistry
-import androidx.test.runner.lifecycle.Stage
+import com.alex.mapnotes.getIdlingResourceActivityInstance
 
 class NonEmptyTextIdlingResource(@IdRes private val expectedViewId: Int) : IdlingResource {
 
@@ -16,7 +14,7 @@ class NonEmptyTextIdlingResource(@IdRes private val expectedViewId: Int) : Idlin
     }
 
     override fun isIdleNow(): Boolean {
-        val view: TextView? = getActivityInstance().findViewById(expectedViewId)
+        val view: TextView? = getIdlingResourceActivityInstance().findViewById(expectedViewId)
         val isIdle = if (view != null) {
             !view.text.toString().isEmpty() && !view.text.toString().isBlank()
         } else {
@@ -31,14 +29,5 @@ class NonEmptyTextIdlingResource(@IdRes private val expectedViewId: Int) : Idlin
 
     override fun registerIdleTransitionCallback(callback: IdlingResource.ResourceCallback?) {
         resourceCallback = callback
-    }
-
-    private fun getActivityInstance(): Activity {
-        var currentActivity: Activity? = null
-        val resumedActivities = ActivityLifecycleMonitorRegistry.getInstance().getActivitiesInStage(Stage.RESUMED)
-        if (resumedActivities.iterator().hasNext()) {
-            currentActivity = resumedActivities.iterator().next()
-        }
-        return currentActivity!!
     }
 }
