@@ -12,12 +12,16 @@ fun signInScreen(func: SignInScreenRobot.() -> Unit) = SignInScreenRobot().apply
 class SignInScreenRobot : BaseTestRobot() {
 
     fun signIn(email: String, password: String) {
-        enterText(R.id.email, email)
-        enterText(R.id.password, password)
+        if (email.isNotEmpty()) {
+            enterText(R.id.email, email)
+        }
+        if (password.isNotEmpty()) {
+            enterText(R.id.password, password)
+        }
         clickView(R.id.signIn)
     }
 
-    fun verifySignInErrorMessage() {
+    fun isSignInErrorDisplayed() {
         val snackbarErrorTextIdlingResource = ViewTextIdlingResource(
                 com.google.android.material.R.id.snackbar_text,
                 R.string.error_user_cannot_be_authenticated)
@@ -28,7 +32,7 @@ class SignInScreenRobot : BaseTestRobot() {
         IdlingRegistry.getInstance().unregister(snackbarErrorTextIdlingResource)
     }
 
-    fun verifyEmptyPasswordErrorMessage() {
+    fun isEmptyPasswordErrorDisplayed() {
         val snackbarErrorTextIdlingResource = ViewTextIdlingResource(
                 com.google.android.material.R.id.snackbar_text,
                 R.string.error_password_should_not_be_empty)
@@ -39,7 +43,7 @@ class SignInScreenRobot : BaseTestRobot() {
         IdlingRegistry.getInstance().unregister(snackbarErrorTextIdlingResource)
     }
 
-    fun verifyIncorrectEmailErrorMessage() {
+    fun isIncorrectEmailErrorDisplayed() {
         val snackbarErrorTextIdlingResource = ViewTextIdlingResource(
                 com.google.android.material.R.id.snackbar_text,
                 R.string.error_email_should_be_valid)
