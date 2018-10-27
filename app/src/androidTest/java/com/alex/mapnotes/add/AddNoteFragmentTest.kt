@@ -32,25 +32,25 @@ class AddNoteFragmentTest {
     @Test
     fun shouldDisplayNoteHintForANewNote() {
         homeScreen {
-            verifyNoteHint(R.string.add_note_hint)
+            isNoteHintDisplayed(R.string.add_note_hint)
         }
     }
 
     @Test
     fun shouldChangeAddButtonEnableAfterChangingNoteText() {
         homeScreen {
-            verifyAddButtonIsDisabled()
+            isAddButtonDisabled()
             enterNoteText(testNoteText)
-            verifyAddButtonIsEnabled()
+            isAddButtonEnabled()
         }
     }
 
     @Test
     fun shouldNothingChangeAfterClickOnAddButtonWithEmptyNoteText() {
         homeScreen {
-            verifyNoteText(emptyNoteText)
+            isNoteTextDisplayed(emptyNoteText)
             pressAddButton()
-            verifyNoteText(emptyNoteText)
+            isNoteTextDisplayed(emptyNoteText)
         }
     }
 
