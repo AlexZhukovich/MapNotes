@@ -1,11 +1,11 @@
 package com.alex.mapnotes.login
 
 import android.content.Intent
-import androidx.test.InstrumentationRegistry
 import androidx.test.espresso.intent.Intents
+import androidx.test.ext.junit.runners.AndroidJUnit4
+import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.rule.ActivityTestRule
 import androidx.test.rule.GrantPermissionRule
-import androidx.test.runner.AndroidJUnit4
 import com.alex.mapnotes.MockTest
 import com.alex.mapnotes.login.signin.SignInActivity
 import com.alex.mapnotes.robots.homeScreen
