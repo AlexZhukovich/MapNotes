@@ -72,11 +72,11 @@ class SmokeTests {
         }
         homeScreen {
             isMapDisplayed()
-            openAddNoteFragment()
+            openAddNote()
             addNote(noteText)
             openSearch()
             searchNoteByText(noteText)
-            isNoteInSearchResult(noteText)
+            isNoteInSearchHasResults(noteText)
             signOut()
         }
     }

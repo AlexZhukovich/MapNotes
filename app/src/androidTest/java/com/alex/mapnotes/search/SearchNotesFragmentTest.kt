@@ -53,7 +53,7 @@ class SearchNotesFragmentTest : MockTest() {
         }
         attachToTestActivity()
         homeScreen {
-            verifySearchScreen()
+            isSuccessfullyDisplayedSearchScreen()
         }
     }
 
@@ -66,7 +66,7 @@ class SearchNotesFragmentTest : MockTest() {
         }
         attachToTestActivity()
         homeScreen {
-            verifySearchResultsByItemCount(expectedItemCount)
+            isSearchResultHasNumberItems(expectedItemCount)
             isNotesInSearchResult(testNotes)
         }
     }
@@ -104,7 +104,7 @@ class SearchNotesFragmentTest : MockTest() {
         attachToTestActivity()
         homeScreen {
             searchNoteByUser(searchInput)
-            verifyUnknownUserError()
+            isUnknownUserErrorDisplayed()
         }
     }
 
@@ -120,7 +120,7 @@ class SearchNotesFragmentTest : MockTest() {
         attachToTestActivity()
         homeScreen {
             searchNoteByUser(searchInput)
-            verifySearchResultsByItemCount(expectedItemCount)
+            isSearchResultHasNumberItems(expectedItemCount)
             isNotesInSearchResult(testNotes)
         }
     }
@@ -136,7 +136,7 @@ class SearchNotesFragmentTest : MockTest() {
         attachToTestActivity()
         homeScreen {
             searchNoteByText(searchInput)
-            verifySearchResultsByItemCount(expectedItemCount)
+            isSearchResultHasNumberItems(expectedItemCount)
             isNotesInSearchResult(testNotes)
         }
     }
@@ -154,7 +154,7 @@ class SearchNotesFragmentTest : MockTest() {
         homeScreen {
             searchNoteByText(searchInput)
             searchNoteByText(emptySearchInput)
-            verifySearchResultsByItemCount(expectedItemCount)
+            isSearchResultHasNumberItems(expectedItemCount)
             isNotesInSearchResult(testNotes)
         }
     }

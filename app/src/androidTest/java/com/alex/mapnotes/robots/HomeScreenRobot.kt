@@ -29,39 +29,23 @@ class HomeScreenRobot : BaseTestRobot() {
         homeScreenMockActivityRule.launchActivity(null)
     }
 
-    fun signOut() {
-        openActionBarOverflowOrOptionsMenu(getActivityInstance())
-        clickButtonWithText(R.string.nav_sign_out_title)
-    }
-
-    fun isMapDisplayed() {
-        val mapVisibilityIdlingResource =
-            ViewVisibilityIdlingResource(R.id.mapContainer, View.VISIBLE)
-        IdlingRegistry.getInstance().register(mapVisibilityIdlingResource)
-
-        matchDisplayedView(R.id.mapContainer)
-
-        IdlingRegistry.getInstance().unregister(mapVisibilityIdlingResource)
-    }
-
-    fun verifyNoteHint(textId: Int) = matchHint(R.id.note, textId)
-
-    fun openAddNoteFragment() {
-        matchDisplayedView(R.id.navigation_add_note)
-        clickView(R.id.navigation_add_note)
-
-        matchDisplayedView(R.id.bottomSheetContainer)
-    }
-
-    fun enterNoteText(text: String) {
-        enterText(R.id.note, text)
-    }
+    fun enterNoteText(text: String) = enterText(R.id.note, text)
 
     fun pressAddButton() = clickView(R.id.add)
 
     fun addNote(text: String) {
         enterNoteText(text)
         clickView(R.id.add)
+    }
+
+    fun openAddNote() {
+        clickView(R.id.navigation_add_note)
+        matchNavigationHasCheckedItemId(R.id.navigation, R.id.navigation_add_note)
+    }
+
+    fun openMap() {
+        clickView(R.id.navigation_map)
+        matchNavigationHasCheckedItemId(R.id.navigation, R.id.navigation_map)
     }
 
     fun openSearch() {
@@ -82,16 +66,32 @@ class HomeScreenRobot : BaseTestRobot() {
         clickView(R.id.searchButton)
     }
 
-    fun isNoteInSearchResult(noteText: String) {
+    fun signOut() {
+        openActionBarOverflowOrOptionsMenu(getActivityInstance())
+        clickButtonWithText(R.string.nav_sign_out_title)
+    }
+
+    fun isMapDisplayed() {
+        val mapVisibilityIdlingResource =
+            ViewVisibilityIdlingResource(R.id.mapContainer, View.VISIBLE)
+        IdlingRegistry.getInstance().register(mapVisibilityIdlingResource)
+
+        matchDisplayedView(R.id.mapContainer)
+
+        IdlingRegistry.getInstance().unregister(mapVisibilityIdlingResource)
+    }
+
+    fun isNoteHintDisplayed(textId: Int) = matchHint(R.id.note, textId)
+
+    // TODO: change name of the method
+    fun isNoteInSearchHasResults(noteText: String) {
         val recyclerViewIdlingResource = RecyclerViewSizeIdlingResources(R.id.recyclerView)
         IdlingRegistry.getInstance().register(recyclerViewIdlingResource)
         matchRecyclerViewItemWithText(R.id.recyclerView, noteText)
         IdlingRegistry.getInstance().unregister(recyclerViewIdlingResource)
     }
 
-    fun verifyUnknownUserError() =
-            matchDisplayedText(R.string.unknown_user_error)
-
+    // TODO: change name of the method
     fun isNotesInSearchResult(notes: List<Note>) {
         val recyclerViewIdlingResource = RecyclerViewSizeIdlingResources(R.id.recyclerView)
         IdlingRegistry.getInstance().register(recyclerViewIdlingResource)
@@ -102,10 +102,13 @@ class HomeScreenRobot : BaseTestRobot() {
         IdlingRegistry.getInstance().unregister(recyclerViewIdlingResource)
     }
 
-    fun verifySearchResultsByItemCount(itemCount: Int) =
+    fun isUnknownUserErrorDisplayed() =
+            matchDisplayedText(R.string.unknown_user_error)
+
+    fun isSearchResultHasNumberItems(itemCount: Int) =
             matchRecyclerItemCount(R.id.recyclerView, itemCount)
 
-    fun verifySearchScreen() {
+    fun isSuccessfullyDisplayedSearchScreen() {
         matchDisplayedView(R.id.recyclerView)
         matchHint(R.id.searchText, R.string.search_hint)
         matchDisplayedView(R.id.searchOptions)
@@ -113,26 +116,17 @@ class HomeScreenRobot : BaseTestRobot() {
         matchText(R.id.searchButton, R.string.search_button_text)
     }
 
-    fun verifyAddButtonIsEnabled() = matchViewIsEnabled(R.id.add)
+    fun isAddButtonEnabled() = matchViewIsEnabled(R.id.add)
 
-    fun verifyAddButtonIsDisabled() = matchViewIsDisabled(R.id.add)
-    fun verifyNoteText(text: String) = matchText(R.id.note, text)
+    fun isAddButtonDisabled() = matchViewIsDisabled(R.id.add)
+
+    fun isNoteTextDisplayed(text: String) = matchText(R.id.note, text)
 
     fun isSuccessfullyDisplayed() {
         matchNavigationItemCount(R.id.navigation, 3)
         matchNavigationHasItemTitle(R.id.navigation, getActivityInstance().getString(R.string.nav_add_note_title))
         matchNavigationHasItemTitle(R.id.navigation, getActivityInstance().getString(R.string.nav_map_title))
         matchNavigationHasItemTitle(R.id.navigation, getActivityInstance().getString(R.string.nav_search_notes_title))
-        matchNavigationHasCheckedItemId(R.id.navigation, R.id.navigation_map)
-    }
-
-    fun openAddNote() {
-        clickView(R.id.navigation_add_note)
-        matchNavigationHasCheckedItemId(R.id.navigation, R.id.navigation_add_note)
-    }
-
-    fun openMap() {
-        clickView(R.id.navigation_map)
         matchNavigationHasCheckedItemId(R.id.navigation, R.id.navigation_map)
     }
 
@@ -144,7 +138,6 @@ class HomeScreenRobot : BaseTestRobot() {
     fun isSuccessfullyDisplayedSearch() {
         matchHint(R.id.searchText, R.string.search_hint)
         matchDisplayedView(R.id.searchButton)
-//        matchDisplayedView(R.id.searchOptions)
     }
 
     fun isSuccessfullyLoaded() {
