@@ -2,7 +2,6 @@ package com.alex.mapnotes.login
 
 import androidx.test.espresso.intent.Intents
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import androidx.test.rule.GrantPermissionRule
 import com.alex.mapnotes.MockTest
 import com.alex.mapnotes.robots.homeScreen
 import com.alex.mapnotes.robots.prepare
@@ -12,6 +11,7 @@ import org.junit.After
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
+import org.junit.rules.RuleChain
 import org.junit.runner.RunWith
 
 @RunWith(AndroidJUnit4::class)
@@ -24,11 +24,11 @@ class SignUpActivityTest : MockTest() {
     private val password = "password"
     private val emptyPassword = ""
 
-    @Rule @JvmField
-    val permissionRule: GrantPermissionRule = GrantPermissionRule.grant(android.Manifest.permission.ACCESS_FINE_LOCATION)
-
-    @Rule @JvmField
-    val activityRule = signUpActivity
+    @Rule
+    @JvmField
+    val chain: RuleChain = RuleChain
+            .outerRule(permissionRule)
+            .around(signUpActivity)
 
     @Before
     override fun setUp() {

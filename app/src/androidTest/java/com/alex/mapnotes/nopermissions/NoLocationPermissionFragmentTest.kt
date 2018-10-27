@@ -22,7 +22,8 @@ import org.junit.runner.RunWith
 @RunWith(AndroidJUnit4::class)
 class NoLocationPermissionFragmentTest {
 
-    @Rule @JvmField
+    @Rule
+    @JvmField
     val activityRule = ActivityTestRule<FragmentTestActivity>(FragmentTestActivity::class.java)
 
     @Before
