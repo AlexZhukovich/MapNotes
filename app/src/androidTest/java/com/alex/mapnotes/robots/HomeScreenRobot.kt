@@ -31,44 +31,44 @@ class HomeScreenRobot : BaseTestRobot() {
 
     fun enterNoteText(text: String) = enterText(R.id.note, text)
 
-    fun pressAddButton() = clickView(R.id.add)
+    fun pressAddButton() = clickOnView(R.id.add)
 
     fun addNote(text: String) {
         enterNoteText(text)
-        clickView(R.id.add)
+        clickOnView(R.id.add)
     }
 
     fun openAddNote() {
-        clickView(R.id.navigation_add_note)
-        matchNavigationHasCheckedItemId(R.id.navigation, R.id.navigation_add_note)
+        clickOnView(R.id.navigation_add_note)
+        isBottomNavigationHasCheckedItemId(R.id.navigation, R.id.navigation_add_note)
     }
 
     fun openMap() {
-        clickView(R.id.navigation_map)
-        matchNavigationHasCheckedItemId(R.id.navigation, R.id.navigation_map)
+        clickOnView(R.id.navigation_map)
+        isBottomNavigationHasCheckedItemId(R.id.navigation, R.id.navigation_map)
     }
 
     fun openSearch() {
-        clickView(R.id.navigation_search_notes)
+        clickOnView(R.id.navigation_search_notes)
 
-        matchNavigationHasCheckedItemId(R.id.navigation, R.id.navigation_search_notes)
+        isBottomNavigationHasCheckedItemId(R.id.navigation, R.id.navigation_search_notes)
     }
 
     fun searchNoteByText(text: String) {
         enterText(R.id.searchText, text)
-        clickView(R.id.searchButton)
+        clickOnView(R.id.searchButton)
     }
 
     fun searchNoteByUser(text: String) {
         enterText(R.id.searchText, text)
-        clickView(R.id.searchOptions)
-        changeSpinnerSelectedItemPosition(searchUserCategoryPosition)
-        clickView(R.id.searchButton)
+        clickOnView(R.id.searchOptions)
+        changeSelectedSpinnerItemPosition(searchUserCategoryPosition)
+        clickOnView(R.id.searchButton)
     }
 
     fun signOut() {
         openActionBarOverflowOrOptionsMenu(getActivityInstance())
-        clickButtonWithText(R.string.nav_sign_out_title)
+        clickOnViewWithText(R.string.nav_sign_out_title)
     }
 
     fun isMapDisplayed() {
@@ -76,18 +76,18 @@ class HomeScreenRobot : BaseTestRobot() {
             ViewVisibilityIdlingResource(R.id.mapContainer, View.VISIBLE)
         IdlingRegistry.getInstance().register(mapVisibilityIdlingResource)
 
-        matchDisplayedView(R.id.mapContainer)
+        isViewDisplayed(R.id.mapContainer)
 
         IdlingRegistry.getInstance().unregister(mapVisibilityIdlingResource)
     }
 
-    fun isNoteHintDisplayed(textId: Int) = matchHint(R.id.note, textId)
+    fun isNoteHintDisplayed(textId: Int) = isViewHintDisplayed(R.id.note, textId)
 
     // TODO: change name of the method
     fun isNoteInSearchHasResults(noteText: String) {
         val recyclerViewIdlingResource = RecyclerViewSizeIdlingResources(R.id.recyclerView)
         IdlingRegistry.getInstance().register(recyclerViewIdlingResource)
-        matchRecyclerViewItemWithText(R.id.recyclerView, noteText)
+        isRecyclerViewHasItemWithText(R.id.recyclerView, noteText)
         IdlingRegistry.getInstance().unregister(recyclerViewIdlingResource)
     }
 
@@ -103,41 +103,44 @@ class HomeScreenRobot : BaseTestRobot() {
     }
 
     fun isUnknownUserErrorDisplayed() =
-            matchDisplayedText(R.string.unknown_user_error)
+            isTextDisplayed(R.string.unknown_user_error)
 
     fun isSearchResultHasNumberItems(itemCount: Int) =
-            matchRecyclerItemCount(R.id.recyclerView, itemCount)
+            isRecyclerViewItemCount(R.id.recyclerView, itemCount)
 
     fun isSuccessfullyDisplayedSearchScreen() {
-        matchDisplayedView(R.id.recyclerView)
-        matchHint(R.id.searchText, R.string.search_hint)
-        matchDisplayedView(R.id.searchOptions)
-        matchSpinnerText(R.id.searchOptions, R.string.search_notes_category)
-        matchText(R.id.searchButton, R.string.search_button_text)
+        isViewDisplayed(R.id.recyclerView)
+        isViewHintDisplayed(R.id.searchText, R.string.search_hint)
+        isViewDisplayed(R.id.searchOptions)
+        isSpinnerHasText(R.id.searchOptions, R.string.search_notes_category)
+        isViewWithTextDisplayed(R.id.searchButton, R.string.search_button_text)
     }
 
-    fun isAddButtonEnabled() = matchViewIsEnabled(R.id.add)
+    fun isAddButtonEnabled() = isViewEnabled(R.id.add)
 
-    fun isAddButtonDisabled() = matchViewIsDisabled(R.id.add)
+    fun isAddButtonDisabled() = isViewDisabled(R.id.add)
 
-    fun isNoteTextDisplayed(text: String) = matchText(R.id.note, text)
+    fun isNoteTextDisplayed(text: String) = isViewWithTextDisplayed(R.id.note, text)
 
     fun isSuccessfullyDisplayed() {
-        matchNavigationItemCount(R.id.navigation, 3)
-        matchNavigationHasItemTitle(R.id.navigation, getActivityInstance().getString(R.string.nav_add_note_title))
-        matchNavigationHasItemTitle(R.id.navigation, getActivityInstance().getString(R.string.nav_map_title))
-        matchNavigationHasItemTitle(R.id.navigation, getActivityInstance().getString(R.string.nav_search_notes_title))
-        matchNavigationHasCheckedItemId(R.id.navigation, R.id.navigation_map)
+        isBottomNavigationItemCount(R.id.navigation, 3)
+        isBottomNavigationHasItemTitle(R.id.navigation,
+                getActivityInstance().getString(R.string.nav_add_note_title))
+        isBottomNavigationHasItemTitle(R.id.navigation,
+                getActivityInstance().getString(R.string.nav_map_title))
+        isBottomNavigationHasItemTitle(R.id.navigation,
+                getActivityInstance().getString(R.string.nav_search_notes_title))
+        isBottomNavigationHasCheckedItemId(R.id.navigation, R.id.navigation_map)
     }
 
     fun isSuccessfullyDisplayedAddNote() {
-        matchHint(R.id.note, R.string.add_note_hint)
-        matchViewIsDisabled(R.id.add)
+        isViewHintDisplayed(R.id.note, R.string.add_note_hint)
+        isViewDisabled(R.id.add)
     }
 
     fun isSuccessfullyDisplayedSearch() {
-        matchHint(R.id.searchText, R.string.search_hint)
-        matchDisplayedView(R.id.searchButton)
+        isViewHintDisplayed(R.id.searchText, R.string.search_hint)
+        isViewDisplayed(R.id.searchButton)
     }
 
     fun isSuccessfullyLoaded() {

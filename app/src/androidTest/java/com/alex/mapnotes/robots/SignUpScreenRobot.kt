@@ -26,7 +26,7 @@ class SignUpScreenRobot : BaseTestRobot() {
         if (password.isNotEmpty()) {
             enterText(R.id.password, password)
         }
-        clickView(R.id.signUp)
+        clickOnView(R.id.signUp)
     }
 
     fun isSuccessfullyLoaded() {
@@ -34,18 +34,18 @@ class SignUpScreenRobot : BaseTestRobot() {
     }
 
     fun isEmailShouldBeValidErrorDisplayed() {
-        matchDisplayedText(R.string.error_email_should_be_valid)
+        isTextDisplayed(R.string.error_email_should_be_valid)
     }
 
     fun isPasswordShouldNotBeEmptyErrorDisplayed() {
-        matchDisplayedText(R.string.error_password_should_not_be_empty)
+        isTextDisplayed(R.string.error_password_should_not_be_empty)
     }
 
     fun isNameShouldNotBeEmptyErrorDisplayed() {
-        matchDisplayedText(R.string.error_name_should_not_be_empty)
+        isTextDisplayed(R.string.error_name_should_not_be_empty)
     }
 
     fun isAccountCannotBeCreatedErrorDisplayed() {
-        matchDisplayedText(R.string.error_account_cannot_be_created)
+        isTextDisplayed(R.string.error_account_cannot_be_created)
     }
 }

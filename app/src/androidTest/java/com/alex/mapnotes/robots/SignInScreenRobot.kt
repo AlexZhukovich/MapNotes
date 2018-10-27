@@ -18,7 +18,7 @@ class SignInScreenRobot : BaseTestRobot() {
         if (password.isNotEmpty()) {
             enterText(R.id.password, password)
         }
-        clickView(R.id.signIn)
+        clickOnView(R.id.signIn)
     }
 
     fun isSignInErrorDisplayed() {
@@ -27,7 +27,7 @@ class SignInScreenRobot : BaseTestRobot() {
                 R.string.error_user_cannot_be_authenticated)
         IdlingRegistry.getInstance().register(snackbarErrorTextIdlingResource)
 
-        matchDisplayedText(R.string.error_user_cannot_be_authenticated)
+        isTextDisplayed(R.string.error_user_cannot_be_authenticated)
 
         IdlingRegistry.getInstance().unregister(snackbarErrorTextIdlingResource)
     }
@@ -38,7 +38,7 @@ class SignInScreenRobot : BaseTestRobot() {
                 R.string.error_password_should_not_be_empty)
         IdlingRegistry.getInstance().register(snackbarErrorTextIdlingResource)
 
-        matchDisplayedText(R.string.error_password_should_not_be_empty)
+        isTextDisplayed(R.string.error_password_should_not_be_empty)
 
         IdlingRegistry.getInstance().unregister(snackbarErrorTextIdlingResource)
     }
@@ -49,7 +49,7 @@ class SignInScreenRobot : BaseTestRobot() {
                 R.string.error_email_should_be_valid)
         IdlingRegistry.getInstance().register(snackbarErrorTextIdlingResource)
 
-        matchDisplayedText(R.string.error_email_should_be_valid)
+        isTextDisplayed(R.string.error_email_should_be_valid)
 
         IdlingRegistry.getInstance().unregister(snackbarErrorTextIdlingResource)
     }
