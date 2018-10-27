@@ -54,7 +54,7 @@ class SmokeTests {
         }
         signInScreen {
             signIn(correctEmail, incorrectPassword)
-            verifySignInErrorMessage()
+            isSignInErrorDisplayed()
         }
     }
 

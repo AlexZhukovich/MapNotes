@@ -52,7 +52,7 @@ class SignInActivityTest : MockTest() {
     fun shouldDisplayEmailErrorWhenEmailIsEmpty() {
         signInScreen {
             signIn(emptyEmail, emptyPassword)
-            verifyIncorrectEmailErrorMessage()
+            isIncorrectEmailErrorDisplayed()
         }
     }
 
@@ -60,7 +60,7 @@ class SignInActivityTest : MockTest() {
     fun shouldDisplayEmailErrorWhenEmailIsNotCorrect() {
         signInScreen {
             signIn(incorrectEmail, password)
-            verifyIncorrectEmailErrorMessage()
+            isIncorrectEmailErrorDisplayed()
         }
     }
 
@@ -68,7 +68,7 @@ class SignInActivityTest : MockTest() {
     fun shouldDisplayPasswordErrorWhenPasswordIsEmpty() {
         signInScreen {
             signIn(correctEmail, emptyPassword)
-            verifyEmptyPasswordErrorMessage()
+            isEmptyPasswordErrorDisplayed()
         }
     }
 
@@ -79,7 +79,7 @@ class SignInActivityTest : MockTest() {
         }
         signInScreen {
             signIn(correctEmail, password)
-            verifySignInErrorMessage()
+            isSignInErrorDisplayed()
         }
     }
 
