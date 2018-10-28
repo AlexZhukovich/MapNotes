@@ -1,5 +1,6 @@
 package com.alex.mapnotes
 
+import androidx.test.espresso.intent.Intents
 import androidx.test.rule.GrantPermissionRule
 import com.alex.mapnotes.data.provider.LocationProvider
 import com.alex.mapnotes.data.repository.NotesRepository
@@ -21,9 +22,11 @@ open class MockTest : KoinTest {
 
     open fun setUp() {
         loadKoinModules(listOf(testAppModule))
+        Intents.init()
     }
 
     open fun tearDown() {
+        Intents.release()
         closeKoin()
     }
 }

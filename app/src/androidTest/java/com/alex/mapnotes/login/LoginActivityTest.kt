@@ -1,9 +1,8 @@
 package com.alex.mapnotes.login
 
-import androidx.test.espresso.intent.Intents
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.rule.ActivityTestRule
-import com.alex.mapnotes.di.appModule
+import com.alex.mapnotes.MockTest
 import com.alex.mapnotes.robots.loginScreen
 import com.alex.mapnotes.robots.signInScreen
 import com.alex.mapnotes.robots.signUpScreen
@@ -12,20 +11,17 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.koin.standalone.StandAloneContext.closeKoin
-import org.koin.standalone.StandAloneContext.loadKoinModules
 
 @RunWith(AndroidJUnit4::class)
-class LoginActivityTest {
+class LoginActivityTest : MockTest() {
 
     @Rule
     @JvmField
     val activityRule = ActivityTestRule<LoginActivity>(LoginActivity::class.java)
 
     @Before
-    fun setUp() {
-        loadKoinModules(listOf(appModule))
-        Intents.init()
+    override fun setUp() {
+        super.setUp()
     }
 
     @Test
@@ -49,8 +45,7 @@ class LoginActivityTest {
     }
 
     @After
-    fun tearDown() {
-        Intents.release()
-        closeKoin()
+    override fun tearDown() {
+        super.tearDown()
     }
 }
