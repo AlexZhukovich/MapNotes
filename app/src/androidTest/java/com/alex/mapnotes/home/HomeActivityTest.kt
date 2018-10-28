@@ -1,6 +1,5 @@
 package com.alex.mapnotes.home
 
-import androidx.test.espresso.intent.Intents
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.alex.mapnotes.MockTest
 import com.alex.mapnotes.model.Note
@@ -8,6 +7,7 @@ import com.alex.mapnotes.robots.homeScreen
 import com.alex.mapnotes.robots.homeScreenMockActivityRule
 import com.alex.mapnotes.robots.loginScreen
 import com.alex.mapnotes.robots.prepare
+import org.junit.After
 import org.junit.Before
 import org.junit.Ignore
 import org.junit.Rule
@@ -75,7 +75,6 @@ class HomeActivityTest : MockTest() {
 
     @Test
     fun shouldVerifySignOut() {
-        Intents.init()
         prepare(testScope) {
             mockUserSignOut()
         }
@@ -86,6 +85,10 @@ class HomeActivityTest : MockTest() {
         loginScreen {
             isSuccessfullyLoaded()
         }
-        Intents.release()
+    }
+
+    @After
+    override fun tearDown() {
+        super.tearDown()
     }
 }
