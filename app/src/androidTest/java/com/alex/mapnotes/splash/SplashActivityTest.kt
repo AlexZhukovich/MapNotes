@@ -1,6 +1,5 @@
 package com.alex.mapnotes.splash
 
-import androidx.test.espresso.intent.Intents
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.alex.mapnotes.MockTest
 import com.alex.mapnotes.robots.homeScreen
@@ -27,7 +26,6 @@ class SplashActivityTest : MockTest() {
     @Before
     override fun setUp() {
         super.setUp()
-        Intents.init()
     }
 
     @Test
@@ -59,6 +57,6 @@ class SplashActivityTest : MockTest() {
 
     @After
     override fun tearDown() {
-        Intents.release()
+        super.tearDown()
     }
 }

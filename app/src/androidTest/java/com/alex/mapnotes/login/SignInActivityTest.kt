@@ -1,7 +1,6 @@
 package com.alex.mapnotes.login
 
 import android.content.Intent
-import androidx.test.espresso.intent.Intents
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.rule.ActivityTestRule
@@ -10,15 +9,12 @@ import com.alex.mapnotes.login.signin.SignInActivity
 import com.alex.mapnotes.robots.homeScreen
 import com.alex.mapnotes.robots.prepare
 import com.alex.mapnotes.robots.signInScreen
-import com.alex.mapnotes.testAppModule
 import org.junit.After
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.RuleChain
 import org.junit.runner.RunWith
-import org.koin.standalone.StandAloneContext.closeKoin
-import org.koin.standalone.StandAloneContext.loadKoinModules
 
 @RunWith(AndroidJUnit4::class)
 class SignInActivityTest : MockTest() {
@@ -40,9 +36,7 @@ class SignInActivityTest : MockTest() {
     @Before
     override fun setUp() {
         super.setUp()
-        loadKoinModules(listOf(testAppModule))
         activityRule.launchActivity(Intent(InstrumentationRegistry.getInstrumentation().targetContext, SignInActivity::class.java))
-        Intents.init()
     }
 
     @Test
@@ -97,7 +91,5 @@ class SignInActivityTest : MockTest() {
     @After
     override fun tearDown() {
         super.tearDown()
-        Intents.release()
-        closeKoin()
     }
 }
