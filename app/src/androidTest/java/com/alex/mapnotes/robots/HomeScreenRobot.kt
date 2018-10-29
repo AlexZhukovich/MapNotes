@@ -26,17 +26,10 @@ val homeScreenMockActivityRule = ActivityTestRule<HomeActivity>(HomeActivity::cl
 class HomeScreenRobot : BaseTestRobot() {
     private val searchUserCategoryPosition = 1
 
+    fun addNoteFragment(func: HomeAddNoteRobot.() -> Unit) = HomeAddNoteRobot().apply { func() }
+
     fun displayAsEntryPoint() {
         homeScreenMockActivityRule.launchActivity(null)
-    }
-
-    fun enterNoteText(text: String) = enterText(R.id.note, text)
-
-    fun pressAddButton() = clickOnView(R.id.add)
-
-    fun addNote(text: String) {
-        enterNoteText(text)
-        clickOnView(R.id.add)
     }
 
     fun openAddNote() {
@@ -82,8 +75,6 @@ class HomeScreenRobot : BaseTestRobot() {
         IdlingRegistry.getInstance().unregister(mapVisibilityIdlingResource)
     }
 
-    fun isNoteHintDisplayed(textId: Int) = isViewHintDisplayed(R.id.note, textId)
-
     // TODO: change name of the method
     fun isNoteInSearchHasResults(noteText: String) {
         val recyclerViewIdlingResource = RecyclerViewSizeIdlingResources(R.id.recyclerView)
@@ -117,12 +108,6 @@ class HomeScreenRobot : BaseTestRobot() {
         isViewWithTextDisplayed(R.id.searchButton, R.string.search_button_text)
     }
 
-    fun isAddButtonEnabled() = isViewEnabled(R.id.add)
-
-    fun isAddButtonDisabled() = isViewDisabled(R.id.add)
-
-    fun isNoteTextDisplayed(text: String) = isViewWithTextDisplayed(R.id.note, text)
-
     fun isSuccessfullyDisplayed() {
         isBottomNavigationItemCount(R.id.navigation, 3)
         isBottomNavigationHasItemTitle(R.id.navigation,
@@ -132,11 +117,6 @@ class HomeScreenRobot : BaseTestRobot() {
         isBottomNavigationHasItemTitle(R.id.navigation,
                 getActivityInstance().getString(R.string.nav_search_notes_title))
         isBottomNavigationHasCheckedItemId(R.id.navigation, R.id.navigation_map)
-    }
-
-    fun isSuccessfullyDisplayedAddNote() {
-        isViewHintDisplayed(R.id.note, R.string.add_note_hint)
-        isViewDisabled(R.id.add)
     }
 
     fun isSuccessfullyDisplayedSearch() {

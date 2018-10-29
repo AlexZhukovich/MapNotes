@@ -46,7 +46,9 @@ class HomeActivityTest : MockTest() {
         homeScreen {
             displayAsEntryPoint()
             openAddNote()
-            isSuccessfullyDisplayedAddNote()
+            addNoteFragment {
+                isSuccessfullyDisplayedAddNote()
+            }
         }
     }
 
