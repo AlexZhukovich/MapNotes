@@ -5,7 +5,7 @@ import androidx.test.rule.ActivityTestRule
 import com.alex.mapnotes.FragmentTestActivity
 import com.alex.mapnotes.MockTest
 import com.alex.mapnotes.R
-import com.alex.mapnotes.robots.homeScreen
+import com.alex.mapnotes.robots.addNoteFragment
 import com.alex.mapnotes.robots.prepare
 import org.junit.After
 import org.junit.Before
@@ -34,14 +34,14 @@ class AddNoteFragmentTest : MockTest() {
 
     @Test
     fun shouldDisplayNoteHintForANewNote() {
-        homeScreen {
+        addNoteFragment {
             isNoteHintDisplayed(R.string.add_note_hint)
         }
     }
 
     @Test
     fun shouldChangeAddButtonEnableAfterChangingNoteText() {
-        homeScreen {
+        addNoteFragment {
             isAddButtonDisabled()
             enterNoteText(testNoteText)
             isAddButtonEnabled()
@@ -50,7 +50,7 @@ class AddNoteFragmentTest : MockTest() {
 
     @Test
     fun shouldNothingChangeAfterClickOnAddButtonWithEmptyNoteText() {
-        homeScreen {
+        addNoteFragment {
             isNoteTextDisplayed(emptyNoteText)
             pressAddButton()
             isNoteTextDisplayed(emptyNoteText)
