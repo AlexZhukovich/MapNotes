@@ -62,7 +62,9 @@ class HomeActivityTest : MockTest() {
             displayAsEntryPoint()
             isSuccessfullyDisplayed()
             openSearch()
-            isSuccessfullyDisplayedSearch()
+            searchNoteFragment {
+                isSuccessfullyDisplayedSearch()
+            }
         }
     }
 

@@ -77,8 +77,10 @@ class SmokeTests {
                 addNote(noteText)
             }
             openSearch()
-            searchNoteByText(noteText)
-            isNoteInSearchHasResults(noteText)
+            searchNoteFragment {
+                searchNoteByText(noteText)
+                isSearchResultsHaveNoteWithTitle(noteText)
+            }
             signOut()
         }
     }
