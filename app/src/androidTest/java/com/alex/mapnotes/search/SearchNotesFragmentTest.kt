@@ -14,8 +14,8 @@ import com.alex.mapnotes.MockTest
 import com.alex.mapnotes.R
 import com.alex.mapnotes.data.Result
 import com.alex.mapnotes.model.Note
-import com.alex.mapnotes.robots.homeScreen
 import com.alex.mapnotes.robots.prepare
+import com.alex.mapnotes.robots.searchNoteFragment
 import io.mockk.coEvery
 import org.hamcrest.Matchers.allOf
 import org.junit.After
@@ -52,7 +52,7 @@ class SearchNotesFragmentTest : MockTest() {
             mockLoadingEmptyListOfNotes()
         }
         attachToTestActivity()
-        homeScreen {
+        searchNoteFragment {
             isSuccessfullyDisplayedSearchScreen()
         }
     }
@@ -65,9 +65,9 @@ class SearchNotesFragmentTest : MockTest() {
             mockLoadingListOfNotes(testNotes)
         }
         attachToTestActivity()
-        homeScreen {
+        searchNoteFragment {
             isSearchResultHasNumberItems(expectedItemCount)
-            isNotesInSearchResult(testNotes)
+            isSearchResultsHaveNotes(testNotes)
         }
     }
 
@@ -102,7 +102,7 @@ class SearchNotesFragmentTest : MockTest() {
             mockErrorDuringLoadingUserNames()
         }
         attachToTestActivity()
-        homeScreen {
+        searchNoteFragment {
             searchNoteByUser(searchInput)
             isUnknownUserErrorDisplayed()
         }
@@ -118,10 +118,10 @@ class SearchNotesFragmentTest : MockTest() {
             mockSearchNoteByAnyUser(testNotes)
         }
         attachToTestActivity()
-        homeScreen {
+        searchNoteFragment {
             searchNoteByUser(searchInput)
             isSearchResultHasNumberItems(expectedItemCount)
-            isNotesInSearchResult(testNotes)
+            isSearchResultsHaveNotes(testNotes)
         }
     }
 
@@ -134,10 +134,10 @@ class SearchNotesFragmentTest : MockTest() {
             mockSearchNoteByAnyText(testNotes)
         }
         attachToTestActivity()
-        homeScreen {
+        searchNoteFragment {
             searchNoteByText(searchInput)
             isSearchResultHasNumberItems(expectedItemCount)
-            isNotesInSearchResult(testNotes)
+            isSearchResultsHaveNotes(testNotes)
         }
     }
 
@@ -151,11 +151,11 @@ class SearchNotesFragmentTest : MockTest() {
             mockLoadingListOfNotes(testNotes)
         }
         attachToTestActivity()
-        homeScreen {
+        searchNoteFragment {
             searchNoteByText(searchInput)
             searchNoteByText(emptySearchInput)
             isSearchResultHasNumberItems(expectedItemCount)
-            isNotesInSearchResult(testNotes)
+            isSearchResultsHaveNotes(testNotes)
         }
     }
 
