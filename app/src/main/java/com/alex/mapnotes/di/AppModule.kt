@@ -18,7 +18,9 @@ import com.alex.mapnotes.login.signin.SignInMvpPresenter
 import com.alex.mapnotes.login.signin.SignInPresenter
 import com.alex.mapnotes.login.signup.SignUpMvpPresenter
 import com.alex.mapnotes.login.signup.SignUpPresenter
+import com.alex.mapnotes.map.MapFragment
 import com.alex.mapnotes.map.GoogleMapPresenter
+import com.alex.mapnotes.map.GeneralMapFragment
 import com.alex.mapnotes.map.MapMvpPresenter
 import com.alex.mapnotes.search.SearchNotesMvpPresenter
 import com.alex.mapnotes.search.SearchNotesPresenter
@@ -52,6 +54,8 @@ val appModule = applicationContext {
     factory { SearchNotesPresenter(get(), get(), get()) as SearchNotesMvpPresenter }
 
     // Map
+    factory { GeneralMapFragment() as MapFragment }
+
     factory { GoogleMapPresenter() as MapMvpPresenter }
 
     // Home

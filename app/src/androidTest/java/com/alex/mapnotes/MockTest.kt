@@ -5,6 +5,7 @@ import androidx.test.rule.GrantPermissionRule
 import com.alex.mapnotes.data.provider.LocationProvider
 import com.alex.mapnotes.data.repository.NotesRepository
 import com.alex.mapnotes.data.repository.UserRepository
+import com.alex.mapnotes.map.MapFragment
 import org.koin.standalone.StandAloneContext.closeKoin
 import org.koin.standalone.StandAloneContext.loadKoinModules
 import org.koin.standalone.inject
@@ -17,6 +18,7 @@ open class MockTest : KoinTest {
     val locationProvider: LocationProvider by inject()
     val userRepository: UserRepository by inject()
     val notesRepository: NotesRepository by inject()
+    val mapFragment: MapFragment by inject()
 
     val testScope: MockTest by lazy { this }
 
