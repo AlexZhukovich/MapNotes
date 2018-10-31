@@ -27,7 +27,7 @@ import org.koin.android.ext.android.setProperty
 
 class GoogleMapFragment : SupportMapFragment(), MapView, OnMapReadyCallback {
     private var map: GoogleMap? = null
-    var markers = mutableListOf<MarkerOptions>()
+    val markers = mutableListOf<MarkerOptions>()
 
     val presenter: MapMvpPresenter by inject()
     private val locationProvider: LocationProvider by inject()

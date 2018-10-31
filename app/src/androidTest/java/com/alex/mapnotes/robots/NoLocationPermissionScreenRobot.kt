@@ -7,6 +7,10 @@ fun noLocationPermissionScreen(func: NoLocationPermissionScreenRobot.() -> Unit)
 
 class NoLocationPermissionScreenRobot : BaseTestRobot() {
 
+    fun openApplicationPreferences() {
+        clickOnView(R.id.openAppPrefs)
+    }
+
     fun isSuccessfullyLoaded() {
         isViewDisplayed(R.id.mapImage)
         isViewWithTextDisplayed(R.id.permissionExplanation, R.string.permission_explanation)
