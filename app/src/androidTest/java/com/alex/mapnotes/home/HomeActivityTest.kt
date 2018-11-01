@@ -9,7 +9,6 @@ import com.alex.mapnotes.robots.loginScreen
 import com.alex.mapnotes.robots.prepare
 import org.junit.After
 import org.junit.Before
-import org.junit.Ignore
 import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.RuleChain
@@ -52,7 +51,7 @@ class HomeActivityTest : MockTest() {
         }
     }
 
-    @Test @Ignore
+    @Test
     fun shouldVerifySearchNoteFragment() {
         val notes = listOf(Note(text = "test note", user = "test user"))
         prepare(testScope) {
