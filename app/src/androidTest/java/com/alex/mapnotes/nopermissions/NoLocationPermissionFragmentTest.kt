@@ -1,11 +1,11 @@
 package com.alex.mapnotes.nopermissions
 
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import androidx.test.rule.ActivityTestRule
-import com.alex.mapnotes.FragmentTestActivity
 import com.alex.mapnotes.R
 import com.alex.mapnotes.robots.noLocationPermissionScreen
 import com.alex.mapnotes.robots.systemAppPreferenceScreen
+import com.alex.mapnotes.robots.testFragmentActivity
+import com.alex.mapnotes.robots.testScreen
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -16,11 +16,11 @@ class NoLocationPermissionFragmentTest {
 
     @Rule
     @JvmField
-    val activityRule = ActivityTestRule<FragmentTestActivity>(FragmentTestActivity::class.java)
+    val activityRule = testFragmentActivity
 
     @Before
     fun setUp() {
-        activityRule.activity.setFragment(NoLocationPermissionFragment())
+        testScreen { attachFragment(NoLocationPermissionFragment()) }
     }
 
     @Test
