@@ -1,12 +1,12 @@
 package com.alex.mapnotes.search
 
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import androidx.test.rule.ActivityTestRule
-import com.alex.mapnotes.FragmentTestActivity
 import com.alex.mapnotes.MockTest
 import com.alex.mapnotes.model.Note
 import com.alex.mapnotes.robots.prepare
 import com.alex.mapnotes.robots.searchNoteFragment
+import com.alex.mapnotes.robots.testFragmentActivity
+import com.alex.mapnotes.robots.testScreen
 import org.junit.After
 import org.junit.Before
 import org.junit.Rule
@@ -27,7 +27,7 @@ class SearchNotesFragmentTest : MockTest() {
             Note(text = "test note 3_2", user = "22222222"))
 
     @Rule @JvmField
-    val activityRule = ActivityTestRule<FragmentTestActivity>(FragmentTestActivity::class.java)
+    val activityRule = testFragmentActivity
 
     @Before
     override fun setUp() {
@@ -39,7 +39,7 @@ class SearchNotesFragmentTest : MockTest() {
         prepare(testScope) {
             mockLoadingEmptyListOfNotes()
         }
-        attachToTestActivity()
+        testScreen { attachFragment(SearchNotesFragment()) }
         searchNoteFragment {
             isSuccessfullyDisplayedSearchScreen()
         }
@@ -52,7 +52,7 @@ class SearchNotesFragmentTest : MockTest() {
         prepare(testScope) {
             mockLoadingListOfNotes(testNotes)
         }
-        attachToTestActivity()
+        testScreen { attachFragment(SearchNotesFragment()) }
         searchNoteFragment {
             isSearchResultHasNumberItems(expectedItemCount)
             isSearchResultsHaveNotes(testNotes)
@@ -64,7 +64,7 @@ class SearchNotesFragmentTest : MockTest() {
         prepare(testScope) {
             mockErrorDuringLoadingNotes()
         }
-        attachToTestActivity()
+        testScreen { attachFragment(SearchNotesFragment()) }
         searchNoteFragment {
             isSearchResultHasNumberItems(0)
             isErrorDuringLoadingNotesDisplayed()
@@ -77,7 +77,7 @@ class SearchNotesFragmentTest : MockTest() {
             mockLoadingEmptyListOfNotes()
             mockErrorDuringLoadingUserNames()
         }
-        attachToTestActivity()
+        testScreen { attachFragment(SearchNotesFragment()) }
         searchNoteFragment {
             searchNoteByUser(searchInput)
             isUnknownUserErrorDisplayed()
@@ -93,7 +93,7 @@ class SearchNotesFragmentTest : MockTest() {
             mockSearchUserId(testUID)
             mockSearchNoteByAnyUser(testNotes)
         }
-        attachToTestActivity()
+        testScreen { attachFragment(SearchNotesFragment()) }
         searchNoteFragment {
             searchNoteByUser(searchInput)
             isSearchResultHasNumberItems(expectedItemCount)
@@ -109,7 +109,7 @@ class SearchNotesFragmentTest : MockTest() {
             mockLoadingEmptyListOfNotes()
             mockSearchNoteByAnyText(testNotes)
         }
-        attachToTestActivity()
+        testScreen { attachFragment(SearchNotesFragment()) }
         searchNoteFragment {
             searchNoteByText(searchInput)
             isSearchResultHasNumberItems(expectedItemCount)
@@ -126,17 +126,13 @@ class SearchNotesFragmentTest : MockTest() {
             mockLoadingEmptyListOfNotesByNoteText()
             mockLoadingListOfNotes(testNotes)
         }
-        attachToTestActivity()
+        testScreen { attachFragment(SearchNotesFragment()) }
         searchNoteFragment {
             searchNoteByText(searchInput)
             searchNoteByText(emptySearchInput)
             isSearchResultHasNumberItems(expectedItemCount)
             isSearchResultsHaveNotes(testNotes)
         }
-    }
-
-    private fun attachToTestActivity() {
-        activityRule.activity.setFragment(SearchNotesFragment())
     }
 
     @After

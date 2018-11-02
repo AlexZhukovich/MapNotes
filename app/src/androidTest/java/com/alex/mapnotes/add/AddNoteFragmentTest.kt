@@ -1,12 +1,12 @@
 package com.alex.mapnotes.add
 
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import androidx.test.rule.ActivityTestRule
-import com.alex.mapnotes.FragmentTestActivity
 import com.alex.mapnotes.MockTest
 import com.alex.mapnotes.R
 import com.alex.mapnotes.robots.addNoteFragment
 import com.alex.mapnotes.robots.prepare
+import com.alex.mapnotes.robots.testFragmentActivity
+import com.alex.mapnotes.robots.testScreen
 import org.junit.After
 import org.junit.Before
 import org.junit.Rule
@@ -20,7 +20,7 @@ class AddNoteFragmentTest : MockTest() {
     private val emptyNoteText = ""
 
     @Rule @JvmField
-    val activityRule = ActivityTestRule<FragmentTestActivity>(FragmentTestActivity::class.java)
+    val activityRule = testFragmentActivity
 
     @Before
     override fun setUp() {
@@ -29,7 +29,7 @@ class AddNoteFragmentTest : MockTest() {
             mockLocationProvider(isLocationAvailable = true)
             mockAuthorizedUser()
         }
-        activityRule.activity.setFragment(AddNoteFragment())
+        testScreen { attachFragment(AddNoteFragment()) }
     }
 
     @Test

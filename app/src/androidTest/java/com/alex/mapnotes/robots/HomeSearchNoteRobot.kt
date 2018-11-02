@@ -6,6 +6,7 @@ import androidx.test.espresso.assertion.ViewAssertions
 import androidx.test.espresso.matcher.ViewMatchers
 import com.alex.mapnotes.R
 import com.alex.mapnotes.idlingresources.RecyclerViewSizeIdlingResources
+import com.alex.mapnotes.idlingresources.ViewTextIdlingResource
 import com.alex.mapnotes.matchers.RecyclerViewMatchers
 import com.alex.mapnotes.model.Note
 
@@ -44,8 +45,14 @@ class HomeSearchNoteRobot : BaseTestRobot() {
         IdlingRegistry.getInstance().unregister(recyclerViewIdlingResource)
     }
 
-    fun isErrorDuringLoadingNotesDisplayed() =
-            isTextDisplayed(R.string.loading_notes_error)
+    fun isErrorDuringLoadingNotesDisplayed() {
+        val snackbarErrorTextIdlingResource = ViewTextIdlingResource(
+                com.google.android.material.R.id.snackbar_text,
+                R.string.loading_notes_error)
+        IdlingRegistry.getInstance().register(snackbarErrorTextIdlingResource)
+        isTextDisplayed(R.string.loading_notes_error)
+        IdlingRegistry.getInstance().unregister(snackbarErrorTextIdlingResource)
+    }
 
     fun isUnknownUserErrorDisplayed() =
             isTextDisplayed(R.string.unknown_user_error)
