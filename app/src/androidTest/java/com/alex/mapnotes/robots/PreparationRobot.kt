@@ -75,6 +75,11 @@ class PreparationRobot(private val scope: MockTest) {
         coEvery { notesRepository.getNotes(any()) } returns Result.Success(listOf())
     }
 
+    fun mockErrorDuringLoadingNotes() {
+        val notesRepository = scope.notesRepository
+        coEvery { notesRepository.getNotes(any()) } returns Result.Error(RuntimeException())
+    }
+
     fun mockLoadingEmptyListOfNotesByNoteText() {
         val notesRepository = scope.notesRepository
         coEvery { notesRepository.getNotesByNoteText(any(), any()) } returns Result.Error(RuntimeException())
