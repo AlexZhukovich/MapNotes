@@ -44,6 +44,9 @@ class HomeSearchNoteRobot : BaseTestRobot() {
         IdlingRegistry.getInstance().unregister(recyclerViewIdlingResource)
     }
 
+    fun isErrorDuringLoadingNotesDisplayed() =
+            isTextDisplayed(R.string.loading_notes_error)
+
     fun isUnknownUserErrorDisplayed() =
             isTextDisplayed(R.string.unknown_user_error)
 

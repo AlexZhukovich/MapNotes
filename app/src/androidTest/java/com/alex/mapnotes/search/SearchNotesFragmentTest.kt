@@ -1,28 +1,16 @@
 package com.alex.mapnotes.search
 
-import androidx.test.espresso.Espresso.onView
-import androidx.test.espresso.assertion.ViewAssertions.matches
-import androidx.test.espresso.matcher.ViewMatchers.withId
-import androidx.test.espresso.matcher.ViewMatchers.withText
-import androidx.test.espresso.matcher.ViewMatchers.withSpinnerText
-import androidx.test.espresso.matcher.ViewMatchers.withHint
-import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.rule.ActivityTestRule
 import com.alex.mapnotes.FragmentTestActivity
 import com.alex.mapnotes.MockTest
-import com.alex.mapnotes.R
-import com.alex.mapnotes.data.Result
 import com.alex.mapnotes.model.Note
 import com.alex.mapnotes.robots.prepare
 import com.alex.mapnotes.robots.searchNoteFragment
-import io.mockk.coEvery
-import org.hamcrest.Matchers.allOf
 import org.junit.After
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
-import org.junit.Ignore
 import org.junit.runner.RunWith
 
 @RunWith(AndroidJUnit4::class)
@@ -71,28 +59,16 @@ class SearchNotesFragmentTest : MockTest() {
         }
     }
 
-    @Test @Ignore
+    @Test
     fun shouldDisplayLoadingNotesError() {
-        coEvery { notesRepository.getNotes(any()) } returns Result.Error(RuntimeException())
-        activityRule.activity.setFragment(SearchNotesFragment())
-
-        onView(withId(R.id.recyclerView))
-                .check(matches(isDisplayed()))
-
-        onView(withId(R.id.searchText))
-                .check(matches(withHint(R.string.search_hint)))
-
-        onView(withId(R.id.searchOptions))
-                .check(matches(isDisplayed()))
-
-        onView(withId(R.id.searchOptions))
-                .check(matches(withSpinnerText(R.string.search_notes_category)))
-
-        onView(withId(R.id.searchButton))
-                .check(matches(withText(R.string.search_button_text)))
-
-        onView(allOf(withId(R.id.snackbar_text), withText(R.string.loading_notes_error)))
-                .check(matches(isDisplayed()))
+        prepare(testScope) {
+            mockErrorDuringLoadingNotes()
+        }
+        attachToTestActivity()
+        searchNoteFragment {
+            isSearchResultHasNumberItems(0)
+            isErrorDuringLoadingNotesDisplayed()
+        }
     }
 
     @Test
