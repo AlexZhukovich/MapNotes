@@ -28,7 +28,7 @@ open class MockTest : KoinTest {
     }
 
     open fun tearDown() {
-        Intents.release()
         closeKoin()
+        Intents.release()
     }
 }
