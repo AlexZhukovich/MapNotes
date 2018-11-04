@@ -17,7 +17,6 @@ import org.junit.runner.RunWith
 class AddNoteFragmentTest : MockTest() {
 
     private val testNoteText = "test note"
-    private val emptyNoteText = ""
 
     @Rule @JvmField
     val activityRule = testFragmentActivity
@@ -45,15 +44,6 @@ class AddNoteFragmentTest : MockTest() {
             isAddButtonDisabled()
             enterNoteText(testNoteText)
             isAddButtonEnabled()
-        }
-    }
-
-    @Test
-    fun shouldNothingChangeAfterClickOnAddButtonWithEmptyNoteText() {
-        addNoteFragment {
-            isNoteTextDisplayed(emptyNoteText)
-            pressAddButton()
-            isNoteTextDisplayed(emptyNoteText)
         }
     }
 
