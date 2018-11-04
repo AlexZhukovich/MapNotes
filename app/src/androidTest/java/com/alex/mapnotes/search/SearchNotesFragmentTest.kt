@@ -66,6 +66,7 @@ class SearchNotesFragmentTest : MockTest() {
         }
         testScreen { attachFragment(SearchNotesFragment()) }
         searchNoteFragment {
+            isSuccessfullyDisplayedSearch()
             isSearchResultHasNumberItems(0)
             isErrorDuringLoadingNotesDisplayed()
         }
