@@ -7,6 +7,7 @@ import com.alex.mapnotes.robots.systemAppPreferenceScreen
 import com.alex.mapnotes.robots.testFragmentActivity
 import com.alex.mapnotes.robots.testScreen
 import org.junit.Before
+import org.junit.Ignore
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -30,7 +31,7 @@ class NoLocationPermissionFragmentTest {
         }
     }
 
-    @Test
+    @Test @Ignore
     fun shouldVerifyOpeningAppPreferences() {
         val appName = activityRule.activity.getString(R.string.app_name)
 
