@@ -60,19 +60,6 @@ class SearchNotesFragmentTest : MockTest() {
     }
 
     @Test
-    fun shouldDisplayLoadingNotesError() {
-        prepare(testScope) {
-            mockErrorDuringLoadingNotes()
-        }
-        testScreen { attachFragment(SearchNotesFragment()) }
-        searchNoteFragment {
-            isSuccessfullyDisplayedSearch()
-            isSearchResultHasNumberItems(0)
-            isErrorDuringLoadingNotesDisplayed()
-        }
-    }
-
-    @Test
     fun shouldDisplayUnknownUserUser() {
         prepare(testScope) {
             mockLoadingEmptyListOfNotes()
