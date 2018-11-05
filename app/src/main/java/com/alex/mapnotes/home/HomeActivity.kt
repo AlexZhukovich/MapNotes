@@ -24,7 +24,7 @@ import com.alex.mapnotes.ext.checkLocationPermission
 import com.alex.mapnotes.ext.navigateTo
 import com.alex.mapnotes.ext.requestLocationPermissions
 import com.alex.mapnotes.login.LoginActivity
-import com.alex.mapnotes.map.GoogleMapFragment
+import com.alex.mapnotes.map.MapFragment
 import com.alex.mapnotes.model.Note
 import com.alex.mapnotes.nopermissions.NoLocationPermissionFragment
 import com.alex.mapnotes.search.SearchNotesFragment
@@ -36,9 +36,9 @@ const val DISPLAY_LOCATION = "display_location"
 const val EXTRA_NOTE = "note"
 
 class HomeActivity : AppCompatActivity(), HomeView {
-    private var mapFragment: GoogleMapFragment? = null
     private val bottomSheetBehavior by lazy { BottomSheetBehavior.from(bottomSheet) }
 
+    private val mapFragment: MapFragment by inject()
     private val presenter: HomeMvpPresenter by inject()
 
     private val hideExpandedMenuListener = object : BroadcastReceiver() {
@@ -87,14 +87,12 @@ class HomeActivity : AppCompatActivity(), HomeView {
     override fun onStart() {
         super.onStart()
         presenter.onAttach(this)
-        mapFragment?.onStart()
         bottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
         presenter.checkUser()
     }
 
     override fun onResume() {
         super.onResume()
-        mapFragment?.onResume()
 
         navigation.selectedItemId = R.id.navigation_map
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener)
@@ -139,7 +137,7 @@ class HomeActivity : AppCompatActivity(), HomeView {
     }
 
     override fun updateMapInteractionMode(isInteractionMode: Boolean) {
-        mapFragment?.isInteractionMode = isInteractionMode
+        mapFragment.isInteractionMode = isInteractionMode
     }
 
     override fun updateNavigationState(newState: Int) {
@@ -153,10 +151,9 @@ class HomeActivity : AppCompatActivity(), HomeView {
     }
 
     override fun showContentWhichRequirePermissions() {
-        mapFragment = GoogleMapFragment()
-        mapFragment?.let {
+        mapFragment.let { mapFragment ->
             supportFragmentManager.beginTransaction()
-                    .replace(R.id.mapContainer, it)
+                    .replace(R.id.mapContainer, mapFragment.fragment)
                     .commit()
             navigation.visibility = View.VISIBLE
         }
@@ -175,9 +172,9 @@ class HomeActivity : AppCompatActivity(), HomeView {
     }
 
     override fun onBackPressed() {
-        if (mapFragment?.isInteractionMode!! || mapFragment?.markers?.isNotEmpty()!!) {
-            mapFragment?.isInteractionMode = false
-            mapFragment?.clearAllMarkers()
+        if (mapFragment.isInteractionMode || mapFragment.hasMarkersOnMap()) {
+            mapFragment.isInteractionMode = false
+            mapFragment.clearAllMarkers()
         } else {
             super.onBackPressed()
         }
@@ -185,14 +182,12 @@ class HomeActivity : AppCompatActivity(), HomeView {
 
     override fun onPause() {
         super.onPause()
-        mapFragment?.onPause()
         navigation.setOnNavigationItemSelectedListener(null)
         LocalBroadcastManager.getInstance(this).unregisterReceiver(hideExpandedMenuListener)
     }
 
     override fun onStop() {
         presenter.onDetach()
-        mapFragment?.onStop()
         super.onStop()
     }
 

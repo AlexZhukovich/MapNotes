@@ -1,12 +1,12 @@
 package com.alex.mapnotes.add
 
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import androidx.test.rule.ActivityTestRule
-import com.alex.mapnotes.FragmentTestActivity
 import com.alex.mapnotes.MockTest
 import com.alex.mapnotes.R
-import com.alex.mapnotes.robots.homeScreen
+import com.alex.mapnotes.robots.addNoteFragment
 import com.alex.mapnotes.robots.prepare
+import com.alex.mapnotes.robots.testFragmentActivity
+import com.alex.mapnotes.robots.testScreen
 import org.junit.After
 import org.junit.Before
 import org.junit.Rule
@@ -17,10 +17,9 @@ import org.junit.runner.RunWith
 class AddNoteFragmentTest : MockTest() {
 
     private val testNoteText = "test note"
-    private val emptyNoteText = ""
 
     @Rule @JvmField
-    val activityRule = ActivityTestRule<FragmentTestActivity>(FragmentTestActivity::class.java)
+    val activityRule = testFragmentActivity
 
     @Before
     override fun setUp() {
@@ -29,31 +28,22 @@ class AddNoteFragmentTest : MockTest() {
             mockLocationProvider(isLocationAvailable = true)
             mockAuthorizedUser()
         }
-        activityRule.activity.setFragment(AddNoteFragment())
+        testScreen { attachFragment(AddNoteFragment()) }
     }
 
     @Test
     fun shouldDisplayNoteHintForANewNote() {
-        homeScreen {
+        addNoteFragment {
             isNoteHintDisplayed(R.string.add_note_hint)
         }
     }
 
     @Test
     fun shouldChangeAddButtonEnableAfterChangingNoteText() {
-        homeScreen {
+        addNoteFragment {
             isAddButtonDisabled()
             enterNoteText(testNoteText)
             isAddButtonEnabled()
-        }
-    }
-
-    @Test
-    fun shouldNothingChangeAfterClickOnAddButtonWithEmptyNoteText() {
-        homeScreen {
-            isNoteTextDisplayed(emptyNoteText)
-            pressAddButton()
-            isNoteTextDisplayed(emptyNoteText)
         }
     }
 

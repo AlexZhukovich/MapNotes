@@ -1,18 +1,11 @@
 package com.alex.mapnotes.nopermissions
 
-import androidx.test.espresso.Espresso.onView
-import androidx.test.espresso.action.ViewActions.click
-import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import androidx.test.platform.app.InstrumentationRegistry
-import androidx.test.rule.ActivityTestRule
-import androidx.test.uiautomator.By
-import androidx.test.uiautomator.UiDevice
-import androidx.test.uiautomator.Until
-import com.alex.mapnotes.FragmentTestActivity
 import com.alex.mapnotes.R
 import com.alex.mapnotes.robots.noLocationPermissionScreen
-import org.junit.Assert.assertEquals
+import com.alex.mapnotes.robots.systemAppPreferenceScreen
+import com.alex.mapnotes.robots.testFragmentActivity
+import com.alex.mapnotes.robots.testScreen
 import org.junit.Before
 import org.junit.Ignore
 import org.junit.Rule
@@ -24,11 +17,11 @@ class NoLocationPermissionFragmentTest {
 
     @Rule
     @JvmField
-    val activityRule = ActivityTestRule<FragmentTestActivity>(FragmentTestActivity::class.java)
+    val activityRule = testFragmentActivity
 
     @Before
     fun setUp() {
-        activityRule.activity.setFragment(NoLocationPermissionFragment())
+        testScreen { attachFragment(NoLocationPermissionFragment()) }
     }
 
     @Test
@@ -40,16 +33,14 @@ class NoLocationPermissionFragmentTest {
 
     @Test @Ignore
     fun shouldVerifyOpeningAppPreferences() {
-        val uiDevice = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation())
-        val expectedAppName = "MapNotes"
-        val expectedAppNameRes = "com.android.settings:id/entity_header_title"
-        val timeout = 3_000L
+        val appName = activityRule.activity.getString(R.string.app_name)
 
-        onView(withId(R.id.openAppPrefs))
-                .perform(click())
-
-        uiDevice.wait(Until.hasObject(By.text(expectedAppName)), timeout)
-        val appName = uiDevice.findObject(By.res(expectedAppNameRes))
-        assertEquals(expectedAppName, appName.text)
+        noLocationPermissionScreen {
+            openApplicationPreferences()
+        }
+        systemAppPreferenceScreen {
+            isAppPreferencesDisplayed(appName)
+            closeAppPreferenceScreen()
+        }
     }
 }
