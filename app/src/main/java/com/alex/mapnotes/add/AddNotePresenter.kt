@@ -10,8 +10,8 @@ import com.alex.mapnotes.data.repository.NotesRepository
 import com.alex.mapnotes.data.repository.UserRepository
 import com.alex.mapnotes.model.Location
 import com.alex.mapnotes.model.Note
-import kotlinx.coroutines.experimental.launch
-import kotlinx.coroutines.experimental.withContext
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class AddNotePresenter(
     private val appExecutors: AppExecutors,

@@ -12,8 +12,7 @@ import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
 import io.mockk.coVerify
-import kotlinx.coroutines.experimental.Dispatchers
-import kotlinx.coroutines.experimental.android.Main
+import kotlinx.coroutines.Dispatchers
 import org.junit.After
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
