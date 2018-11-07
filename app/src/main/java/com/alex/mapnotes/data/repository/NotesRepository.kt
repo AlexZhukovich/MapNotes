@@ -2,7 +2,7 @@ package com.alex.mapnotes.data.repository
 
 import com.alex.mapnotes.data.Result
 import com.alex.mapnotes.model.Note
-import kotlinx.coroutines.experimental.Job
+import kotlinx.coroutines.Job
 
 interface NotesRepository {
 

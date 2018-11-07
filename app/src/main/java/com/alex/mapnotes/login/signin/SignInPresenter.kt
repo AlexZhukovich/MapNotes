@@ -5,7 +5,7 @@ import com.alex.mapnotes.base.ScopedPresenter
 import com.alex.mapnotes.data.Result
 import com.alex.mapnotes.data.repository.UserRepository
 import com.alex.mapnotes.ext.isValidEmail
-import kotlinx.coroutines.experimental.launch
+import kotlinx.coroutines.launch
 
 class SignInPresenter(
     private val appExecutors: AppExecutors,

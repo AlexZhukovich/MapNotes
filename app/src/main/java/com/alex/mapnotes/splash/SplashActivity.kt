@@ -7,7 +7,7 @@ import com.alex.mapnotes.data.repository.UserRepository
 import com.alex.mapnotes.ext.navigateTo
 import com.alex.mapnotes.home.HomeActivity
 import com.alex.mapnotes.login.LoginActivity
-import kotlinx.coroutines.experimental.runBlocking
+import kotlinx.coroutines.runBlocking
 import org.koin.android.ext.android.inject
 
 class SplashActivity : AppCompatActivity() {
