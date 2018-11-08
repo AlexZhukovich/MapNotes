@@ -28,38 +28,38 @@ import org.koin.dsl.module.applicationContext
 
 val appModule = applicationContext {
 
-    bean { AppExecutors() }
+    single(override = true) { AppExecutors() }
 
     // Location
-    factory { Geocoder(getProperty(Properties.FRAGMENT_CONTEXT)) }
+    factory(override = true) { Geocoder(getProperty(Properties.FRAGMENT_CONTEXT)) }
 
-    factory { AddressLocationProvider(getProperty(Properties.FRAGMENT_CONTEXT)) as LocationProvider }
+    factory(override = true) { AddressLocationProvider(getProperty(Properties.FRAGMENT_CONTEXT)) as LocationProvider }
 
-    factory { FullAddressFormatter(get()) as LocationFormatter }
+    factory(override = true) { FullAddressFormatter(get()) as LocationFormatter }
 
     // Repositories
-    factory { FirebaseUserRepository(get()) as UserRepository }
+    factory(override = true) { FirebaseUserRepository(get()) as UserRepository }
 
-    factory { FirebaseNotesRepository(get()) as NotesRepository }
+    factory(override = true) { FirebaseNotesRepository(get()) as NotesRepository }
 
     // Login
-    factory { SignInPresenter(get(), get()) as SignInMvpPresenter }
+    factory(override = true) { SignInPresenter(get(), get()) as SignInMvpPresenter }
 
-    factory { SignUpPresenter(get(), get()) as SignUpMvpPresenter }
+    factory(override = true) { SignUpPresenter(get(), get()) as SignUpMvpPresenter }
 
     // Add
-    factory { AddNotePresenter(get(), get(), get(), get(), get()) as AddNoteMvpPresenter }
+    factory(override = true) { AddNotePresenter(get(), get(), get(), get(), get()) as AddNoteMvpPresenter }
 
     // Search
-    factory { SearchNotesPresenter(get(), get(), get()) as SearchNotesMvpPresenter }
+    factory(override = true) { SearchNotesPresenter(get(), get(), get()) as SearchNotesMvpPresenter }
 
     // Map
-    factory { GeneralMapFragment() as MapFragment }
+    factory(override = true) { GeneralMapFragment() as MapFragment }
 
-    factory { GoogleMapPresenter() as MapMvpPresenter }
+    factory(override = true) { GoogleMapPresenter() as MapMvpPresenter }
 
     // Home
-    factory { HomePresenter(get(), get()) as HomeMvpPresenter }
+    factory(override = true) { HomePresenter(get(), get()) as HomeMvpPresenter }
 }
 
 object Properties {
