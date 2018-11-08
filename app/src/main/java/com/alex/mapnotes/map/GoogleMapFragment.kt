@@ -22,7 +22,6 @@ import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import org.koin.android.ext.android.inject
-import org.koin.android.ext.android.releaseProperties
 import org.koin.android.ext.android.setProperty
 
 class GoogleMapFragment : SupportMapFragment(), MapView, OnMapReadyCallback {
@@ -127,7 +126,6 @@ class GoogleMapFragment : SupportMapFragment(), MapView, OnMapReadyCallback {
 
     override fun onStop() {
         locationProvider.stopLocationUpdates()
-        releaseProperties(Properties.FRAGMENT_CONTEXT)
         presenter.onDetach()
         super.onStop()
     }
