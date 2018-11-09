@@ -18,9 +18,9 @@ import com.alex.mapnotes.map.MapMvpPresenter
 import com.alex.mapnotes.search.SearchNotesMvpPresenter
 import com.alex.mapnotes.search.SearchNotesPresenter
 import io.mockk.mockk
-import org.koin.dsl.module.applicationContext
+import org.koin.dsl.module.module
 
-val testAppModule = applicationContext {
+val testAppModule = module {
 
     single(override = true) { AppExecutors() }
 

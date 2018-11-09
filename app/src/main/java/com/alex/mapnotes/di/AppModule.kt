@@ -24,9 +24,9 @@ import com.alex.mapnotes.map.GeneralMapFragment
 import com.alex.mapnotes.map.MapMvpPresenter
 import com.alex.mapnotes.search.SearchNotesMvpPresenter
 import com.alex.mapnotes.search.SearchNotesPresenter
-import org.koin.dsl.module.applicationContext
+import org.koin.dsl.module.module
 
-val appModule = applicationContext {
+val appModule = module {
 
     single(override = true) { AppExecutors() }
 
