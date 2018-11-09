@@ -20,17 +20,23 @@ import com.alex.mapnotes.search.SearchNotesPresenter
 import io.mockk.mockk
 import org.koin.dsl.module.module
 
-val testAppModule = module {
+val testLocationModule = module(override = true) {
 
-    single(override = true) { AppExecutors() }
+    single { mockk<LocationProvider>() }
 
-    single(override = true) { mockk<LocationProvider>() }
+    single { mockk<LocationFormatter>() }
+}
+
+val testDataModule = module(override = true) {
 
     single(override = true) { mockk<UserRepository>() }
 
     single(override = true) { mockk<NotesRepository>() }
+}
 
-    single(override = true) { mockk<LocationFormatter>() }
+val testAppModule = module {
+
+    single(override = true) { AppExecutors() }
 
     factory(override = true) { SignInPresenter(get(), get()) as SignInMvpPresenter }
 

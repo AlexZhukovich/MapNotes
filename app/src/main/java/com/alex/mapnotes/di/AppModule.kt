@@ -26,21 +26,25 @@ import com.alex.mapnotes.search.SearchNotesMvpPresenter
 import com.alex.mapnotes.search.SearchNotesPresenter
 import org.koin.dsl.module.module
 
+val locationModule = module(override = true) {
+
+    factory { Geocoder(getProperty(Properties.FRAGMENT_CONTEXT)) }
+
+    factory { AddressLocationProvider(getProperty(Properties.FRAGMENT_CONTEXT)) as LocationProvider }
+
+    factory { FullAddressFormatter(get()) as LocationFormatter }
+}
+
+val dataModule = module(override = true) {
+
+    factory { FirebaseUserRepository(get()) as UserRepository }
+
+    factory { FirebaseNotesRepository(get()) as NotesRepository }
+}
+
 val appModule = module {
 
     single(override = true) { AppExecutors() }
-
-    // Location
-    factory(override = true) { Geocoder(getProperty(Properties.FRAGMENT_CONTEXT)) }
-
-    factory(override = true) { AddressLocationProvider(getProperty(Properties.FRAGMENT_CONTEXT)) as LocationProvider }
-
-    factory(override = true) { FullAddressFormatter(get()) as LocationFormatter }
-
-    // Repositories
-    factory(override = true) { FirebaseUserRepository(get()) as UserRepository }
-
-    factory(override = true) { FirebaseNotesRepository(get()) as NotesRepository }
 
     // Login
     factory(override = true) { SignInPresenter(get(), get()) as SignInMvpPresenter }

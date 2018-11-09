@@ -23,7 +23,7 @@ open class MockTest : KoinTest {
     val testScope: MockTest by lazy { this }
 
     open fun setUp() {
-        loadKoinModules(listOf(testAppModule))
+        loadKoinModules(listOf(testLocationModule, testDataModule, testAppModule))
         Intents.init()
     }
 

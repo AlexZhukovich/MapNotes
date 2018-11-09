@@ -2,6 +2,8 @@ package com.alex.mapnotes
 
 import android.app.Application
 import com.alex.mapnotes.di.appModule
+import com.alex.mapnotes.di.dataModule
+import com.alex.mapnotes.di.locationModule
 import com.google.android.gms.maps.MapsInitializer
 import org.koin.android.ext.android.startKoin
 
@@ -13,6 +15,6 @@ open class MapNotesApp : Application() {
     }
 
     open fun initDI() {
-        startKoin(this, listOf(appModule))
+        startKoin(this, listOf(locationModule, dataModule, appModule))
     }
 }
