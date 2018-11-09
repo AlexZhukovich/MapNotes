@@ -9,8 +9,8 @@ import io.mockk.verify
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
-import org.koin.standalone.StandAloneContext.closeKoin
 import org.koin.standalone.StandAloneContext.loadKoinModules
+import org.koin.standalone.StandAloneContext.stopKoin
 
 class GoogleMapPresenterTest {
 
@@ -246,6 +246,6 @@ class GoogleMapPresenterTest {
 
     @After
     fun tearDown() {
-        closeKoin()
+        stopKoin()
     }
 }

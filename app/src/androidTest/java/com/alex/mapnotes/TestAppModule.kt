@@ -22,29 +22,27 @@ import org.koin.dsl.module.applicationContext
 
 val testAppModule = applicationContext {
 
-    bean { AppExecutors() }
+    single(override = true) { AppExecutors() }
 
-    bean <LocationProvider> { mockk() }
+    single(override = true) { mockk<LocationProvider>() }
 
-    bean <UserRepository> { mockk() }
+    single(override = true) { mockk<UserRepository>() }
 
-    bean <NotesRepository> { mockk() }
+    single(override = true) { mockk<NotesRepository>() }
 
-    bean <LocationProvider> { mockk() }
+    single(override = true) { mockk<LocationFormatter>() }
 
-    bean <LocationFormatter> { mockk() }
+    factory(override = true) { SignInPresenter(get(), get()) as SignInMvpPresenter }
 
-    factory { SignInPresenter(get(), get()) as SignInMvpPresenter }
+    factory(override = true) { SignUpPresenter(get(), get()) as SignUpMvpPresenter }
 
-    factory { SignUpPresenter(get(), get()) as SignUpMvpPresenter }
+    factory(override = true) { HomePresenter(get(), get()) as HomeMvpPresenter }
 
-    factory { HomePresenter(get(), get()) as HomeMvpPresenter }
+    factory(override = true) { AddNotePresenter(get(), get(), get(), get(), get()) as AddNoteMvpPresenter }
 
-    factory { AddNotePresenter(get(), get(), get(), get(), get()) as AddNoteMvpPresenter }
+    factory(override = true) { SearchNotesPresenter(get(), get(), get()) as SearchNotesMvpPresenter }
 
-    factory { SearchNotesPresenter(get(), get(), get()) as SearchNotesMvpPresenter }
+    factory(override = true) { FakeMapFragment() as MapFragment }
 
-    factory { FakeMapFragment() as MapFragment }
-
-    factory { GoogleMapPresenter() as MapMvpPresenter }
+    factory(override = true) { GoogleMapPresenter() as MapMvpPresenter }
 }

@@ -6,8 +6,8 @@ import com.alex.mapnotes.data.provider.LocationProvider
 import com.alex.mapnotes.data.repository.NotesRepository
 import com.alex.mapnotes.data.repository.UserRepository
 import com.alex.mapnotes.map.MapFragment
-import org.koin.standalone.StandAloneContext.closeKoin
 import org.koin.standalone.StandAloneContext.loadKoinModules
+import org.koin.standalone.StandAloneContext.stopKoin
 import org.koin.standalone.inject
 import org.koin.test.KoinTest
 
@@ -28,7 +28,7 @@ open class MockTest : KoinTest {
     }
 
     open fun tearDown() {
-        closeKoin()
+        stopKoin()
         Intents.release()
     }
 }
