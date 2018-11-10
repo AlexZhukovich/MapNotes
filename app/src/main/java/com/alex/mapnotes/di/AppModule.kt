@@ -27,7 +27,6 @@ import com.alex.mapnotes.search.SearchNotesPresenter
 import org.koin.dsl.module.module
 
 val locationModule = module(override = true) {
-
     factory { Geocoder(getProperty(Properties.FRAGMENT_CONTEXT)) }
 
     factory { AddressLocationProvider(getProperty(Properties.FRAGMENT_CONTEXT)) as LocationProvider }
@@ -36,34 +35,37 @@ val locationModule = module(override = true) {
 }
 
 val dataModule = module(override = true) {
-
     factory { FirebaseUserRepository(get()) as UserRepository }
 
     factory { FirebaseNotesRepository(get()) as NotesRepository }
 }
 
-val appModule = module {
+val appModule = module(override = true) {
+    single { AppExecutors() }
+}
 
-    single(override = true) { AppExecutors() }
+val loginScreenModule = module(override = true) {
+    factory { SignInPresenter(get(), get()) as SignInMvpPresenter }
 
-    // Login
-    factory(override = true) { SignInPresenter(get(), get()) as SignInMvpPresenter }
+    factory { SignUpPresenter(get(), get()) as SignUpMvpPresenter }
+}
 
-    factory(override = true) { SignUpPresenter(get(), get()) as SignUpMvpPresenter }
+val homeScreenModule = module(override = true) {
+    factory { HomePresenter(get(), get()) as HomeMvpPresenter }
+}
 
-    // Add
-    factory(override = true) { AddNotePresenter(get(), get(), get(), get(), get()) as AddNoteMvpPresenter }
+val mapModule = module(override = true) {
+    factory { GeneralMapFragment() as MapFragment }
 
-    // Search
-    factory(override = true) { SearchNotesPresenter(get(), get(), get()) as SearchNotesMvpPresenter }
+    factory { GoogleMapPresenter() as MapMvpPresenter }
+}
 
-    // Map
-    factory(override = true) { GeneralMapFragment() as MapFragment }
+val addNoteScreenModule = module(override = true) {
+    factory { AddNotePresenter(get(), get(), get(), get(), get()) as AddNoteMvpPresenter }
+}
 
-    factory(override = true) { GoogleMapPresenter() as MapMvpPresenter }
-
-    // Home
-    factory(override = true) { HomePresenter(get(), get()) as HomeMvpPresenter }
+val searchNotesScreenModule = module(override = true) {
+    factory { SearchNotesPresenter(get(), get(), get()) as SearchNotesMvpPresenter }
 }
 
 object Properties {
