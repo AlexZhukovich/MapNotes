@@ -6,8 +6,8 @@ import com.alex.mapnotes.data.provider.LocationProvider
 import com.alex.mapnotes.data.repository.NotesRepository
 import com.alex.mapnotes.data.repository.UserRepository
 import com.alex.mapnotes.map.MapFragment
-import org.koin.standalone.StandAloneContext.closeKoin
 import org.koin.standalone.StandAloneContext.loadKoinModules
+import org.koin.standalone.StandAloneContext.stopKoin
 import org.koin.standalone.inject
 import org.koin.test.KoinTest
 
@@ -23,12 +23,12 @@ open class MockTest : KoinTest {
     val testScope: MockTest by lazy { this }
 
     open fun setUp() {
-        loadKoinModules(listOf(testAppModule))
+        loadKoinModules(listOf(testLocationModule, testDataModule, testAppModule))
         Intents.init()
     }
 
     open fun tearDown() {
-        closeKoin()
+        stopKoin()
         Intents.release()
     }
 }

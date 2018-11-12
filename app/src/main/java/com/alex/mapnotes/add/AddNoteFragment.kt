@@ -14,7 +14,6 @@ import com.alex.mapnotes.di.Properties
 import kotlinx.android.synthetic.main.fragment_add_note.*
 import kotlinx.android.synthetic.main.fragment_add_note.view.*
 import org.koin.android.ext.android.inject
-import org.koin.android.ext.android.releaseProperties
 import org.koin.android.ext.android.setProperty
 
 class AddNoteFragment : Fragment(), AddNoteView {
@@ -69,7 +68,6 @@ class AddNoteFragment : Fragment(), AddNoteView {
 
     override fun onStop() {
         super.onStop()
-        releaseProperties(Properties.FRAGMENT_CONTEXT)
         presenter.onDetach()
     }
 }

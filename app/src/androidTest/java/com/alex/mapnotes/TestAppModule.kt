@@ -18,33 +18,37 @@ import com.alex.mapnotes.map.MapMvpPresenter
 import com.alex.mapnotes.search.SearchNotesMvpPresenter
 import com.alex.mapnotes.search.SearchNotesPresenter
 import io.mockk.mockk
-import org.koin.dsl.module.applicationContext
+import org.koin.dsl.module.module
 
-val testAppModule = applicationContext {
+val testLocationModule = module(override = true) {
 
-    bean { AppExecutors() }
+    single { mockk<LocationProvider>() }
 
-    bean <LocationProvider> { mockk() }
+    single { mockk<LocationFormatter>() }
+}
 
-    bean <UserRepository> { mockk() }
+val testDataModule = module(override = true) {
 
-    bean <NotesRepository> { mockk() }
+    single(override = true) { mockk<UserRepository>() }
 
-    bean <LocationProvider> { mockk() }
+    single(override = true) { mockk<NotesRepository>() }
+}
 
-    bean <LocationFormatter> { mockk() }
+val testAppModule = module {
 
-    factory { SignInPresenter(get(), get()) as SignInMvpPresenter }
+    single(override = true) { AppExecutors() }
 
-    factory { SignUpPresenter(get(), get()) as SignUpMvpPresenter }
+    factory(override = true) { SignInPresenter(get(), get()) as SignInMvpPresenter }
 
-    factory { HomePresenter(get(), get()) as HomeMvpPresenter }
+    factory(override = true) { SignUpPresenter(get(), get()) as SignUpMvpPresenter }
 
-    factory { AddNotePresenter(get(), get(), get(), get(), get()) as AddNoteMvpPresenter }
+    factory(override = true) { HomePresenter(get(), get()) as HomeMvpPresenter }
 
-    factory { SearchNotesPresenter(get(), get(), get()) as SearchNotesMvpPresenter }
+    factory(override = true) { AddNotePresenter(get(), get(), get(), get(), get()) as AddNoteMvpPresenter }
 
-    factory { FakeMapFragment() as MapFragment }
+    factory(override = true) { SearchNotesPresenter(get(), get(), get()) as SearchNotesMvpPresenter }
 
-    factory { GoogleMapPresenter() as MapMvpPresenter }
+    factory(override = true) { FakeMapFragment() as MapFragment }
+
+    factory(override = true) { GoogleMapPresenter() as MapMvpPresenter }
 }
