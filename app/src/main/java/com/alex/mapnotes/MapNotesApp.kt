@@ -20,7 +20,7 @@ open class MapNotesApp : Application() {
     }
 
     open fun initDI() {
-        startKoin(this, listOf(
+        startKoin(applicationContext, listOf(
                 locationModule,
                 dataModule,
                 loginScreenModule,
