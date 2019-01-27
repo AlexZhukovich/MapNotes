@@ -19,7 +19,7 @@ class GoogleMapPresenterTest {
     private val testNote = Note(text = "test note")
     private val testLocation = Location(10.0, 10.0)
 
-    private val view: MapView = mockk()
+    private val view: MapView = mockk(relaxed = true)
     private val presenter by lazy { GoogleMapPresenter() }
 
     @Before
@@ -38,8 +38,6 @@ class GoogleMapPresenterTest {
 
     @Test
     fun `verify handleInteractionMode without interaction mode when non-null view is attached`() {
-        every { view.animateCamera(any()) } answers { nothing }
-
         presenter.onAttach(view)
         presenter.handleInteractionMode(isNonInteractionMode)
 
@@ -153,8 +151,6 @@ class GoogleMapPresenterTest {
 
     @Test
     fun `verify handleLocationUpdate with non-interaction mode and new location when non-null view is attached`() {
-        every { view.animateCamera(any()) } answers { nothing }
-
         presenter.onAttach(view)
         presenter.handleLocationUpdate(isNonInteractionMode, testLocation)
 
@@ -163,8 +159,6 @@ class GoogleMapPresenterTest {
 
     @Test
     fun `verify handleLocationUpdate with non-interaction mode and the same location when non-null view is attached`() {
-        every { view.animateCamera(any()) } answers { nothing }
-
         presenter.onAttach(view)
         presenter.handleLocationUpdate(isNonInteractionMode, testLocation)
         presenter.handleLocationUpdate(isNonInteractionMode, testLocation)

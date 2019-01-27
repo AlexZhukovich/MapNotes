@@ -22,9 +22,9 @@ import org.robolectric.RobolectricTestRunner
 @RunWith(RobolectricTestRunner::class)
 class SignInPresenterTest {
 
-    private val view: SignInView = mockk()
-    private val appExecutors: AppExecutors = mockk()
-    private val userRepository: UserRepository = mockk()
+    private val view: SignInView = mockk(relaxed = true)
+    private val appExecutors: AppExecutors = mockk(relaxed = true)
+    private val userRepository: UserRepository = mockk(relaxed = true)
 
     private val presenter by lazy { SignInPresenter(appExecutors, userRepository) }
 
@@ -33,10 +33,6 @@ class SignInPresenterTest {
         loadKoinModules(listOf(appModule))
 
         every { appExecutors.networkContext } returns Dispatchers.Main
-        every { view.displayEmailError() } answers { nothing }
-        every { view.displayPasswordError() } answers { nothing }
-        every { view.displaySignInError() } answers { nothing }
-        every { view.navigateToMapScreen() } answers { nothing }
     }
 
     @Test
