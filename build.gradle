@@ -12,7 +12,7 @@ buildscript {
     ext.maps_play_services_version = '16.0.0'
     ext.play_services_version = '16.0.0'
     ext.firebase_core_version = '16.0.8'
-    ext.firebase_auth_version = '16.2.0'
+    ext.firebase_auth_version = '16.2.1'
     ext.firebase_database_version = '16.1.0'
     ext.junit_version = '4.12'
     ext.mockk_version = '1.8.10.kotlin13'
