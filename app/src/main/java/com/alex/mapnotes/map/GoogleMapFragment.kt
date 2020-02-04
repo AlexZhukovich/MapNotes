@@ -28,7 +28,7 @@ class GoogleMapFragment : SupportMapFragment(), MapView, OnMapReadyCallback {
     val markers = mutableListOf<MarkerOptions>()
 
     val presenter: MapMvpPresenter by inject()
-    private val locationProvider: LocationProvider by inject{ parametersOf(requireActivity()) }
+    private val locationProvider: LocationProvider by inject { parametersOf(requireActivity()) }
 
     var isInteractionMode: Boolean = false
         set(value) {

@@ -33,7 +33,7 @@ val locationModule = module(override = true) {
 
     factory { (activityContext: Context) -> AddressLocationProvider(activityContext) as LocationProvider }
 
-    factory { (activityContext: Context) -> FullAddressFormatter(get{ parametersOf(activityContext) }) as LocationFormatter }
+    factory { (activityContext: Context) -> FullAddressFormatter(get { parametersOf(activityContext) }) as LocationFormatter }
 }
 
 val dataModule = module(override = true) {
@@ -63,7 +63,7 @@ val mapModule = module(override = true) {
 }
 
 val addNoteScreenModule = module(override = true) {
-    factory { (activityContext: Context) -> AddNotePresenter(get(), get{ parametersOf(activityContext) }, get{ parametersOf(activityContext) }, get(), get()) as AddNoteMvpPresenter }
+    factory { (activityContext: Context) -> AddNotePresenter(get(), get { parametersOf(activityContext) }, get { parametersOf(activityContext) }, get(), get()) as AddNoteMvpPresenter }
 }
 
 val searchNotesScreenModule = module(override = true) {
