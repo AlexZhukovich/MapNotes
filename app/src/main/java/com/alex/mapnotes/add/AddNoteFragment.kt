@@ -10,14 +10,13 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import com.alex.mapnotes.R
-import com.alex.mapnotes.di.Properties
 import kotlinx.android.synthetic.main.fragment_add_note.*
 import kotlinx.android.synthetic.main.fragment_add_note.view.*
 import org.koin.android.ext.android.inject
-import org.koin.android.ext.android.setProperty
+import org.koin.core.parameter.parametersOf
 
 class AddNoteFragment : Fragment(), AddNoteView {
-    private val presenter: AddNoteMvpPresenter by inject()
+    private val presenter: AddNoteMvpPresenter by inject { parametersOf(requireContext()) }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val rootView = inflater.inflate(R.layout.fragment_add_note, container, false)
@@ -44,7 +43,6 @@ class AddNoteFragment : Fragment(), AddNoteView {
 
     override fun onStart() {
         super.onStart()
-        setProperty(Properties.FRAGMENT_CONTEXT, this.context!!)
         presenter.onAttach(this)
     }
 

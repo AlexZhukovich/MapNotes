@@ -18,7 +18,7 @@ import com.alex.mapnotes.map.MapMvpPresenter
 import com.alex.mapnotes.search.SearchNotesMvpPresenter
 import com.alex.mapnotes.search.SearchNotesPresenter
 import io.mockk.mockk
-import org.koin.dsl.module.module
+import org.koin.dsl.module
 
 val testLocationModule = module(override = true) {
 

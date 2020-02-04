@@ -9,9 +9,12 @@ import io.mockk.verify
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
-import org.koin.standalone.StandAloneContext.loadKoinModules
-import org.koin.standalone.StandAloneContext.stopKoin
+import org.junit.runner.RunWith
+import org.koin.core.context.loadKoinModules
+import org.koin.core.context.stopKoin
+import org.robolectric.RobolectricTestRunner
 
+@RunWith(RobolectricTestRunner::class)
 class GoogleMapPresenterTest {
 
     private val isInteractionMode = true

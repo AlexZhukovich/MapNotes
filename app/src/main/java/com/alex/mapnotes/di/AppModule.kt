@@ -1,5 +1,6 @@
 package com.alex.mapnotes.di
 
+import android.content.Context
 import android.location.Geocoder
 import com.alex.mapnotes.AppExecutors
 import com.alex.mapnotes.add.AddNoteMvpPresenter
@@ -18,20 +19,21 @@ import com.alex.mapnotes.login.signin.SignInMvpPresenter
 import com.alex.mapnotes.login.signin.SignInPresenter
 import com.alex.mapnotes.login.signup.SignUpMvpPresenter
 import com.alex.mapnotes.login.signup.SignUpPresenter
-import com.alex.mapnotes.map.MapFragment
-import com.alex.mapnotes.map.GoogleMapPresenter
 import com.alex.mapnotes.map.GeneralMapFragment
+import com.alex.mapnotes.map.GoogleMapPresenter
+import com.alex.mapnotes.map.MapFragment
 import com.alex.mapnotes.map.MapMvpPresenter
 import com.alex.mapnotes.search.SearchNotesMvpPresenter
 import com.alex.mapnotes.search.SearchNotesPresenter
-import org.koin.dsl.module.module
+import org.koin.core.parameter.parametersOf
+import org.koin.dsl.module
 
 val locationModule = module(override = true) {
-    factory { Geocoder(getProperty(Properties.FRAGMENT_CONTEXT)) }
+    factory { (activityContext: Context) -> Geocoder(activityContext) }
 
-    factory { AddressLocationProvider(getProperty(Properties.FRAGMENT_CONTEXT)) as LocationProvider }
+    factory { (activityContext: Context) -> AddressLocationProvider(activityContext) as LocationProvider }
 
-    factory { FullAddressFormatter(get()) as LocationFormatter }
+    factory { (activityContext: Context) -> FullAddressFormatter(get{ parametersOf(activityContext) }) as LocationFormatter }
 }
 
 val dataModule = module(override = true) {
@@ -61,13 +63,9 @@ val mapModule = module(override = true) {
 }
 
 val addNoteScreenModule = module(override = true) {
-    factory { AddNotePresenter(get(), get(), get(), get(), get()) as AddNoteMvpPresenter }
+    factory { (activityContext: Context) -> AddNotePresenter(get(), get{ parametersOf(activityContext) }, get{ parametersOf(activityContext) }, get(), get()) as AddNoteMvpPresenter }
 }
 
 val searchNotesScreenModule = module(override = true) {
     factory { SearchNotesPresenter(get(), get(), get()) as SearchNotesMvpPresenter }
-}
-
-object Properties {
-    const val FRAGMENT_CONTEXT = "FRAGMENT_CONTEXT"
 }
