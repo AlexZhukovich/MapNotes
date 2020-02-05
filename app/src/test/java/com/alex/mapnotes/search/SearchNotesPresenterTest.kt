@@ -27,7 +27,7 @@ class SearchNotesPresenterTest {
     private val notesRepository: NotesRepository = mockk(relaxed = true)
     private val appExecutors: AppExecutors = mockk(relaxed = true)
 
-    private val presenter by lazy { SearchNotesPresenter(userRepository, notesRepository, appExecutors) }
+    private val presenter by lazy { SearchNotesPresenter(appExecutors, userRepository, notesRepository) }
 
     private val noteCategoryInSearch = 0
     private val userCategoryInSearch = 1
