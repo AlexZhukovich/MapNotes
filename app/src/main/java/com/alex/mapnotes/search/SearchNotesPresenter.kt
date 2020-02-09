@@ -12,9 +12,9 @@ import kotlinx.coroutines.withContext
 import java.lang.IllegalArgumentException
 
 class SearchNotesPresenter(
+    private val appExecutors: AppExecutors,
     private val userRepository: UserRepository,
-    private val notesRepository: NotesRepository,
-    private val appExecutors: AppExecutors
+    private val notesRepository: NotesRepository
 ) : ScopedPresenter<SearchNotesView>(), SearchNotesMvpPresenter {
 
     private var view: SearchNotesView? = null

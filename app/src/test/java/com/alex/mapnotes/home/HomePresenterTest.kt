@@ -21,8 +21,8 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.ExpectedException
 import org.junit.runner.RunWith
-import org.koin.standalone.StandAloneContext.loadKoinModules
-import org.koin.standalone.StandAloneContext.stopKoin
+import org.koin.core.context.loadKoinModules
+import org.koin.core.context.stopKoin
 import org.robolectric.RobolectricTestRunner
 
 @RunWith(RobolectricTestRunner::class)
@@ -32,9 +32,9 @@ class HomePresenterTest {
     private val searchItemId = R.id.navigation_search_notes
     private val incorrectItemId = -1
 
-    private val appExecutors: AppExecutors = mockk()
-    private val userRepository: UserRepository = mockk()
-    private val view: HomeView = mockk()
+    private val view: HomeView = mockk(relaxed = true)
+    private val appExecutors: AppExecutors = mockk(relaxed = true)
+    private val userRepository: UserRepository = mockk(relaxed = true)
 
     private val presenter by lazy { HomePresenter(appExecutors, userRepository) }
 
@@ -53,7 +53,6 @@ class HomePresenterTest {
     @Test
     fun `verify handleNavigationItemClick when non-null view is attached and itemId is add`() {
         every { view.updateMapInteractionMode(true) } answers { nothing }
-        every { view.displayAddNote() } answers { nothing }
         every { view.updateNavigationState(BottomSheetBehavior.STATE_COLLAPSED) } answers { nothing }
 
         presenter.onAttach(view)
@@ -79,7 +78,6 @@ class HomePresenterTest {
     @Test
     fun `verify handleNavigationItemClick when non-null view is attached and itemId is search`() {
         every { view.updateMapInteractionMode(true) } answers { nothing }
-        every { view.displaySearchNotes() } answers { nothing }
         every { view.updateNavigationState(BottomSheetBehavior.STATE_EXPANDED) } answers { nothing }
 
         presenter.onAttach(view)
@@ -107,9 +105,6 @@ class HomePresenterTest {
 
     @Test
     fun `verify showLocationPermissionRationale when non-null view is attached`() {
-        every { view.showPermissionExplanationSnackBar() } answers { nothing }
-        every { view.hideContentWhichRequirePermissions() } answers { nothing }
-
         presenter.onAttach(view)
         presenter.showLocationPermissionRationale()
 
@@ -129,7 +124,6 @@ class HomePresenterTest {
 
     @Test
     fun `verify checkUser when non-null view is attached and repository returns error`() {
-        every { view.navigateToLoginScreen() } answers { nothing }
         coEvery { userRepository.getCurrentUser() } returns Result.Error(RuntimeException())
 
         presenter.onAttach(view)
@@ -140,9 +134,6 @@ class HomePresenterTest {
 
     @Test
     fun `verify signOut when non-null view is attached`() {
-        every { view.navigateToLoginScreen() } answers { nothing }
-        coEvery { userRepository.signOut() } answers { nothing }
-
         presenter.onAttach(view)
         presenter.signOut()
 
@@ -329,9 +320,6 @@ class HomePresenterTest {
 
     @Test
     fun `verify signOut when view is detached`() {
-        every { view.navigateToLoginScreen() } answers { nothing }
-        coEvery { userRepository.signOut() } answers { nothing }
-
         presenter.onAttach(view)
         presenter.onDetach()
         presenter.signOut()

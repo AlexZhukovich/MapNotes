@@ -15,8 +15,8 @@ import org.junit.After
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.koin.standalone.StandAloneContext.loadKoinModules
-import org.koin.standalone.StandAloneContext.stopKoin
+import org.koin.core.context.loadKoinModules
+import org.koin.core.context.stopKoin
 import org.robolectric.RobolectricTestRunner
 
 @RunWith(RobolectricTestRunner::class)
@@ -34,9 +34,9 @@ class SignUpPresenterTest {
 
     private val errorMessage = "The email address is already in use by another account."
 
-    private val view: SignUpView = mockk()
-    private val appExecutors: AppExecutors = mockk()
-    private val userRepository: UserRepository = mockk()
+    private val view: SignUpView = mockk(relaxed = true)
+    private val appExecutors: AppExecutors = mockk(relaxed = true)
+    private val userRepository: UserRepository = mockk(relaxed = true)
 
     private val presenter by lazy { SignUpPresenter(appExecutors, userRepository) }
 
@@ -46,12 +46,6 @@ class SignUpPresenterTest {
 
         every { appExecutors.uiContext } returns Dispatchers.Main
         every { appExecutors.ioContext } returns Dispatchers.Main
-
-        every { view.displaySignUpError() } answers { nothing }
-        every { view.displayEmptyUserNameError() } answers { nothing }
-        every { view.displayEmailError() } answers { nothing }
-        every { view.displayPasswordError() } answers { nothing }
-        every { view.navigateToMapScreen() } answers { nothing }
 
         coEvery { userRepository.signUp(correctEmail, correctPassword) } returns Result.Success(authUser)
         coEvery { userRepository.changeUserName(authUser, correctUserName) } answers { nothing }

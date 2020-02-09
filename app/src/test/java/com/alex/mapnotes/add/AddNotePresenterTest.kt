@@ -20,8 +20,8 @@ import org.junit.After
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.koin.standalone.StandAloneContext.loadKoinModules
-import org.koin.standalone.StandAloneContext.stopKoin
+import org.koin.core.context.loadKoinModules
+import org.koin.core.context.stopKoin
 import org.robolectric.RobolectricTestRunner
 
 @RunWith(RobolectricTestRunner::class)
@@ -31,12 +31,12 @@ class AddNotePresenterTest {
     private val testNoteText = "test note"
     private val sydneyTestNote = Note(sydneyLocation.latitude, sydneyLocation.longitude, testNoteText, uid)
 
-    private val view: AddNoteView = mockk()
-    private val appExecutors: AppExecutors = mockk()
-    private val userRepository: UserRepository = mockk()
-    private val notesRepository: NotesRepository = mockk()
-    private val locationProvider: LocationProvider = mockk()
-    private val locationFormatter: LocationFormatter = mockk()
+    private val view: AddNoteView = mockk(relaxed = true)
+    private val appExecutors: AppExecutors = mockk(relaxed = true)
+    private val userRepository: UserRepository = mockk(relaxed = true)
+    private val notesRepository: NotesRepository = mockk(relaxed = true)
+    private val locationProvider: LocationProvider = mockk(relaxed = true)
+    private val locationFormatter: LocationFormatter = mockk(relaxed = true)
 
     private val presenter by lazy {
         AddNotePresenter(appExecutors, locationProvider, locationFormatter, userRepository, notesRepository)
@@ -47,11 +47,6 @@ class AddNotePresenterTest {
         loadKoinModules(listOf(appModule))
 
         every { appExecutors.ioContext } returns Dispatchers.Main
-        every { view.clearNoteText() } answers { nothing }
-        every { view.hideKeyboard() } answers { nothing }
-        every { locationProvider.startLocationUpdates() } answers { nothing }
-        every { locationProvider.stopLocationUpdates() } answers { nothing }
-        coEvery { notesRepository.addNote(any()) } answers { nothing }
     }
 
     @Test
