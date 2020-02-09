@@ -6,8 +6,8 @@ import com.alex.mapnotes.R
 import com.alex.mapnotes.base.ScopedPresenter
 import com.alex.mapnotes.data.Result
 import com.alex.mapnotes.data.repository.UserRepository
-import kotlinx.coroutines.experimental.launch
-import kotlinx.coroutines.experimental.withContext
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class HomePresenter(
     private val appExecutors: AppExecutors,

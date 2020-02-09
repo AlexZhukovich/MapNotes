@@ -139,7 +139,7 @@ dependencies {
     implementation "androidx.constraintlayout:constraintlayout:$constraint_layout_version"
 
     // Google play services
-    implementation "com.google.android.gms:play-services-maps:$play_services_version"
+    implementation "com.google.android.gms:play-services-maps:$maps_play_services_version"
     implementation "com.google.android.gms:play-services-location:$play_services_version"
 
     // Firebase
@@ -166,6 +166,7 @@ dependencies {
 
     // Android test runner and rules
     androidTestImplementation "androidx.test:runner:$test_runner_version"
+    androidTestImplementation "androidx.test:core:$test_core_version"
     androidTestImplementation "androidx.test.ext:junit:$test_junit_version"
     androidTestImplementation "androidx.test:rules:$test_rules_version"
 

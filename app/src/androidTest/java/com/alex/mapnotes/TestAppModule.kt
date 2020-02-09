@@ -18,33 +18,54 @@ import com.alex.mapnotes.map.MapMvpPresenter
 import com.alex.mapnotes.search.SearchNotesMvpPresenter
 import com.alex.mapnotes.search.SearchNotesPresenter
 import io.mockk.mockk
-import org.koin.dsl.module.applicationContext
+import org.koin.dsl.module
 
-val testAppModule = applicationContext {
+val testLocationModule = module(override = true) {
+    single<LocationProvider> { mockk() }
+    single<LocationFormatter> { mockk() }
+}
 
-    bean { AppExecutors() }
+val testDataModule = module(override = true) {
+    single<UserRepository>(override = true) { mockk() }
+    single<NotesRepository>(override = true) { mockk() }
+}
 
-    bean <LocationProvider> { mockk() }
-
-    bean <UserRepository> { mockk() }
-
-    bean <NotesRepository> { mockk() }
-
-    bean <LocationProvider> { mockk() }
-
-    bean <LocationFormatter> { mockk() }
-
-    factory { SignInPresenter(get(), get()) as SignInMvpPresenter }
-
-    factory { SignUpPresenter(get(), get()) as SignUpMvpPresenter }
-
-    factory { HomePresenter(get(), get()) as HomeMvpPresenter }
-
-    factory { AddNotePresenter(get(), get(), get(), get(), get()) as AddNoteMvpPresenter }
-
-    factory { SearchNotesPresenter(get(), get(), get()) as SearchNotesMvpPresenter }
-
-    factory { FakeMapFragment() as MapFragment }
-
-    factory { GoogleMapPresenter() as MapMvpPresenter }
+val testAppModule = module {
+    single(override = true) { AppExecutors() }
+    factory<MapFragment>(override = true) { FakeMapFragment() }
+    factory<MapMvpPresenter>(override = true) { GoogleMapPresenter() }
+    factory<SignInMvpPresenter>(override = true) {
+        SignInPresenter(
+                appExecutors = get(),
+                userRepository = get()
+        )
+    }
+    factory<SignUpMvpPresenter>(override = true) {
+        SignUpPresenter(
+                appExecutors = get(),
+                userRepository = get()
+        )
+    }
+    factory<HomeMvpPresenter>(override = true) {
+        HomePresenter(
+                appExecutors = get(),
+                userRepository = get()
+        )
+    }
+    factory<AddNoteMvpPresenter>(override = true) {
+        AddNotePresenter(
+                appExecutors = get(),
+                locationProvider = get(),
+                locationFormatter = get(),
+                userRepository = get(),
+                notesRepository = get()
+        )
+    }
+    factory<SearchNotesMvpPresenter>(override = true) {
+        SearchNotesPresenter(
+                appExecutors = get(),
+                userRepository = get(),
+                notesRepository = get()
+        )
+    }
 }

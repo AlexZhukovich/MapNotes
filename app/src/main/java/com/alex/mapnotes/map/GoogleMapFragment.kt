@@ -9,7 +9,6 @@ import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import androidx.appcompat.app.AlertDialog
 import com.alex.mapnotes.R
 import com.alex.mapnotes.data.provider.LocationProvider
-import com.alex.mapnotes.di.Properties
 import com.alex.mapnotes.ext.checkLocationPermission
 import com.alex.mapnotes.home.DISPLAY_LOCATION
 import com.alex.mapnotes.home.EXTRA_NOTE
@@ -22,15 +21,14 @@ import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import org.koin.android.ext.android.inject
-import org.koin.android.ext.android.releaseProperties
-import org.koin.android.ext.android.setProperty
+import org.koin.core.parameter.parametersOf
 
 class GoogleMapFragment : SupportMapFragment(), MapView, OnMapReadyCallback {
     private var map: GoogleMap? = null
     val markers = mutableListOf<MarkerOptions>()
 
     val presenter: MapMvpPresenter by inject()
-    private val locationProvider: LocationProvider by inject()
+    private val locationProvider: LocationProvider by inject { parametersOf(requireActivity()) }
 
     var isInteractionMode: Boolean = false
         set(value) {
@@ -47,7 +45,6 @@ class GoogleMapFragment : SupportMapFragment(), MapView, OnMapReadyCallback {
 
     override fun onStart() {
         super.onStart()
-        setProperty(Properties.FRAGMENT_CONTEXT, this.context!!)
         presenter.onAttach(this)
         locationProvider.startLocationUpdates()
         locationProvider.addUpdatableLocationListener {
@@ -127,7 +124,6 @@ class GoogleMapFragment : SupportMapFragment(), MapView, OnMapReadyCallback {
 
     override fun onStop() {
         locationProvider.stopLocationUpdates()
-        releaseProperties(Properties.FRAGMENT_CONTEXT)
         presenter.onDetach()
         super.onStop()
     }

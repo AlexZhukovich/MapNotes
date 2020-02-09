@@ -11,24 +11,23 @@ import io.mockk.every
 import io.mockk.coEvery
 import io.mockk.verify
 import io.mockk.coVerify
-import kotlinx.coroutines.experimental.Dispatchers
-import kotlinx.coroutines.experimental.android.Main
+import kotlinx.coroutines.Dispatchers
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.koin.standalone.StandAloneContext.closeKoin
-import org.koin.standalone.StandAloneContext.loadKoinModules
+import org.koin.core.context.loadKoinModules
+import org.koin.core.context.stopKoin
 import org.robolectric.RobolectricTestRunner
 
 @RunWith(RobolectricTestRunner::class)
 class SearchNotesPresenterTest {
-    private val view: SearchNotesView = mockk()
-    private val userRepository: UserRepository = mockk()
-    private val notesRepository: NotesRepository = mockk()
-    private val appExecutors: AppExecutors = mockk()
+    private val view: SearchNotesView = mockk(relaxed = true)
+    private val userRepository: UserRepository = mockk(relaxed = true)
+    private val notesRepository: NotesRepository = mockk(relaxed = true)
+    private val appExecutors: AppExecutors = mockk(relaxed = true)
 
-    private val presenter by lazy { SearchNotesPresenter(userRepository, notesRepository, appExecutors) }
+    private val presenter by lazy { SearchNotesPresenter(appExecutors, userRepository, notesRepository) }
 
     private val noteCategoryInSearch = 0
     private val userCategoryInSearch = 1
@@ -47,8 +46,6 @@ class SearchNotesPresenterTest {
         loadKoinModules(listOf(appModule))
         every { appExecutors.uiContext } returns Dispatchers.Main
         every { appExecutors.networkContext } returns Dispatchers.Main
-        every { view.clearSearchResults() } answers { nothing }
-        every { view.displayLoadingNotesError() } answers { nothing }
     }
 
     @Test
@@ -83,7 +80,6 @@ class SearchNotesPresenterTest {
     fun `verify getNotes when non-null view is attached and notes repository returns non-empty correct data`() {
         val expectedListSize = testNotes.size
 
-        every { view.displayNote(any()) } answers { nothing }
         coEvery { notesRepository.getNotes(any()) } returns Result.Success(testNotes)
 
         presenter.onAttach(view)
@@ -95,7 +91,6 @@ class SearchNotesPresenterTest {
 
     @Test
     fun `verify getNotes when non-null view is attached and notes repository returns empty correct data`() {
-        every { view.displayNote(any()) } answers { nothing }
         coEvery { notesRepository.getNotes(any()) } returns Result.Success(listOf())
 
         presenter.onAttach(view)
@@ -107,7 +102,6 @@ class SearchNotesPresenterTest {
 
     @Test
     fun `verify getNotes when null view is attached and notes repository returns correct data`() {
-        presenter.onAttach(null)
         presenter.getNotes(unknownUserName)
 
         coVerify(exactly = 0) { notesRepository.getNotes(any()) }
@@ -153,7 +147,6 @@ class SearchNotesPresenterTest {
     @Test
     fun `verify searchNotes by note when non-null view is attached and notesRepository returns non-empty correct data`() {
         val expectedListSize = testNotes.size
-        every { view.displayNote(any()) } answers { nothing }
         coEvery { notesRepository.getNotesByNoteText(searchByNoteRequest, any()) } returns Result.Success(testNotes)
 
         presenter.onAttach(view)
@@ -165,7 +158,6 @@ class SearchNotesPresenterTest {
 
     @Test
     fun `verify searchNotes by note when non-null view is attached and notesRepository returns empty correct data`() {
-        every { view.displayNote(any()) } answers { nothing }
         coEvery { notesRepository.getNotesByNoteText(searchByNoteRequest, any()) } returns Result.Success(listOf())
 
         presenter.onAttach(view)
@@ -227,7 +219,6 @@ class SearchNotesPresenterTest {
     @Test
     fun `verify searchNotes by user when non-null view is attached and notesRepository returns non-empty correct data and`() {
         val expectedListSize = testNotes.size
-        every { view.displayNote(any()) } answers { nothing }
         coEvery { userRepository.getUserIdFromHumanReadableName(searchByUserUIDRequest) } answers { Result.Success(searchByUserUIDRequest) }
         coEvery { notesRepository.getNotesByUser(searchByUserUIDRequest, any()) } answers { Result.Success(testNotes) }
 
@@ -286,7 +277,6 @@ class SearchNotesPresenterTest {
     fun `verify searchNotes by user when non-null view is attached, text is empty and notesRepository returns correct data`() {
         val emptySearchRequest = ""
 
-        every { view.displayNote(any()) } answers { nothing }
         coEvery { notesRepository.getNotes(any()) } returns Result.Success(listOf())
 
         presenter.onAttach(view)
@@ -298,7 +288,6 @@ class SearchNotesPresenterTest {
 
     @Test
     fun `verify searchNotes by user when non-null view is attached, userRepository returns Error`() {
-        every { view.displayUnknownUserError() } answers { nothing }
         coEvery { userRepository.getUserIdFromHumanReadableName(any()) } returns Result.Error(RuntimeException())
 
         presenter.onAttach(view)
@@ -310,6 +299,6 @@ class SearchNotesPresenterTest {
 
     @After
     fun tearDown() {
-        closeKoin()
+        stopKoin()
     }
 }

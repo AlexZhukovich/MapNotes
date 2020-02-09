@@ -1,5 +1,6 @@
 package com.alex.mapnotes.di
 
+import android.content.Context
 import android.location.Geocoder
 import com.alex.mapnotes.AppExecutors
 import com.alex.mapnotes.add.AddNoteMvpPresenter
@@ -18,50 +19,89 @@ import com.alex.mapnotes.login.signin.SignInMvpPresenter
 import com.alex.mapnotes.login.signin.SignInPresenter
 import com.alex.mapnotes.login.signup.SignUpMvpPresenter
 import com.alex.mapnotes.login.signup.SignUpPresenter
-import com.alex.mapnotes.map.MapFragment
-import com.alex.mapnotes.map.GoogleMapPresenter
 import com.alex.mapnotes.map.GeneralMapFragment
+import com.alex.mapnotes.map.GoogleMapPresenter
+import com.alex.mapnotes.map.MapFragment
 import com.alex.mapnotes.map.MapMvpPresenter
 import com.alex.mapnotes.search.SearchNotesMvpPresenter
 import com.alex.mapnotes.search.SearchNotesPresenter
-import org.koin.dsl.module.applicationContext
+import org.koin.core.parameter.parametersOf
+import org.koin.dsl.module
 
-val appModule = applicationContext {
-
-    bean { AppExecutors() }
-
-    // Location
-    factory { Geocoder(getProperty(Properties.FRAGMENT_CONTEXT)) }
-
-    factory { AddressLocationProvider(getProperty(Properties.FRAGMENT_CONTEXT)) as LocationProvider }
-
-    factory { FullAddressFormatter(get()) as LocationFormatter }
-
-    // Repositories
-    factory { FirebaseUserRepository(get()) as UserRepository }
-
-    factory { FirebaseNotesRepository(get()) as NotesRepository }
-
-    // Login
-    factory { SignInPresenter(get(), get()) as SignInMvpPresenter }
-
-    factory { SignUpPresenter(get(), get()) as SignUpMvpPresenter }
-
-    // Add
-    factory { AddNotePresenter(get(), get(), get(), get(), get()) as AddNoteMvpPresenter }
-
-    // Search
-    factory { SearchNotesPresenter(get(), get(), get()) as SearchNotesMvpPresenter }
-
-    // Map
-    factory { GeneralMapFragment() as MapFragment }
-
-    factory { GoogleMapPresenter() as MapMvpPresenter }
-
-    // Home
-    factory { HomePresenter(get(), get()) as HomeMvpPresenter }
+val locationModule = module(override = true) {
+    factory { (activityContext: Context) -> Geocoder(activityContext) }
+    factory<LocationProvider> { (activityContext: Context) -> AddressLocationProvider(activityContext) }
+    factory<LocationFormatter> { (activityContext: Context) ->
+        FullAddressFormatter(
+                geocoder = get { parametersOf(activityContext) }
+        )
+    }
 }
 
-object Properties {
-    const val FRAGMENT_CONTEXT = "FRAGMENT_CONTEXT"
+val dataModule = module(override = true) {
+    factory<UserRepository> {
+        FirebaseUserRepository(
+                appExecutors = get()
+        )
+    }
+    factory<NotesRepository> {
+        FirebaseNotesRepository(
+                appExecutors = get()
+        )
+    }
+}
+
+val appModule = module(override = true) {
+    single { AppExecutors() }
+}
+
+val loginScreenModule = module(override = true) {
+    factory<SignInMvpPresenter> {
+        SignInPresenter(
+                appExecutors = get(),
+                userRepository = get()
+        )
+    }
+    factory<SignUpMvpPresenter> {
+        SignUpPresenter(
+                appExecutors = get(),
+                userRepository = get()
+        )
+    }
+}
+
+val homeScreenModule = module(override = true) {
+    factory<HomeMvpPresenter> {
+        HomePresenter(
+                appExecutors = get(),
+                userRepository = get()
+        )
+    }
+}
+
+val mapModule = module(override = true) {
+    factory<MapFragment> { GeneralMapFragment() }
+    factory<MapMvpPresenter> { GoogleMapPresenter() }
+}
+
+val addNoteScreenModule = module(override = true) {
+    factory<AddNoteMvpPresenter> { (activityContext: Context) ->
+        AddNotePresenter(
+                appExecutors = get(),
+                locationProvider = get { parametersOf(activityContext) },
+                locationFormatter = get { parametersOf(activityContext) },
+                userRepository = get(),
+                notesRepository = get()
+        )
+    }
+}
+
+val searchNotesScreenModule = module(override = true) {
+    factory<SearchNotesMvpPresenter> {
+        SearchNotesPresenter(
+                appExecutors = get(),
+                userRepository = get(),
+                notesRepository = get()
+        )
+    }
 }

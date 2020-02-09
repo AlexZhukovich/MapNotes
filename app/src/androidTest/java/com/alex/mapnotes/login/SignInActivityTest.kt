@@ -4,6 +4,7 @@ import android.content.Intent
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.rule.ActivityTestRule
+import com.alex.mapnotes.InstrumentationTestData
 import com.alex.mapnotes.MockTest
 import com.alex.mapnotes.login.signin.SignInActivity
 import com.alex.mapnotes.robots.homeScreen
@@ -18,11 +19,6 @@ import org.junit.runner.RunWith
 
 @RunWith(AndroidJUnit4::class)
 class SignInActivityTest : MockTest() {
-    private val emptyEmail = ""
-    private val correctEmail = "test@test.com"
-    private val incorrectEmail = "test"
-    private val password = "password"
-    private val emptyPassword = ""
     private val signInActivityScope = this
 
     private val activityRule = ActivityTestRule<SignInActivity>(SignInActivity::class.java, true, false)
@@ -42,7 +38,7 @@ class SignInActivityTest : MockTest() {
     @Test
     fun shouldDisplayEmailErrorWhenEmailIsEmpty() {
         signInScreen {
-            signIn(emptyEmail, emptyPassword)
+            signIn(InstrumentationTestData.EMPTY_EMAIL, InstrumentationTestData.EMPTY_PASSWORD)
             isIncorrectEmailErrorDisplayed()
         }
     }
@@ -50,7 +46,7 @@ class SignInActivityTest : MockTest() {
     @Test
     fun shouldDisplayEmailErrorWhenEmailIsNotCorrect() {
         signInScreen {
-            signIn(incorrectEmail, password)
+            signIn(InstrumentationTestData.INCORRECT_EMAIL, InstrumentationTestData.PASSWORD)
             isIncorrectEmailErrorDisplayed()
         }
     }
@@ -58,7 +54,7 @@ class SignInActivityTest : MockTest() {
     @Test
     fun shouldDisplayPasswordErrorWhenPasswordIsEmpty() {
         signInScreen {
-            signIn(correctEmail, emptyPassword)
+            signIn(InstrumentationTestData.CORRECT_EMAIL, InstrumentationTestData.EMPTY_PASSWORD)
             isEmptyPasswordErrorDisplayed()
         }
     }
@@ -69,7 +65,7 @@ class SignInActivityTest : MockTest() {
             mockUnsuccessfulSignInWithException()
         }
         signInScreen {
-            signIn(correctEmail, password)
+            signIn(InstrumentationTestData.CORRECT_EMAIL, InstrumentationTestData.PASSWORD)
             isSignInErrorDisplayed()
         }
     }
@@ -78,10 +74,10 @@ class SignInActivityTest : MockTest() {
     fun shouldOpenMapScreenAfterSuccessfulSignIn() {
         prepare(signInActivityScope) {
             mockLocationProvider()
-            mockSuccessfulSignIn(correctEmail, password)
+            mockSuccessfulSignIn(InstrumentationTestData.CORRECT_EMAIL, InstrumentationTestData.PASSWORD)
         }
         signInScreen {
-            signIn(correctEmail, password)
+            signIn(InstrumentationTestData.CORRECT_EMAIL, InstrumentationTestData.PASSWORD)
         }
         homeScreen {
             isSuccessfullyLoaded()

@@ -32,11 +32,11 @@ class SignInActivity : AppCompatActivity(), SignInView {
     }
 
     override fun displayEmailError() {
-        Snackbar.make(signInRoot, R.string.error_email_should_be_valid, Snackbar.LENGTH_SHORT).show()
+        Snackbar.make(signInRoot, R.string.error_email_should_be_valid, Snackbar.LENGTH_LONG).show()
     }
 
     override fun displayPasswordError() {
-        Snackbar.make(signInRoot, R.string.error_password_should_not_be_empty, Snackbar.LENGTH_SHORT).show()
+        Snackbar.make(signInRoot, R.string.error_password_should_not_be_empty, Snackbar.LENGTH_LONG).show()
     }
 
     override fun displaySignInError() {

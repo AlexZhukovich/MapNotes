@@ -10,8 +10,9 @@ import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
-import kotlinx.coroutines.experimental.withContext
-import kotlin.coroutines.experimental.suspendCoroutine
+import kotlinx.coroutines.withContext
+import kotlin.coroutines.suspendCoroutine
+import kotlin.coroutines.resume
 
 class FirebaseUserRepository(private val appExecutors: AppExecutors) : UserRepository {
     private val usersPath = "users"
