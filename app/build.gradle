@@ -170,6 +170,9 @@ dependencies {
     androidTestImplementation "androidx.test.ext:junit:$test_junit_version"
     androidTestImplementation "androidx.test:rules:$test_rules_version"
 
+    // Kakao
+    androidTestImplementation "com.agoda.kakao:kakao:$kakao_version"
+
     // Espresso
     androidTestImplementation "androidx.test.espresso:espresso-core:$espresso_core_version"
     androidTestImplementation "androidx.test.espresso:espresso-intents:$espresso_intents_version"

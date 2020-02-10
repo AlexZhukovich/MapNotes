@@ -1,7 +1,6 @@
 package com.alex.mapnotes.robots
 
-import androidx.test.espresso.intent.Intents
-import androidx.test.espresso.intent.matcher.IntentMatchers
+import com.agoda.kakao.intent.KIntent
 import com.alex.mapnotes.R
 import com.alex.mapnotes.login.LoginActivity
 
@@ -9,11 +8,17 @@ fun loginScreen(func: LoginScreenRobot.() -> Unit) = LoginScreenRobot().apply { 
 
 class LoginScreenRobot : BaseTestRobot() {
 
-    fun openSignIn() = clickOnView(R.id.signIn)
+    fun openSignIn() {
+        clickOnView(R.id.signIn)
+    }
 
-    fun openSignUp() = clickOnView(R.id.signUp)
+    fun openSignUp() {
+        clickOnView(R.id.signUp)
+    }
 
     fun isSuccessfullyLoaded() {
-        Intents.intended(IntentMatchers.hasComponent(LoginActivity::class.java.name))
+        KIntent {
+            hasComponent(LoginActivity::class.java.name)
+        }
     }
 }

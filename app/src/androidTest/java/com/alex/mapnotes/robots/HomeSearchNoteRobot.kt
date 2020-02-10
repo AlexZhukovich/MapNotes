@@ -13,7 +13,9 @@ fun searchNoteFragment(func: HomeSearchNoteRobot.() -> Unit) = HomeSearchNoteRob
 
 class HomeSearchNoteRobot : BaseTestRobot() {
 
-    private val searchUserCategoryPosition = 1
+    companion object {
+        const val USERS_SEARCH_CATEGORY = "Users"
+    }
 
     fun searchNoteByText(text: String) {
         enterText(R.id.searchText, text)
@@ -23,7 +25,7 @@ class HomeSearchNoteRobot : BaseTestRobot() {
     fun searchNoteByUser(text: String) {
         enterText(R.id.searchText, text)
         clickOnView(R.id.searchOptions)
-        changeSelectedSpinnerItemPosition(searchUserCategoryPosition)
+        changeSelectedSpinnerItemPosition(USERS_SEARCH_CATEGORY)
         clickOnView(R.id.searchButton)
     }
 
@@ -44,14 +46,13 @@ class HomeSearchNoteRobot : BaseTestRobot() {
         IdlingRegistry.getInstance().unregister(recyclerViewIdlingResource)
     }
 
-    fun isErrorDuringLoadingNotesDisplayed() =
-        isTextDisplayed(R.string.loading_notes_error)
+    fun isUnknownUserErrorDisplayed() {
+        isTextDisplayed(R.string.unknown_user_error)
+    }
 
-    fun isUnknownUserErrorDisplayed() =
-            isTextDisplayed(R.string.unknown_user_error)
-
-    fun isSearchResultHasNumberItems(itemCount: Int) =
-            isRecyclerViewItemCount(R.id.recyclerView, itemCount)
+    fun isSearchResultHasNumberItems(itemCount: Int) {
+        isRecyclerViewItemCount(R.id.recyclerView, itemCount)
+    }
 
     fun isSuccessfullyDisplayedSearchScreen() {
         isViewDisplayed(R.id.recyclerView)
