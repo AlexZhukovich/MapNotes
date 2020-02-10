@@ -3,9 +3,8 @@ package com.alex.mapnotes.robots
 import android.view.View
 import androidx.test.espresso.Espresso.openActionBarOverflowOrOptionsMenu
 import androidx.test.espresso.IdlingRegistry
-import androidx.test.espresso.intent.Intents
-import androidx.test.espresso.intent.matcher.IntentMatchers
 import androidx.test.rule.ActivityTestRule
+import com.agoda.kakao.intent.KIntent
 import com.alex.mapnotes.R
 import com.alex.mapnotes.getActivityInstance
 import com.alex.mapnotes.home.HomeActivity
@@ -67,6 +66,8 @@ class HomeScreenRobot : BaseTestRobot() {
     }
 
     fun isSuccessfullyLoaded() {
-        Intents.intended(IntentMatchers.hasComponent(HomeActivity::class.java.name))
+        KIntent {
+            hasComponent(HomeActivity::class.java.name)
+        }
     }
 }

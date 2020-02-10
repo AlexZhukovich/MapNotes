@@ -1,6 +1,6 @@
 package com.alex.mapnotes.search
 
-import androidx.test.ext.junit.runners.AndroidJUnit4
+import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner
 import com.alex.mapnotes.MockTest
 import com.alex.mapnotes.model.Note
 import com.alex.mapnotes.robots.prepare
@@ -13,7 +13,7 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 
-@RunWith(AndroidJUnit4::class)
+@RunWith(AndroidJUnit4ClassRunner::class)
 class SearchNotesFragmentTest : MockTest() {
     private val searchInput = "text"
     private val emptySearchInput = ""

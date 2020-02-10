@@ -21,6 +21,7 @@ buildscript {
     ext.test_runner_version = '1.1.0'
     ext.test_rules_version = '1.1.0'
     ext.test_junit_version = '1.1.0'
+    ext.kakao_version = '2.2.0'
     ext.espresso_core_version = '3.1.0'
     ext.espresso_intents_version = '3.1.0'
     ext.uiuatomator_version = '2.2.0'

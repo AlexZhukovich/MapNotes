@@ -1,8 +1,7 @@
 package com.alex.mapnotes.robots
 
 import androidx.test.espresso.IdlingRegistry
-import androidx.test.espresso.intent.Intents
-import androidx.test.espresso.intent.matcher.IntentMatchers
+import com.agoda.kakao.intent.KIntent
 import com.alex.mapnotes.R
 import com.alex.mapnotes.idlingresources.ViewTextIdlingResource
 import com.alex.mapnotes.login.signin.SignInActivity
@@ -55,6 +54,8 @@ class SignInScreenRobot : BaseTestRobot() {
     }
 
     fun isSuccessfullyLoaded() {
-        Intents.intended(IntentMatchers.hasComponent(SignInActivity::class.java.name))
+        KIntent {
+            hasComponent(SignInActivity::class.java.name)
+        }
     }
 }

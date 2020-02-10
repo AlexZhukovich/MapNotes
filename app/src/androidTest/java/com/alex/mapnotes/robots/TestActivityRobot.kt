@@ -6,7 +6,7 @@ import com.alex.mapnotes.FragmentTestActivity
 
 fun testScreen(func: TestActivityRobot.() -> Unit) = TestActivityRobot().apply { func() }
 
-val testFragmentActivity = ActivityTestRule<FragmentTestActivity>(FragmentTestActivity::class.java)
+val testFragmentActivity = ActivityTestRule(FragmentTestActivity::class.java)
 
 class TestActivityRobot {
 
