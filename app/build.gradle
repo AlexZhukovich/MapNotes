@@ -146,6 +146,7 @@ dependencies {
     implementation "com.google.firebase:firebase-auth:$firebase_auth_version"
     implementation "com.google.firebase:firebase-database:$firebase_database_version"
     implementation "com.google.firebase:firebase-core:$firebase_core_version"
+    implementation 'com.google.android.gms:play-services-basement:17.5.0'
 
     // Koin
     implementation "org.koin:koin-core:$koin_version"
