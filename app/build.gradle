@@ -96,8 +96,8 @@ task jacocoTestReport(type : JacocoReport, dependsOn : 'testDebugUnitTest') {
     def debugKotlinTree = fileTree(dir: "${buildDir}/tmp/kotlin-classes/devDebug", excludes: fileFilter)
     def mainSrc = "${project.projectDir}/src/main/java"
 
-    sourceDirectories = files([mainSrc])
-    classDirectories = files([debugKotlinTree])
+    getSourceDirectories().setFrom([mainSrc])
+    getClassDirectories().setFrom(files([debugKotlinTree]))
 
     def localTestsFiles = fileTree("${buildDir}/jacoco/")
             .filter { it.name.endsWith(".exec") }
@@ -106,7 +106,7 @@ task jacocoTestReport(type : JacocoReport, dependsOn : 'testDebugUnitTest') {
             .filter { it.name.endsWith(".ec") }
             .filter { it.isFile() }
 
-    executionData = files(localTestsFiles + instrumentationTestsFiles)
+    getExecutionData().setFrom(files(localTestsFiles + instrumentationTestsFiles))
 }
 
 task ktlint(type: JavaExec, group: "verification") {
@@ -159,7 +159,6 @@ dependencies {
 
     // MockK
     testImplementation "io.mockk:mockk:$mockk_version"
-    androidTestImplementation "io.mockk:mockk:$mockk_version"
     androidTestImplementation "io.mockk:mockk-android:$mockk_version"
 
     // Robolectric
