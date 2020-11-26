@@ -8,7 +8,7 @@ androidExtensions {
 }
 
 jacoco {
-    toolVersion = "$jacoco_tools_version"
+    toolVersion = "$jacoco_version"
     reportsDir = file("$buildDir/reports")
 }
 
