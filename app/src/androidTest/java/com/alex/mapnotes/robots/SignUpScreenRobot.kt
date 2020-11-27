@@ -11,7 +11,7 @@ class SignUpScreenRobot : BaseTestRobot() {
 
     fun displayAsEntryPoint() {
         ActivityScenario.launch(SignUpActivity::class.java)
-   }
+    }
 
     fun signUp(name: String, email: String, password: String) {
         if (name.isNotEmpty()) {

@@ -10,7 +10,6 @@ import org.junit.Before
 import org.junit.Ignore
 import org.junit.Rule
 import org.junit.Test
-import org.junit.rules.RuleChain
 import org.junit.runner.RunWith
 
 @RunWith(AndroidJUnit4ClassRunner::class)

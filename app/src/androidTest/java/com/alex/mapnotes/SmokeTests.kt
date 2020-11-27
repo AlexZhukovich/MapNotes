@@ -9,14 +9,13 @@ import com.alex.mapnotes.robots.splashScreen
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
-import java.util.*
+import java.util.Date
 
 @RunWith(AndroidJUnit4::class)
 class SmokeTests {
     private val correctEmail = "test@test.com"
     private val correctPassword = "test123"
     private val incorrectPassword = "test-password"
-
 
     @get:Rule
     val appPermissionRule: GrantPermissionRule =
