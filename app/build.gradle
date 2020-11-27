@@ -75,6 +75,11 @@ android {
     }
 }
 
+tasks.withType(Test) {
+    jacoco.includeNoLocationClasses = true
+    jacoco.excludes = ['jdk.internal.*']
+}
+
 task jacocoTestReport(type : JacocoReport, dependsOn : 'testDebugUnitTest') {
     group = "Reporting"
     description = "Generate Jacoco coverage reports for Debug build"
@@ -91,8 +96,7 @@ task jacocoTestReport(type : JacocoReport, dependsOn : 'testDebugUnitTest') {
             '**/BuildConfig.*',
             '**/Manifest*.*',
             '**/*Test*.*',
-            'android/**/*.*',
-            'jdk/internal.*'
+            'android/**/*.*'
     ]
 
     def debugKotlinTree = fileTree(dir: "${buildDir}/tmp/kotlin-classes/devDebug", excludes: fileFilter)
