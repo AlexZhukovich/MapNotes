@@ -46,8 +46,8 @@ class HomePresenterTest {
     @Before
     fun setUp() {
         loadKoinModules(listOf(appModule))
-        every { appExecutors.uiContext } returns Dispatchers.Main
-        every { appExecutors.ioContext } returns Dispatchers.Main
+        every { appExecutors.uiContext } returns Dispatchers.Unconfined
+        every { appExecutors.ioContext } returns Dispatchers.Unconfined
     }
 
     @Test

@@ -46,7 +46,7 @@ class AddNotePresenterTest {
     fun setUp() {
         loadKoinModules(listOf(appModule))
 
-        every { appExecutors.ioContext } returns Dispatchers.Main
+        every { appExecutors.ioContext } returns Dispatchers.Unconfined
     }
 
     @Test
