@@ -96,7 +96,7 @@ class HomeActivity : AppCompatActivity(), HomeView {
 
         navigation.selectedItemId = R.id.navigation_map
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener)
-        bottomSheetBehavior.setBottomSheetCallback(bottomSheetCallback)
+        bottomSheetBehavior.addBottomSheetCallback(bottomSheetCallback)
 
         if (!checkLocationPermission(this)) {
             // Permission is not granted; show an explanation
@@ -182,6 +182,7 @@ class HomeActivity : AppCompatActivity(), HomeView {
 
     override fun onPause() {
         super.onPause()
+        bottomSheetBehavior.removeBottomSheetCallback(bottomSheetCallback)
         navigation.setOnNavigationItemSelectedListener(null)
         LocalBroadcastManager.getInstance(this).unregisterReceiver(hideExpandedMenuListener)
     }
