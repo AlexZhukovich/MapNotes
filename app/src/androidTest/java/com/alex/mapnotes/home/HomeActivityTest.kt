@@ -4,10 +4,8 @@ import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner
 import com.alex.mapnotes.MockTest
 import com.alex.mapnotes.model.Note
 import com.alex.mapnotes.robots.homeScreen
-import com.alex.mapnotes.robots.homeScreenMockActivityRule
 import com.alex.mapnotes.robots.loginScreen
 import com.alex.mapnotes.robots.prepare
-import org.junit.After
 import org.junit.Before
 import org.junit.Ignore
 import org.junit.Rule
@@ -18,11 +16,8 @@ import org.junit.runner.RunWith
 @RunWith(AndroidJUnit4ClassRunner::class)
 class HomeActivityTest : MockTest() {
 
-    @Rule
-    @JvmField
-    val chain: RuleChain = RuleChain
-            .outerRule(permissionRule)
-            .around(homeScreenMockActivityRule)
+    @get:Rule
+    val appPermissionRule = permissionRule
 
     @Before
     override fun setUp() {
@@ -36,7 +31,7 @@ class HomeActivityTest : MockTest() {
     @Test
     fun shouldVerifyAllTabs() {
         homeScreen {
-            displayAsEntryPoint()
+            launch()
             isSuccessfullyDisplayed()
         }
     }
@@ -44,7 +39,7 @@ class HomeActivityTest : MockTest() {
     @Test
     fun shouldVerifyAddNoteFragment() {
         homeScreen {
-            displayAsEntryPoint()
+            launch()
             openAddNote()
             addNoteFragment {
                 isSuccessfullyDisplayedAddNote()
@@ -59,7 +54,7 @@ class HomeActivityTest : MockTest() {
             mockLoadingListOfNotes(notes)
         }
         homeScreen {
-            displayAsEntryPoint()
+            launch()
             isSuccessfullyDisplayed()
             openSearch()
             searchNoteFragment {
@@ -71,7 +66,7 @@ class HomeActivityTest : MockTest() {
     @Test
     fun shouldVerifyMapFragmentAfterMovingFromAddTab() {
         homeScreen {
-            displayAsEntryPoint()
+            launch()
             openAddNote()
             openMap()
         }
@@ -83,16 +78,11 @@ class HomeActivityTest : MockTest() {
             mockUserSignOut()
         }
         homeScreen {
-            displayAsEntryPoint()
+            launch()
             signOut()
         }
         loginScreen {
             isSuccessfullyLoaded()
         }
-    }
-
-    @After
-    override fun tearDown() {
-        super.tearDown()
     }
 }

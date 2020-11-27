@@ -1,19 +1,17 @@
 package com.alex.mapnotes.robots
 
-import androidx.test.rule.ActivityTestRule
+import androidx.test.core.app.ActivityScenario
 import com.agoda.kakao.intent.KIntent
 import com.alex.mapnotes.R
 import com.alex.mapnotes.login.signup.SignUpActivity
 
 fun signUpScreen(func: SignUpScreenRobot.() -> Unit) = SignUpScreenRobot().apply { func() }
 
-val signUpActivity = ActivityTestRule<SignUpActivity>(SignUpActivity::class.java, true, false)
-
 class SignUpScreenRobot : BaseTestRobot() {
 
     fun displayAsEntryPoint() {
-        signUpActivity.launchActivity(null)
-    }
+        ActivityScenario.launch(SignUpActivity::class.java)
+   }
 
     fun signUp(name: String, email: String, password: String) {
         if (name.isNotEmpty()) {

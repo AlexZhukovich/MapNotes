@@ -38,7 +38,7 @@ class HomePresenterTest {
 
     private val presenter by lazy { HomePresenter(appExecutors, userRepository) }
 
-    @Rule @JvmField
+    @get:Rule
     val expectedException: ExpectedException = ExpectedException.none()
 
     // non-null is attached

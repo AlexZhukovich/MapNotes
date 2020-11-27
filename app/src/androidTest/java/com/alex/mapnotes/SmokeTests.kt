@@ -6,12 +6,10 @@ import com.alex.mapnotes.robots.homeScreen
 import com.alex.mapnotes.robots.loginScreen
 import com.alex.mapnotes.robots.signInScreen
 import com.alex.mapnotes.robots.splashScreen
-import com.alex.mapnotes.robots.splashActivityE2ETestRule
 import org.junit.Rule
 import org.junit.Test
-import org.junit.rules.RuleChain
 import org.junit.runner.RunWith
-import java.util.Date
+import java.util.*
 
 @RunWith(AndroidJUnit4::class)
 class SmokeTests {
@@ -19,18 +17,15 @@ class SmokeTests {
     private val correctPassword = "test123"
     private val incorrectPassword = "test-password"
 
-    private val permissionRule = GrantPermissionRule.grant(android.Manifest.permission.ACCESS_FINE_LOCATION)
 
-    @Rule
-    @JvmField
-    val chain: RuleChain = RuleChain
-            .outerRule(permissionRule)
-            .around(splashActivityE2ETestRule)
+    @get:Rule
+    val appPermissionRule: GrantPermissionRule =
+            GrantPermissionRule.grant(android.Manifest.permission.ACCESS_FINE_LOCATION)
 
     @Test
     fun shouldVerifySuccessfulLogin() {
         splashScreen {
-            displayAsEntryPoint()
+            launch()
         }
         loginScreen {
             openSignIn()
@@ -47,7 +42,7 @@ class SmokeTests {
     @Test
     fun shouldVerifyFailureLogin() {
         splashScreen {
-            displayAsEntryPoint()
+            launch()
         }
         loginScreen {
             openSignIn()
@@ -62,7 +57,7 @@ class SmokeTests {
     fun shouldVerifyAddingAndSearchNote() {
         val noteText = "test note ${Date().time}"
         splashScreen {
-            displayAsEntryPoint()
+            launch()
         }
         loginScreen {
             openSignIn()

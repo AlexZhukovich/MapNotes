@@ -5,25 +5,12 @@ import com.alex.mapnotes.MockTest
 import com.alex.mapnotes.robots.homeScreen
 import com.alex.mapnotes.robots.loginScreen
 import com.alex.mapnotes.robots.prepare
-import com.alex.mapnotes.robots.splashActivityMockTestRule
 import com.alex.mapnotes.robots.splashScreen
-import org.junit.After
-import org.junit.Before
-import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 
 @RunWith(AndroidJUnit4::class)
 class SplashActivityTest : MockTest() {
-
-    @Rule
-    @JvmField
-    val activityRule = splashActivityMockTestRule
-
-    @Before
-    override fun setUp() {
-        super.setUp()
-    }
 
     @Test
     fun shouldOpenHomeActivityWhenUserIsAuthenticated() {
@@ -32,7 +19,7 @@ class SplashActivityTest : MockTest() {
             mockAuthorizedUser()
         }
         splashScreen {
-            displayMockAsEntryPoint()
+            launch()
         }
         homeScreen {
             isSuccessfullyLoaded()
@@ -45,15 +32,10 @@ class SplashActivityTest : MockTest() {
             mockNoAuthorizedUser()
         }
         splashScreen {
-            displayAsEntryPoint()
+            launch()
         }
         loginScreen {
             isSuccessfullyLoaded()
         }
-    }
-
-    @After
-    override fun tearDown() {
-        super.tearDown()
     }
 }
