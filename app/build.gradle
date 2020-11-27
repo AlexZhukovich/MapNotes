@@ -92,7 +92,7 @@ task jacocoTestReport(type : JacocoReport, dependsOn : 'testDebugUnitTest') {
             '**/Manifest*.*',
             '**/*Test*.*',
             'android/**/*.*',
-            'jdk.internal.*'
+            'jdk/internal.*'
     ]
 
     def debugKotlinTree = fileTree(dir: "${buildDir}/tmp/kotlin-classes/devDebug", excludes: fileFilter)
