@@ -44,11 +44,11 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-            resValue("string", "google_maps_api_key", "$System.env.GOOGLE_MAPS_API_KEY")
+            resValue("string", "google_maps_api_key", "$System.env.MAP_NOTES_GOOGLE_MAPS_API_KEY")
         }
         debug {
             testCoverageEnabled true
-            resValue("string", "google_maps_api_key", "$System.env.GOOGLE_MAPS_API_KEY")
+            resValue("string", "google_maps_api_key", "$System.env.MAP_NOTES_GOOGLE_MAPS_API_KEY")
         }
     }
     testOptions {
