@@ -2,26 +2,23 @@ package com.alex.mapnotes.add
 
 import android.content.Context
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.text.Editable
 import android.text.TextWatcher
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
+import androidx.fragment.app.Fragment
 import com.alex.mapnotes.R
 import kotlinx.android.synthetic.main.fragment_add_note.*
 import kotlinx.android.synthetic.main.fragment_add_note.view.*
 import org.koin.android.ext.android.inject
 import org.koin.core.parameter.parametersOf
 
-class AddNoteFragment : Fragment(), AddNoteView {
+class AddNoteFragment : Fragment(R.layout.fragment_add_note), AddNoteView {
     private val presenter: AddNoteMvpPresenter by inject { parametersOf(requireContext()) }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val rootView = inflater.inflate(R.layout.fragment_add_note, container, false)
-
-        rootView.note.addTextChangedListener(object : TextWatcher {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        note.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {
             }
 
@@ -29,16 +26,16 @@ class AddNoteFragment : Fragment(), AddNoteView {
             }
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                rootView.add.isEnabled = !s.isNullOrEmpty()
+                add.isEnabled = !s.isNullOrEmpty()
             }
         })
-        rootView.add.setOnClickListener {
-            val text = rootView.note.text.toString()
+
+        view.add.setOnClickListener {
+            val text = note.text.toString()
             if (text.isNotEmpty()) {
                 presenter.addNote(text)
             }
         }
-        return rootView
     }
 
     override fun onStart() {

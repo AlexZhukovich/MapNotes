@@ -2,15 +2,12 @@ package com.alex.mapnotes.search
 
 import android.content.Intent
 import android.os.Bundle
-import com.google.android.material.snackbar.Snackbar
+import android.view.View
+import android.widget.ArrayAdapter
 import androidx.fragment.app.Fragment
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
-import android.widget.ArrayAdapter
 import com.alex.mapnotes.R
 import com.alex.mapnotes.data.formatter.CoordinateFormatter
 import com.alex.mapnotes.data.formatter.LatLonFormatter
@@ -18,42 +15,40 @@ import com.alex.mapnotes.home.DISPLAY_LOCATION
 import com.alex.mapnotes.home.EXTRA_NOTE
 import com.alex.mapnotes.model.Note
 import com.alex.mapnotes.search.adapter.NotesAdapter
+import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.fragment_search_notes.*
-import kotlinx.android.synthetic.main.fragment_search_notes.view.*
 import org.koin.android.ext.android.inject
 
-class SearchNotesFragment : Fragment(), SearchNotesView {
+class SearchNotesFragment : Fragment(R.layout.fragment_search_notes), SearchNotesView {
     private val defaultUserName by lazy { getString(R.string.unknown_user) }
     private val coordinateFormatter: LatLonFormatter by lazy { CoordinateFormatter() }
     private lateinit var adapter: NotesAdapter
 
     private val presenter: SearchNotesMvpPresenter by inject()
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-
-        val rootView = inflater.inflate(R.layout.fragment_search_notes, container, false)
-        rootView.searchOptions.adapter = ArrayAdapter.createFromResource(
-                activity!!,
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        searchOptions.adapter = ArrayAdapter.createFromResource(
+                requireContext(),
                 R.array.search_options,
                 android.R.layout.simple_dropdown_item_1line)
         adapter = NotesAdapter(coordinateFormatter) {
             val broadcastManager = LocalBroadcastManager.getInstance(this.context!!)
             val intent = Intent(DISPLAY_LOCATION)
-            intent.apply {
+                intent.apply {
                 putExtra(EXTRA_NOTE, it)
             }
             broadcastManager.sendBroadcast(intent)
         }
         val layoutManager = LinearLayoutManager(activity)
-        rootView.recyclerView.layoutManager = layoutManager
-        rootView.recyclerView.addItemDecoration(
-                DividerItemDecoration(rootView.recyclerView.context, layoutManager.orientation))
-        rootView.recyclerView.adapter = adapter
+        recyclerView.layoutManager = layoutManager
+        recyclerView.addItemDecoration(
+                DividerItemDecoration(recyclerView.context, layoutManager.orientation))
+        recyclerView.adapter = adapter
 
-        rootView.searchButton.setOnClickListener {
-            presenter.searchNotes(rootView.searchText.text.toString(), rootView.searchOptions.selectedItemPosition, defaultUserName)
+        searchButton.setOnClickListener {
+            presenter.searchNotes(searchText.text.toString(), searchOptions.selectedItemPosition, defaultUserName)
         }
-        return rootView
     }
 
     override fun onStart() {
