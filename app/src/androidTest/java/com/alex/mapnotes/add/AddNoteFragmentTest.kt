@@ -5,11 +5,7 @@ import com.alex.mapnotes.MockTest
 import com.alex.mapnotes.R
 import com.alex.mapnotes.robots.addNoteFragment
 import com.alex.mapnotes.robots.prepare
-import com.alex.mapnotes.robots.testFragmentActivity
 import com.alex.mapnotes.robots.testScreen
-import org.junit.After
-import org.junit.Before
-import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 
@@ -18,17 +14,15 @@ class AddNoteFragmentTest : MockTest() {
 
     private val testNoteText = "test note"
 
-    @Rule @JvmField
-    val activityRule = testFragmentActivity
-
-    @Before
     override fun setUp() {
         super.setUp()
         prepare(testScope) {
             mockLocationProvider(isLocationAvailable = true)
             mockAuthorizedUser()
         }
-        testScreen { attachFragment(AddNoteFragment()) }
+        testScreen {
+            launch(AddNoteFragment())
+        }
     }
 
     @Test
@@ -45,10 +39,5 @@ class AddNoteFragmentTest : MockTest() {
             enterNoteText(testNoteText)
             isAddButtonEnabled()
         }
-    }
-
-    @After
-    override fun tearDown() {
-        super.tearDown()
     }
 }

@@ -1,5 +1,6 @@
 package com.alex.mapnotes.robots
 
+import androidx.test.core.app.ActivityScenario
 import androidx.test.espresso.IdlingRegistry
 import com.agoda.kakao.intent.KIntent
 import com.alex.mapnotes.R
@@ -9,6 +10,10 @@ import com.alex.mapnotes.login.signin.SignInActivity
 fun signInScreen(func: SignInScreenRobot.() -> Unit) = SignInScreenRobot().apply { func() }
 
 class SignInScreenRobot : BaseTestRobot() {
+
+    fun launch() {
+        ActivityScenario.launch(SignInActivity::class.java)
+    }
 
     fun signIn(email: String, password: String) {
         if (email.isNotEmpty()) {

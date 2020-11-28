@@ -5,6 +5,8 @@ import androidx.test.rule.GrantPermissionRule
 import com.alex.mapnotes.data.provider.LocationProvider
 import com.alex.mapnotes.data.repository.NotesRepository
 import com.alex.mapnotes.data.repository.UserRepository
+import org.junit.After
+import org.junit.Before
 import org.koin.core.context.startKoin
 import org.koin.core.context.stopKoin
 import org.koin.test.KoinTest
@@ -20,6 +22,7 @@ open class MockTest : KoinTest {
 
     val testScope: MockTest by lazy { this }
 
+    @Before
     open fun setUp() {
         stopKoin()
         startKoin {
@@ -32,6 +35,7 @@ open class MockTest : KoinTest {
         Intents.init()
     }
 
+    @After
     open fun tearDown() {
         Intents.release()
     }

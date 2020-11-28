@@ -24,7 +24,7 @@ An Android application which allows you to add notes to the current location
 
 # Configuration
 * Firebase project should be created, and ```google-services.json``` should be added to the **app** folder.
-* Google Maps API key should be added as System variable with the ```google_maps_api_key``` key
+* Google Maps API key should be added as System variable with the ```MAP_NOTES_GOOGLE_MAPS_API_KEY``` key
 
 # Features
 * Creating account/Login/ Log out, use email and password

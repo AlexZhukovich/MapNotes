@@ -38,7 +38,7 @@ class HomePresenterTest {
 
     private val presenter by lazy { HomePresenter(appExecutors, userRepository) }
 
-    @Rule @JvmField
+    @get:Rule
     val expectedException: ExpectedException = ExpectedException.none()
 
     // non-null is attached
@@ -46,8 +46,8 @@ class HomePresenterTest {
     @Before
     fun setUp() {
         loadKoinModules(listOf(appModule))
-        every { appExecutors.uiContext } returns Dispatchers.Main
-        every { appExecutors.ioContext } returns Dispatchers.Main
+        every { appExecutors.uiContext } returns Dispatchers.Unconfined
+        every { appExecutors.ioContext } returns Dispatchers.Unconfined
     }
 
     @Test

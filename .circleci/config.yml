@@ -42,11 +42,7 @@ references:
   android_config: &android_config
     working_directory: *workspace
     docker:
-      - image: circleci/android:api-28-alpha
-    environment:
-      TERM: dumb
-      _JAVA_OPTIONS: "-Xmx1800m -XX:+UnlockExperimentalVMOptions -XX:+UseCGroupMemoryLimitForHeap"
-      GRADLE_OPTS: '-Dorg.gradle.jvmargs="-Xmx1800m"'
+      - image: circleci/android:api-30
   gcloud_config: &gcloud_config
     working_directory: *workspace
     docker:

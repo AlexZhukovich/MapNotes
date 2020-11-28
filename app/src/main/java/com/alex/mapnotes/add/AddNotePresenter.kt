@@ -11,7 +11,6 @@ import com.alex.mapnotes.data.repository.UserRepository
 import com.alex.mapnotes.model.Location
 import com.alex.mapnotes.model.Note
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 class AddNotePresenter(
     private val appExecutors: AppExecutors,
@@ -55,14 +54,12 @@ class AddNotePresenter(
         view?.let { view ->
             view.clearNoteText()
             view.hideKeyboard()
-            launch {
+            launch(appExecutors.ioContext) {
                 uid?.let { uid ->
                     val latitude = lastLocation?.latitude ?: 0.0
                     val longitude = lastLocation?.longitude ?: 0.0
                     val note = Note(latitude, longitude, text, uid)
-                    withContext(appExecutors.ioContext) {
-                        notesRepository.addNote(note)
-                    }
+                    notesRepository.addNote(note)
                 }
             }
         }
