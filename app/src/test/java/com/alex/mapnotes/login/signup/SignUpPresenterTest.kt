@@ -44,8 +44,8 @@ class SignUpPresenterTest {
     fun setUp() {
         loadKoinModules(listOf(appModule))
 
-        every { appExecutors.uiContext } returns Dispatchers.Main
-        every { appExecutors.ioContext } returns Dispatchers.Main
+        every { appExecutors.uiContext } returns Dispatchers.Unconfined
+        every { appExecutors.ioContext } returns Dispatchers.Unconfined
 
         coEvery { userRepository.signUp(correctEmail, correctPassword) } returns Result.Success(authUser)
         coEvery { userRepository.changeUserName(authUser, correctUserName) } answers { nothing }

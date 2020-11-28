@@ -1,9 +1,9 @@
 package com.alex.mapnotes.robots
 
 import android.view.View
+import androidx.test.core.app.ActivityScenario
 import androidx.test.espresso.Espresso.openActionBarOverflowOrOptionsMenu
 import androidx.test.espresso.IdlingRegistry
-import androidx.test.rule.ActivityTestRule
 import com.agoda.kakao.intent.KIntent
 import com.alex.mapnotes.R
 import com.alex.mapnotes.getActivityInstance
@@ -12,17 +12,15 @@ import com.alex.mapnotes.idlingresources.ViewVisibilityIdlingResource
 
 fun homeScreen(func: HomeScreenRobot.() -> Unit) = HomeScreenRobot().apply { func() }
 
-val homeScreenMockActivityRule = ActivityTestRule<HomeActivity>(HomeActivity::class.java, true, false)
-
 class HomeScreenRobot : BaseTestRobot() {
+
+    fun launch() {
+        ActivityScenario.launch(HomeActivity::class.java)
+    }
 
     fun addNoteFragment(func: HomeAddNoteRobot.() -> Unit) = HomeAddNoteRobot().apply { func() }
 
     fun searchNoteFragment(func: HomeSearchNoteRobot.() -> Unit) = HomeSearchNoteRobot().apply { func() }
-
-    fun displayAsEntryPoint() {
-        homeScreenMockActivityRule.launchActivity(null)
-    }
 
     fun openAddNote() {
         clickOnView(R.id.navigation_add_note)

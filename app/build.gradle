@@ -8,7 +8,7 @@ androidExtensions {
 }
 
 jacoco {
-    toolVersion = "$jacoco_tools_version"
+    toolVersion = "$jacoco_version"
     reportsDir = file("$buildDir/reports")
 }
 
@@ -31,11 +31,11 @@ configurations {
 }
 
 android {
-    compileSdkVersion 28
+    compileSdkVersion 30
     defaultConfig {
         applicationId "com.alex.mapnotes"
         minSdkVersion 21
-        targetSdkVersion 28
+        targetSdkVersion 30
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
@@ -44,11 +44,11 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-            resValue("string", "google_maps_api_key", "$System.env.GOOGLE_MAPS_API_KEY")
+            resValue("string", "google_maps_api_key", "$System.env.MAP_NOTES_GOOGLE_MAPS_API_KEY")
         }
         debug {
             testCoverageEnabled true
-            resValue("string", "google_maps_api_key", "$System.env.GOOGLE_MAPS_API_KEY")
+            resValue("string", "google_maps_api_key", "$System.env.MAP_NOTES_GOOGLE_MAPS_API_KEY")
         }
     }
     testOptions {
@@ -75,6 +75,11 @@ android {
     }
 }
 
+tasks.withType(Test) {
+    jacoco.includeNoLocationClasses = true
+    jacoco.excludes = ['jdk.internal.*']
+}
+
 task jacocoTestReport(type : JacocoReport, dependsOn : 'testDebugUnitTest') {
     group = "Reporting"
     description = "Generate Jacoco coverage reports for Debug build"
@@ -91,13 +96,14 @@ task jacocoTestReport(type : JacocoReport, dependsOn : 'testDebugUnitTest') {
             '**/BuildConfig.*',
             '**/Manifest*.*',
             '**/*Test*.*',
-            'android/**/*.*']
+            'android/**/*.*'
+    ]
 
     def debugKotlinTree = fileTree(dir: "${buildDir}/tmp/kotlin-classes/devDebug", excludes: fileFilter)
     def mainSrc = "${project.projectDir}/src/main/java"
 
-    sourceDirectories = files([mainSrc])
-    classDirectories = files([debugKotlinTree])
+    getSourceDirectories().setFrom([mainSrc])
+    getClassDirectories().setFrom(files([debugKotlinTree]))
 
     def localTestsFiles = fileTree("${buildDir}/jacoco/")
             .filter { it.name.endsWith(".exec") }
@@ -106,7 +112,7 @@ task jacocoTestReport(type : JacocoReport, dependsOn : 'testDebugUnitTest') {
             .filter { it.name.endsWith(".ec") }
             .filter { it.isFile() }
 
-    executionData = files(localTestsFiles + instrumentationTestsFiles)
+    getExecutionData().setFrom(files(localTestsFiles + instrumentationTestsFiles))
 }
 
 task ktlint(type: JavaExec, group: "verification") {
@@ -146,6 +152,7 @@ dependencies {
     implementation "com.google.firebase:firebase-auth:$firebase_auth_version"
     implementation "com.google.firebase:firebase-database:$firebase_database_version"
     implementation "com.google.firebase:firebase-core:$firebase_core_version"
+    implementation 'com.google.android.gms:play-services-basement:17.5.0'
 
     // Koin
     implementation "org.koin:koin-core:$koin_version"
@@ -158,7 +165,6 @@ dependencies {
 
     // MockK
     testImplementation "io.mockk:mockk:$mockk_version"
-    androidTestImplementation "io.mockk:mockk:$mockk_version"
     androidTestImplementation "io.mockk:mockk-android:$mockk_version"
 
     // Robolectric

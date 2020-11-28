@@ -32,7 +32,7 @@ class SignInPresenterTest {
     fun setUp() {
         loadKoinModules(listOf(appModule))
 
-        every { appExecutors.networkContext } returns Dispatchers.Main
+        every { appExecutors.networkContext } returns Dispatchers.Unconfined
     }
 
     @Test

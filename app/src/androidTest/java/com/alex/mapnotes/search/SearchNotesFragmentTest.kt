@@ -5,11 +5,7 @@ import com.alex.mapnotes.MockTest
 import com.alex.mapnotes.model.Note
 import com.alex.mapnotes.robots.prepare
 import com.alex.mapnotes.robots.searchNoteFragment
-import com.alex.mapnotes.robots.testFragmentActivity
 import com.alex.mapnotes.robots.testScreen
-import org.junit.After
-import org.junit.Before
-import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 
@@ -26,20 +22,14 @@ class SearchNotesFragmentTest : MockTest() {
             Note(text = "test note 2_2", user = "22222222"),
             Note(text = "test note 3_2", user = "22222222"))
 
-    @Rule @JvmField
-    val activityRule = testFragmentActivity
-
-    @Before
-    override fun setUp() {
-        super.setUp()
-    }
-
     @Test
     fun shouldVerifyLayout() {
         prepare(testScope) {
             mockLoadingEmptyListOfNotes()
         }
-        testScreen { attachFragment(SearchNotesFragment()) }
+        testScreen {
+            launch(SearchNotesFragment())
+        }
         searchNoteFragment {
             isSuccessfullyDisplayedSearchScreen()
         }
@@ -52,7 +42,9 @@ class SearchNotesFragmentTest : MockTest() {
         prepare(testScope) {
             mockLoadingListOfNotes(testNotes)
         }
-        testScreen { attachFragment(SearchNotesFragment()) }
+        testScreen {
+            launch(SearchNotesFragment())
+        }
         searchNoteFragment {
             isSearchResultHasNumberItems(expectedItemCount)
             isSearchResultsHaveNotes(testNotes)
@@ -65,7 +57,9 @@ class SearchNotesFragmentTest : MockTest() {
             mockLoadingEmptyListOfNotes()
             mockErrorDuringLoadingUserNames()
         }
-        testScreen { attachFragment(SearchNotesFragment()) }
+        testScreen {
+            launch(SearchNotesFragment())
+        }
         searchNoteFragment {
             searchNoteByUser(searchInput)
             isUnknownUserErrorDisplayed()
@@ -81,7 +75,9 @@ class SearchNotesFragmentTest : MockTest() {
             mockSearchUserId(testUID)
             mockSearchNoteByAnyUser(testNotes)
         }
-        testScreen { attachFragment(SearchNotesFragment()) }
+        testScreen {
+            launch(SearchNotesFragment())
+        }
         searchNoteFragment {
             searchNoteByUser(searchInput)
             isSearchResultHasNumberItems(expectedItemCount)
@@ -97,7 +93,9 @@ class SearchNotesFragmentTest : MockTest() {
             mockLoadingEmptyListOfNotes()
             mockSearchNoteByAnyText(testNotes)
         }
-        testScreen { attachFragment(SearchNotesFragment()) }
+        testScreen {
+            launch(SearchNotesFragment())
+        }
         searchNoteFragment {
             searchNoteByText(searchInput)
             isSearchResultHasNumberItems(expectedItemCount)
@@ -114,17 +112,14 @@ class SearchNotesFragmentTest : MockTest() {
             mockLoadingEmptyListOfNotesByNoteText()
             mockLoadingListOfNotes(testNotes)
         }
-        testScreen { attachFragment(SearchNotesFragment()) }
+        testScreen {
+            launch(SearchNotesFragment())
+        }
         searchNoteFragment {
             searchNoteByText(searchInput)
             searchNoteByText(emptySearchInput)
             isSearchResultHasNumberItems(expectedItemCount)
             isSearchResultsHaveNotes(testNotes)
         }
-    }
-
-    @After
-    override fun tearDown() {
-        super.tearDown()
     }
 }

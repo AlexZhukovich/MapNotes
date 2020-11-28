@@ -12,6 +12,7 @@ import io.mockk.coEvery
 import io.mockk.verify
 import io.mockk.coVerify
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.runBlocking
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
@@ -44,12 +45,12 @@ class SearchNotesPresenterTest {
     @Before
     fun setUp() {
         loadKoinModules(listOf(appModule))
-        every { appExecutors.uiContext } returns Dispatchers.Main
-        every { appExecutors.networkContext } returns Dispatchers.Main
+        every { appExecutors.uiContext } returns Dispatchers.Unconfined
+        every { appExecutors.networkContext } returns Dispatchers.Unconfined
     }
 
     @Test
-    fun `verify getNotes when non-null view is attached and notesRepository returns Error`() {
+    fun `verify getNotes when non-null view is attached and notesRepository returns Error`() = runBlocking {
         coEvery { notesRepository.getNotes(any()) } returns Result.Error(RuntimeException())
 
         presenter.onAttach(view)

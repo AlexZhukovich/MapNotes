@@ -4,13 +4,9 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.alex.mapnotes.MockTest
 import com.alex.mapnotes.robots.homeScreen
 import com.alex.mapnotes.robots.prepare
-import com.alex.mapnotes.robots.signUpActivity
 import com.alex.mapnotes.robots.signUpScreen
-import org.junit.After
-import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
-import org.junit.rules.RuleChain
 import org.junit.runner.RunWith
 
 @RunWith(AndroidJUnit4::class)
@@ -23,16 +19,8 @@ class SignUpActivityTest : MockTest() {
     private val password = "password"
     private val emptyPassword = ""
 
-    @Rule
-    @JvmField
-    val chain: RuleChain = RuleChain
-            .outerRule(permissionRule)
-            .around(signUpActivity)
-
-    @Before
-    override fun setUp() {
-        super.setUp()
-    }
+    @get:Rule
+    val appPermissionRule = permissionRule
 
     @Test
     fun shouldDisplayEmailErrorWhenEmailIsEmpty() {
@@ -96,10 +84,5 @@ class SignUpActivityTest : MockTest() {
         homeScreen {
             isSuccessfullyLoaded()
         }
-    }
-
-    @After
-    override fun tearDown() {
-        super.tearDown()
     }
 }
