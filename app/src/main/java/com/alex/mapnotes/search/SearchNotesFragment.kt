@@ -33,7 +33,7 @@ class SearchNotesFragment : Fragment(R.layout.fragment_search_notes), SearchNote
                 R.array.search_options,
                 android.R.layout.simple_dropdown_item_1line)
         adapter = NotesAdapter(coordinateFormatter) {
-            val broadcastManager = LocalBroadcastManager.getInstance(this.context!!)
+            val broadcastManager = LocalBroadcastManager.getInstance(requireContext())
             val intent = Intent(DISPLAY_LOCATION)
                 intent.apply {
                 putExtra(EXTRA_NOTE, it)
