@@ -29,7 +29,7 @@ class SearchNotesFragment : Fragment(R.layout.fragment_search_notes), SearchNote
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         searchOptions.adapter = ArrayAdapter.createFromResource(
-                activity!!,
+                requireContext(),
                 R.array.search_options,
                 android.R.layout.simple_dropdown_item_1line)
         adapter = NotesAdapter(coordinateFormatter) {
