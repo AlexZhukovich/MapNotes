@@ -14,7 +14,9 @@ class HomeAddNoteRobot : BaseTestRobot() {
         ActivityScenario.launch(HomeActivity::class.java)
                 .onActivity {  }
 
-        launchFragmentInContainer<AddNoteFragment>()
+        launchFragmentInContainer<AddNoteFragment>(
+            themeResId = R.style.AppTheme
+        )
     }
 
     fun enterNoteText(text: String) {

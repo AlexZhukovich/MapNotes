@@ -20,7 +20,9 @@ class HomeSearchNoteRobot : BaseTestRobot() {
     }
 
     fun launch() {
-        launchFragmentInContainer<SearchNotesFragment>()
+        launchFragmentInContainer<SearchNotesFragment>(
+            themeResId = R.style.AppTheme
+        )
     }
 
     fun searchNoteByText(text: String) {

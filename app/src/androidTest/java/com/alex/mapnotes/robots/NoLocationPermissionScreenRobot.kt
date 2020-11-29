@@ -10,7 +10,9 @@ fun noLocationPermissionScreen(func: NoLocationPermissionScreenRobot.() -> Unit)
 class NoLocationPermissionScreenRobot : BaseTestRobot() {
 
     fun launch() {
-        launchFragmentInContainer<NoLocationPermissionFragment>()
+        launchFragmentInContainer<NoLocationPermissionFragment>(
+            themeResId = R.style.AppTheme
+        )
     }
 
     fun openApplicationPreferences() {
