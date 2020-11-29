@@ -1,10 +1,21 @@
 package com.alex.mapnotes.robots
 
+import androidx.fragment.app.testing.launchFragmentInContainer
+import androidx.test.core.app.ActivityScenario
 import com.alex.mapnotes.R
+import com.alex.mapnotes.add.AddNoteFragment
+import com.alex.mapnotes.home.HomeActivity
 
 fun addNoteFragment(func: HomeAddNoteRobot.() -> Unit) = HomeAddNoteRobot().apply { func() }
 
 class HomeAddNoteRobot : BaseTestRobot() {
+
+    fun launch() {
+        ActivityScenario.launch(HomeActivity::class.java)
+                .onActivity {  }
+
+        launchFragmentInContainer<AddNoteFragment>()
+    }
 
     fun enterNoteText(text: String) {
         enterText(R.id.note, text)

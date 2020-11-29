@@ -1,5 +1,6 @@
 package com.alex.mapnotes.robots
 
+import androidx.fragment.app.testing.launchFragmentInContainer
 import androidx.test.espresso.Espresso
 import androidx.test.espresso.IdlingRegistry
 import androidx.test.espresso.assertion.ViewAssertions
@@ -8,6 +9,7 @@ import com.alex.mapnotes.R
 import com.alex.mapnotes.idlingresources.RecyclerViewSizeIdlingResources
 import com.alex.mapnotes.matchers.RecyclerViewMatchers
 import com.alex.mapnotes.model.Note
+import com.alex.mapnotes.search.SearchNotesFragment
 
 fun searchNoteFragment(func: HomeSearchNoteRobot.() -> Unit) = HomeSearchNoteRobot().apply { func() }
 
@@ -15,6 +17,10 @@ class HomeSearchNoteRobot : BaseTestRobot() {
 
     companion object {
         const val USERS_SEARCH_CATEGORY = "Users"
+    }
+
+    fun launch() {
+        launchFragmentInContainer<SearchNotesFragment>()
     }
 
     fun searchNoteByText(text: String) {

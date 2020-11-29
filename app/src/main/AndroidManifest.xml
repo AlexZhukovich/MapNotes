@@ -35,9 +35,6 @@
         <activity
             android:name=".login.signin.SignInActivity"
             android:label="@string/sign_in_title" />
-
-        <!-- TODO: move it to debug flavor  -->
-        <activity android:name=".FragmentTestActivity"/>
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_api_key"/>
