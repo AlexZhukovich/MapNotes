@@ -5,36 +5,33 @@ import com.alex.mapnotes.MockTest
 import com.alex.mapnotes.R
 import com.alex.mapnotes.robots.addNoteFragment
 import com.alex.mapnotes.robots.prepare
-import com.alex.mapnotes.robots.testScreen
 import org.junit.Test
 import org.junit.runner.RunWith
 
 @RunWith(AndroidJUnit4ClassRunner::class)
 class AddNoteFragmentTest : MockTest() {
-
     private val testNoteText = "test note"
 
-    override fun setUp() {
-        super.setUp()
+    @Test
+    fun shouldDisplayNoteHintForANewNote() {
         prepare(testScope) {
             mockLocationProvider(isLocationAvailable = true)
             mockAuthorizedUser()
         }
-        testScreen {
-            launch(AddNoteFragment())
-        }
-    }
-
-    @Test
-    fun shouldDisplayNoteHintForANewNote() {
         addNoteFragment {
+            launch()
             isNoteHintDisplayed(R.string.add_note_hint)
         }
     }
 
     @Test
     fun shouldChangeAddButtonEnableAfterChangingNoteText() {
+        prepare(testScope) {
+            mockLocationProvider(isLocationAvailable = true)
+            mockAuthorizedUser()
+        }
         addNoteFragment {
+            launch()
             isAddButtonDisabled()
             enterNoteText(testNoteText)
             isAddButtonEnabled()

@@ -72,7 +72,7 @@ class GoogleMapFragment : SupportMapFragment(), MapView, OnMapReadyCallback {
     override fun onResume() {
         super.onResume()
         LocalBroadcastManager
-                .getInstance(this.context!!)
+                .getInstance(requireContext())
                 .registerReceiver(displayOnMapBroadcastListener, IntentFilter(DISPLAY_LOCATION))
     }
 
@@ -80,7 +80,7 @@ class GoogleMapFragment : SupportMapFragment(), MapView, OnMapReadyCallback {
         map = googleMap
         updateInitLocation(map)
         if (!locationProvider.isLocationAvailable()) {
-            val dialog = AlertDialog.Builder(this.context!!).apply {
+            val dialog = AlertDialog.Builder(requireContext()).apply {
                 this.setMessage(R.string.use_location_message)
                 this.setPositiveButton(R.string.ok_button) { _, _ ->
                     startActivity(Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS))
@@ -91,7 +91,7 @@ class GoogleMapFragment : SupportMapFragment(), MapView, OnMapReadyCallback {
             }
             dialog.show()
         }
-        if (checkLocationPermission(this.context!!)) {
+        if (checkLocationPermission(requireContext())) {
             map?.isMyLocationEnabled = true
             map?.setOnMyLocationButtonClickListener {
                 isInteractionMode = false
@@ -119,7 +119,7 @@ class GoogleMapFragment : SupportMapFragment(), MapView, OnMapReadyCallback {
 
     override fun onPause() {
         super.onPause()
-        LocalBroadcastManager.getInstance(this.context!!).unregisterReceiver(displayOnMapBroadcastListener)
+        LocalBroadcastManager.getInstance(requireContext()).unregisterReceiver(displayOnMapBroadcastListener)
     }
 
     override fun onStop() {

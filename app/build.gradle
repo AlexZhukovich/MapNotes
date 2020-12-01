@@ -62,6 +62,13 @@ android {
             includeAndroidResources = true
         }
     }
+    kotlinOptions {
+        jvmTarget = "1.8"
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
     packagingOptions {
         exclude 'META-INF/DEPENDENCIES'
         exclude 'META-INF/LICENSE'
@@ -71,7 +78,7 @@ android {
         exclude 'META-INF/NOTICE.txt'
         exclude 'META-INF/notice.txt'
         exclude 'META-INF/ASL2.0'
-        exclude  'META-INF/main.kotlin_module'
+        exclude 'META-INF/main.kotlin_module'
     }
 }
 
@@ -143,6 +150,11 @@ dependencies {
 
     // Constraint Layout
     implementation "androidx.constraintlayout:constraintlayout:$constraint_layout_version"
+
+    // Fragment
+    implementation "androidx.fragment:fragment-ktx:$fragment_version"
+    // 1.3.0-beta01 because 1.2.5 use old version of androidx.test:core library
+    debugImplementation "androidx.fragment:fragment-testing:$fragment_testing_version"
 
     // Google play services
     implementation "com.google.android.gms:play-services-maps:$maps_play_services_version"

@@ -5,7 +5,6 @@ import com.alex.mapnotes.MockTest
 import com.alex.mapnotes.model.Note
 import com.alex.mapnotes.robots.prepare
 import com.alex.mapnotes.robots.searchNoteFragment
-import com.alex.mapnotes.robots.testScreen
 import org.junit.Test
 import org.junit.runner.RunWith
 
@@ -27,10 +26,8 @@ class SearchNotesFragmentTest : MockTest() {
         prepare(testScope) {
             mockLoadingEmptyListOfNotes()
         }
-        testScreen {
-            launch(SearchNotesFragment())
-        }
         searchNoteFragment {
+            launch()
             isSuccessfullyDisplayedSearchScreen()
         }
     }
@@ -42,10 +39,8 @@ class SearchNotesFragmentTest : MockTest() {
         prepare(testScope) {
             mockLoadingListOfNotes(testNotes)
         }
-        testScreen {
-            launch(SearchNotesFragment())
-        }
         searchNoteFragment {
+            launch()
             isSearchResultHasNumberItems(expectedItemCount)
             isSearchResultsHaveNotes(testNotes)
         }
@@ -57,10 +52,8 @@ class SearchNotesFragmentTest : MockTest() {
             mockLoadingEmptyListOfNotes()
             mockErrorDuringLoadingUserNames()
         }
-        testScreen {
-            launch(SearchNotesFragment())
-        }
         searchNoteFragment {
+            launch()
             searchNoteByUser(searchInput)
             isUnknownUserErrorDisplayed()
         }
@@ -75,10 +68,8 @@ class SearchNotesFragmentTest : MockTest() {
             mockSearchUserId(testUID)
             mockSearchNoteByAnyUser(testNotes)
         }
-        testScreen {
-            launch(SearchNotesFragment())
-        }
         searchNoteFragment {
+            launch()
             searchNoteByUser(searchInput)
             isSearchResultHasNumberItems(expectedItemCount)
             isSearchResultsHaveNotes(testNotes)
@@ -93,10 +84,8 @@ class SearchNotesFragmentTest : MockTest() {
             mockLoadingEmptyListOfNotes()
             mockSearchNoteByAnyText(testNotes)
         }
-        testScreen {
-            launch(SearchNotesFragment())
-        }
         searchNoteFragment {
+            launch()
             searchNoteByText(searchInput)
             isSearchResultHasNumberItems(expectedItemCount)
             isSearchResultsHaveNotes(testNotes)
@@ -112,10 +101,8 @@ class SearchNotesFragmentTest : MockTest() {
             mockLoadingEmptyListOfNotesByNoteText()
             mockLoadingListOfNotes(testNotes)
         }
-        testScreen {
-            launch(SearchNotesFragment())
-        }
         searchNoteFragment {
+            launch()
             searchNoteByText(searchInput)
             searchNoteByText(emptySearchInput)
             isSearchResultHasNumberItems(expectedItemCount)
